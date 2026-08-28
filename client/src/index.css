@@ -1,3 +1,4 @@
+/* TerraForge Robotics / Field Notes direction: warm earth neutrals, graphite machinery, Terra Orange actions, mono operational metadata. */
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -27,151 +28,86 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
 }
 
 :root {
-  --primary: var(--color-blue-700);
-  --primary-foreground: var(--color-blue-50);
-  --sidebar-primary: var(--color-blue-600);
-  --sidebar-primary-foreground: var(--color-blue-50);
-  --chart-1: var(--color-blue-300);
-  --chart-2: var(--color-blue-500);
-  --chart-3: var(--color-blue-600);
-  --chart-4: var(--color-blue-700);
-  --chart-5: var(--color-blue-800);
-  --radius: 0.65rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.235 0.015 65);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.235 0.015 65);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.235 0.015 65);
-  --secondary: oklch(0.98 0.001 286.375);
-  --secondary-foreground: oklch(0.4 0.015 65);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.141 0.005 285.823);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.623 0.214 259.815);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.235 0.015 65);
-  --sidebar-accent: oklch(0.967 0.001 286.375);
-  --sidebar-accent-foreground: oklch(0.141 0.005 285.823);
-  --sidebar-border: oklch(0.92 0.004 286.32);
-  --sidebar-ring: oklch(0.623 0.214 259.815);
-}
-
-.dark {
-  --primary: var(--color-blue-700);
-  --primary-foreground: var(--color-blue-50);
-  --sidebar-primary: var(--color-blue-500);
-  --sidebar-primary-foreground: var(--color-blue-50);
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.85 0.005 65);
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.85 0.005 65);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.85 0.005 65);
-  --secondary: oklch(0.24 0.006 286.033);
-  --secondary-foreground: oklch(0.7 0.005 65);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground:  oklch(0.92 0.005 65);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.488 0.243 264.376);
-  --chart-1: var(--color-blue-300);
-  --chart-2: var(--color-blue-500);
-  --chart-3: var(--color-blue-600);
-  --chart-4: var(--color-blue-700);
-  --chart-5: var(--color-blue-800);
-  --sidebar: oklch(0.21 0.006 285.885);
-  --sidebar-foreground: oklch(0.85 0.005 65);
-  --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground:  oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.488 0.243 264.376);
+  --radius: 0.35rem;
+  --background: oklch(0.95 0.014 85);
+  --foreground: oklch(0.21 0.014 58);
+  --card: oklch(0.98 0.009 85);
+  --card-foreground: oklch(0.21 0.014 58);
+  --popover: oklch(0.98 0.009 85);
+  --popover-foreground: oklch(0.21 0.014 58);
+  --primary: oklch(0.63 0.17 43);
+  --primary-foreground: oklch(0.98 0.009 85);
+  --secondary: oklch(0.89 0.025 87);
+  --secondary-foreground: oklch(0.27 0.02 57);
+  --muted: oklch(0.91 0.018 86);
+  --muted-foreground: oklch(0.5 0.018 58);
+  --accent: oklch(0.67 0.16 139);
+  --accent-foreground: oklch(0.19 0.012 58);
+  --destructive: oklch(0.58 0.19 29);
+  --destructive-foreground: oklch(0.98 0.009 85);
+  --border: oklch(0.78 0.025 76);
+  --input: oklch(0.78 0.025 76);
+  --ring: oklch(0.63 0.17 43);
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
+  * { @apply border-border outline-ring/50; }
+  html { scroll-behavior: smooth; }
   body {
     @apply bg-background text-foreground;
+    margin: 0;
+    min-width: 320px;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
-  button:not(:disabled),
-  [role="button"]:not([aria-disabled="true"]),
-  [type="button"]:not(:disabled),
-  [type="submit"]:not(:disabled),
-  [type="reset"]:not(:disabled),
-  a[href],
-  select:not(:disabled),
-  input[type="checkbox"]:not(:disabled),
-  input[type="radio"]:not(:disabled) {
-    @apply cursor-pointer;
-  }
+  button, input, textarea { font: inherit; }
+  button:not(:disabled), a[href], input[type="submit"] { cursor: pointer; }
+  ::selection { background: #e85b2a; color: #fffaf3; }
 }
 
 @layer components {
-  /**
-   * Custom container utility that centers content and adds responsive padding.
-   *
-   * This overrides Tailwind's default container behavior to:
-   * - Auto-center content (mx-auto)
-   * - Add responsive horizontal padding
-   * - Set max-width for large screens
-   *
-   * Usage: <div className="container">...</div>
-   *
-   * For custom widths, use max-w-* utilities directly:
-   * <div className="max-w-6xl mx-auto px-4">...</div>
-   */
-  .container {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1rem; /* 16px - mobile padding */
-    padding-right: 1rem;
-  }
+  .tf-page { overflow-x: clip; background: #f1ede6; }
+  .tf-container { width: min(1180px, calc(100% - 48px)); margin-inline: auto; }
+  .tf-mono { font-family: "IBM Plex Mono", monospace; letter-spacing: .08em; text-transform: uppercase; }
+  .tf-eyebrow { color: #777267; font-size: 10px; line-height: 1.1; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+  .tf-rule { height: 1px; background: rgba(43, 41, 37, .18); }
+  .tf-surface { background: #f1ede6; color: #2b2925; }
+  .tf-dark { background: #252724; color: #f1ede6; }
+  .tf-orange { color: #e85b2a; }
+  .tf-focus:focus-visible { outline: 2px solid #e85b2a; outline-offset: 4px; }
+  .tf-btn { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 46px; padding: 0 20px; border: 1px solid transparent; border-radius: 999px; font-size: 13px; font-weight: 600; transition: transform .18s cubic-bezier(.23,1,.32,1), background-color .18s ease, color .18s ease, border-color .18s ease; }
+  .tf-btn:active { transform: scale(.97); }
+  .tf-btn-primary { background: #e85b2a; color: #fffaf3; box-shadow: 0 6px 22px rgba(232, 91, 42, .2); }
+  .tf-btn-primary:hover { background: #c8481d; }
+  .tf-btn-quiet { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.28); color: #fffaf3; }
+  .tf-btn-quiet:hover { background: rgba(255,255,255,.16); }
+  .tf-btn-outline { background: transparent; border-color: rgba(43,41,37,.32); color: #2b2925; }
+  .tf-btn-outline:hover { background: #2b2925; color: #f1ede6; }
+  .tf-card { border: 1px solid rgba(43, 41, 37, .15); background: rgba(250, 247, 241, .66); }
+  .tf-grid-line { background-image: linear-gradient(to right, rgba(43,41,37,.065) 1px, transparent 1px), linear-gradient(to bottom, rgba(43,41,37,.065) 1px, transparent 1px); background-size: 72px 72px; }
+  .tf-scanline { position: relative; }
+  .tf-scanline::after { position: absolute; inset: 0; pointer-events: none; content: ""; opacity: .17; background: repeating-linear-gradient(0deg, transparent 0, transparent 4px, rgba(255,255,255,.13) 5px); mix-blend-mode: overlay; }
+}
 
-  .flex {
-    min-height: 0;
-    min-width: 0;
-  }
+.hero-fade { background: linear-gradient(180deg, rgba(13,15,14,.26) 0%, rgba(13,15,14,.04) 38%, rgba(13,15,14,.76) 100%); }
+.hero-copy { text-wrap: balance; }
+.reveal { opacity: 0; transform: translateY(16px); animation: rise-in .8s cubic-bezier(.23,1,.32,1) forwards; }
+.reveal-delay-1 { animation-delay: .12s; }
+.reveal-delay-2 { animation-delay: .22s; }
+.reveal-delay-3 { animation-delay: .32s; }
 
-  @media (min-width: 640px) {
-    .container {
-      padding-left: 1.5rem; /* 24px - tablet padding */
-      padding-right: 1.5rem;
-    }
-  }
+@keyframes rise-in { to { opacity: 1; transform: translateY(0); } }
+@keyframes slow-pan { from { transform: scale(1.03); } to { transform: scale(1.08); } }
 
-  @media (min-width: 1024px) {
-    .container {
-      padding-left: 2rem; /* 32px - desktop padding */
-      padding-right: 2rem;
-      max-width: 1280px; /* Standard content width */
-    }
-  }
+@media (max-width: 760px) {
+  .tf-container { width: min(100% - 32px, 620px); }
+  .tf-grid-line { background-size: 44px 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
