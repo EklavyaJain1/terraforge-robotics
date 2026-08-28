@@ -11,22 +11,22 @@ Contemporary industrial editorial with Swiss-influenced information design, docu
 ### Core Principles
 - Let the machine and the field carry the emotional weight; interface chrome stays quiet.
 - Use asymmetry and anchored metadata rather than centered marketing blocks.
-- Pair warm, sun-baked neutrals with deep graphite and one ownable safety-orange accent.
+- Pair white space with deep black and one ownable jade-green accent.
 - Make every interaction feel like a control surface: immediate, legible, and purposeful.
 
 ### Color Philosophy
-The palette begins with the sunset-earth atmosphere of the reference and translates it into a calm working interface: sand and bone for daylight, graphite for machinery and text, oxidized orange for action, and a muted sage signal for operational states. Orange means movement and commitment, never decoration; graphite gives the product credibility; bone preserves the spacious, editorial feel.
+The palette is intentionally reduced to a high-contrast working interface: white preserves clarity, black gives the product credibility, and jade green signals movement, health, and operational readiness. Jade is used for action and live states, never as decoration; black carries the engineering weight; white keeps the experience spacious and legible.
 
 ### Layout Paradigm
 A vertical story spine with full-bleed visual moments, offset editorial copy blocks, thin measurement rules, and a split calculator panel. Desktop uses a 12-column grid with content intentionally biased left; mobile collapses into a single reading rail while preserving edge-to-edge imagery.
 
 ### Signature Elements
 - Hairline rules with compact uppercase labels and numeric section markers.
-- Product cards with clipped corners and a small orange “field note” tag.
-- An amber action pill paired with a small green live-status dot.
+- Product cards with clipped corners and a small jade “field note” tag.
+- A jade action pill paired with a lighter jade live-status dot.
 
 ### Interaction Philosophy
-Hover and focus states behave like a tactile instrument: labels shift by a few pixels, buttons compress on press, and selected product states reveal a brighter orange edge. Accordions and the calculator are progressive disclosure, keeping the initial page quiet.
+Hover and focus states behave like a tactile instrument: labels shift by a few pixels, buttons compress on press, and selected product states reveal a brighter jade edge. Accordions and the calculator are progressive disclosure, keeping the initial page quiet.
 
 ### Animation
 Use only transform and opacity transitions, mostly 180–260ms with a strong ease-out. Hero content fades upward in staggered layers; cards lift by 4px on hover; tab changes crossfade; respect prefers-reduced-motion and never animate layout dimensions.
@@ -45,10 +45,10 @@ Example lines:
 - “See what one operator can move in a season.”
 
 ### Wordmark & Logo
-Use a compact symbol-only mark: two ascending chevrons nested inside a squared seed/field frame, drawn as a bold orange glyph. Pair it with a custom wordmark treatment in the interface rather than relying on a default logo font.
+Use a compact symbol-only mark: two ascending chevrons nested inside a squared seed/field frame, drawn as a bold jade glyph. Pair it with a custom wordmark treatment in the interface rather than relying on a default logo font.
 
 ### Signature Brand Color
-Terra Orange — `#E85B2A` — a warm, ownable signal color that feels like a safety stripe, a setting sun, and a decisive button all at once.
+Terra Jade — `#1B8F6A` — an ownable signal color that connects living crops, system readiness, and decisive action.
 
 ## Implementation notes
 Use original generated visual assets for the hero and major editorial image moments. Keep the page as a single high-conversion home experience with anchor navigation, a working savings calculator, product/attachment state switching, FAQ accordions, mobile menu, and a lightweight request-demo form. No fabricated reviews or testimonials are included.
