@@ -164,7 +164,9 @@ export default function Home() {
 
       <main>
         <section className="tf-scanline relative min-h-[720px] overflow-hidden bg-[#111311] text-white sm:min-h-[860px] lg:min-h-[100svh]" aria-label="TerraForge Robotics introduction">
-          <img src={ASSETS.hero} alt="TerraForge agricultural robot working a field at sunset" className="absolute inset-0 h-full w-full object-cover object-[55%_center] motion-safe:animate-[slow-pan_18s_ease-out_forwards]" />
+          <video autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover object-center">
+            <source src="/videos/hero.mp4" type="video/mp4" />
+          </video>
           <div className="hero-fade absolute inset-0" />
           <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/35 to-transparent" />
           <div className="tf-container relative flex min-h-[720px] items-end pb-12 pt-32 sm:min-h-[860px] sm:pb-20 lg:min-h-[100svh] lg:pb-16">
