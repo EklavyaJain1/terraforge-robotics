@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#17201B"/>
+      <stop offset=".55" stop-color="#111311"/>
+      <stop offset="1" stop-color="#0B0F0D"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1B8F6A" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#1B8F6A" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#1B8F6A" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#sky)"/>
+  <rect y="360" width="1200" height="6" fill="url(#glow)"/>
+  <g stroke="#1B8F6A" stroke-opacity=".35" stroke-width="2">
+    <line x1="600" y1="366" x2="80" y2="630"/>
+    <line x1="600" y1="366" x2="340" y2="630"/>
+    <line x1="600" y1="366" x2="600" y2="630"/>
+    <line x1="600" y1="366" x2="860" y2="630"/>
+    <line x1="600" y1="366" x2="1120" y2="630"/>
+  </g>
+  <g fill="#B9F4D4" fill-opacity=".5">
+    <circle cx="80" cy="366" r="4"/><circle cx="600" cy="366" r="4"/><circle cx="1120" cy="366" r="4"/>
+  </g>
+</svg>

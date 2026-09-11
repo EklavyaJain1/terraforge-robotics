@@ -8,61 +8,54 @@ import {
   ChevronLeft,
   ChevronRight,
   CircleHelp,
-  Menu,
   MoveUpRight,
   Play,
   Radio,
   ShieldCheck,
   Sparkles,
-  X,
   Zap,
 } from "lucide-react";
 import { toast } from "sonner";
+import Footer from "@/components/Footer";
+import Navbar from "@/components/Navbar";
+import usePageTitle from "@/hooks/usePageTitle";
+import SectionKicker from "@/components/SectionKicker";
+
+import { agriImages, robots, type RobotId } from "@/data/catalog";
 
 const ASSETS = {
-  hero: "/manus-storage/terraforge-hero_7f64f5b1.jpg",
-  field: "/manus-storage/terraforge-field-ops_00be0994.jpg",
-  attachment: "/manus-storage/terraforge-attachment_5dcf0267.jpg",
-  mark: "/manus-storage/terraforge-mark_9d8559cb.png",
+  hero: agriImages.hero,
+  field: agriImages.wide,
+  attachment: agriImages.farmx,
+  mark: "/images/mark-fallback.svg",
 };
 
-const navItems = [
-  { label: "The machine", href: "#machine" },
-  { label: "Attachments", href: "#attachments" },
-  { label: "Field notes", href: "#field-notes" },
-  { label: "Savings", href: "#calculator" },
-];
+interface MachineView {
+  eyebrow: string;
+  name: string;
+  subtitle: string;
+  body: string;
+  image: string;
+  specs: [string, string][];
+  tag: string;
+}
 
-const models = {
-  r1: {
-    eyebrow: "01 / Multipurpose platform",
-    name: "R1",
-    subtitle: "The field-ready base layer.",
-    body: "A compact electric platform built for the jobs that keep a season moving: weeding, spraying, tilling, and carrying.",
-    image: ASSETS.attachment,
-    specs: [
-      ["Runtime", "8–10 hrs"],
-      ["Payload", "800 kg"],
-      ["Ground clearance", "220 mm"],
-    ],
-    tag: "Available for field trials",
-  },
-  r5: {
-    eyebrow: "02 / Precision autonomy",
-    name: "R5",
-    subtitle: "Navigation that learns your rows.",
-    body: "A larger autonomous platform for repeatable coverage, built around camera guidance, RTK support, and a live operator console.",
-    image: ASSETS.field,
-    specs: [
-      ["Coverage", "12 acres/day"],
-      ["Accuracy", "± 2 cm RTK"],
-      ["Operator", "1 person"],
-    ],
-    tag: "Pilot programme open",
-  },
-} as const;
+const models = Object.fromEntries(
+  robots.map((robot): [RobotId, MachineView] => [
+    robot.id,
+    {
+      eyebrow: `${robot.number} / ${robot.tier}`,
+      name: robot.name,
+      subtitle: robot.tagline,
+      body: robot.body,
+      image: robot.image,
+      specs: robot.specs,
+      tag: robot.availability,
+    },
+  ]),
+) as Record<RobotId, MachineView>;
 
-type ModelKey = keyof typeof models;
+type ModelKey = RobotId;
 
 const attachments = [
   { number: "A01", name: "Rotary tiller", copy: "Aerate 3–4 inches deep while cutting weed roots between rows.", stat: "3–4 in depth", icon: "✣" },
@@ -82,28 +75,9 @@ function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-function SectionKicker({ number, label, light = false }: { number: string; label: string; light?: boolean }) {
-  return (
-    <div className={`flex items-center gap-3 ${light ? "text-white/60" : "text-[#64736C]"}`}>
-      <span className="tf-mono text-[10px]">{number}</span>
-      <span className={`h-px w-8 ${light ? "bg-white/30" : "bg-[#111311]/25"}`} />
-      <span className="tf-mono text-[10px]">{label}</span>
-    </div>
-  );
-}
-
-function AppMark({ dark = false }: { dark?: boolean }) {
-  return (
-    <a href="#top" className="tf-focus flex items-center gap-2" aria-label="TerraForge Robotics home">
-      <img src={ASSETS.mark} alt="" className={`h-8 w-8 object-contain ${dark ? "brightness-0 invert" : ""}`} />
-      <span className={`text-[11px] font-semibold tracking-[.14em] ${dark ? "text-white" : "text-[#111311]"}`}>TERRAFORGE</span>
-    </a>
-  );
-}
-
 export default function Home() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [model, setModel] = useState<ModelKey>("r1");
+  usePageTitle("TerraForge Robotics — More acres. Fewer compromises.");
+  const [model, setModel] = useState<ModelKey>("farmx-500");
   const [activeAttachment, setActiveAttachment] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [submitted, setSubmitted] = useState(false);
@@ -131,36 +105,7 @@ export default function Home() {
 
   return (
     <div id="top" className="tf-page">
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/15 bg-[#0B0F0D]/30 text-white backdrop-blur-[10px]">
-        <div className="tf-container flex h-[72px] items-center justify-between">
-          <AppMark dark />
-          <nav className="hidden items-center gap-8 md:flex" aria-label="Primary navigation">
-            {navItems.map((item, index) => (
-              <a key={item.href} href={item.href} className={`tf-focus relative text-[11px] font-medium text-white/75 transition-colors hover:text-white ${index === 0 ? "text-white after:absolute after:-bottom-[27px] after:left-0 after:h-[2px] after:w-full after:bg-[#1B8F6A]" : ""}`}>
-                {item.label}
-              </a>
-            ))}
-          </nav>
-          <div className="flex items-center gap-3">
-            <button type="button" onClick={() => scrollToId("calculator")} className="tf-btn tf-btn-primary hidden min-h-[38px] px-4 text-[11px] sm:inline-flex">
-              Calculate savings <ArrowRight size={14} />
-            </button>
-            <button type="button" onClick={() => setMenuOpen(!menuOpen)} className="tf-focus inline-flex h-10 w-10 items-center justify-center md:hidden" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen}>
-              {menuOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
-          </div>
-        </div>
-        {menuOpen && (
-          <div className="border-t border-white/15 bg-[#111311] px-6 py-5 md:hidden">
-            <div className="flex flex-col gap-4">
-              {navItems.map((item) => (
-                <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)} className="tf-mono text-[11px] text-white/80 hover:text-[#1B8F6A]">{item.label}</a>
-              ))}
-              <button type="button" onClick={() => { setMenuOpen(false); scrollToId("calculator"); }} className="tf-btn tf-btn-primary mt-2 w-full text-[11px]">Calculate savings <ArrowRight size={14} /></button>
-            </div>
-          </div>
-        )}
-      </header>
+      <Navbar />
 
       <main>
         <section className="tf-scanline relative min-h-[720px] overflow-hidden bg-[#111311] text-white sm:min-h-[860px] lg:min-h-[100svh]" aria-label="TerraForge Robotics introduction">
@@ -201,7 +146,7 @@ export default function Home() {
                 <p className="mt-6 max-w-[390px] text-base leading-7 text-[#3F4B45]">TerraForge makes farm work more repeatable. One platform, a set of tools, and a calmer way to keep every pass on schedule.</p>
                 <div className="mt-8 flex flex-wrap gap-2">
                   {(Object.keys(models) as ModelKey[]).map((key) => (
-                    <button key={key} type="button" onClick={() => setModel(key)} className={`tf-focus tf-mono border px-4 py-3 text-[10px] transition-colors ${model === key ? "border-[#1B8F6A] bg-[#1B8F6A] text-white" : "border-[#111311]/25 text-[#3F4B45] hover:border-[#1B8F6A]"}`} aria-pressed={model === key}>{key.toUpperCase()} platform</button>
+                    <button key={key} type="button" onClick={() => setModel(key)} className={`tf-focus tf-mono border px-4 py-3 text-[10px] transition-colors ${model === key ? "border-[#1B8F6A] bg-[#1B8F6A] text-white" : "border-[#111311]/25 text-[#3F4B45] hover:border-[#1B8F6A]"}`} aria-pressed={model === key}>{models[key].name}</button>
                   ))}
                 </div>
               </div>
@@ -299,9 +244,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="tf-dark border-t border-white/10 py-10 sm:py-14">
-        <div className="tf-container"><div className="flex flex-col justify-between gap-8 sm:flex-row sm:items-start"><div><AppMark dark /><p className="mt-5 max-w-[260px] text-sm leading-6 text-white/45">Field-ready autonomy for the next pass, and the one after that.</p></div><div className="grid grid-cols-2 gap-x-12 gap-y-3 sm:gap-x-16"><div className="tf-mono text-[10px] text-white/35">Explore</div><div className="tf-mono text-[10px] text-white/35">Connect</div><a href="#machine" className="text-sm text-white/70 hover:text-[#B9F4D4]">The machine</a><a href="mailto:hello@terraforge.example" className="text-sm text-white/70 hover:text-[#B9F4D4]">Email the team</a><a href="#attachments" className="text-sm text-white/70 hover:text-[#B9F4D4]">Attachments</a><a href="#demo" className="text-sm text-white/70 hover:text-[#B9F4D4]">Book a field note</a><a href="#faq" className="text-sm text-white/70 hover:text-[#B9F4D4]">Questions</a><span className="text-sm text-white/35">© 2026 TerraForge</span></div></div><div className="mt-10 flex flex-col justify-between gap-3 border-t border-white/10 pt-5 text-[10px] text-white/35 sm:flex-row"><span className="tf-mono">Made for real rows</span><span>Autonomy, with both feet on the ground.</span></div></div>
-      </footer>
+      <Footer />
 
       <a href="https://wa.me/919154153925" target="_blank" rel="noreferrer" className="tf-focus fixed bottom-5 right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-[#53C98B] text-[#0B0F0D] shadow-[0_10px_30px_rgba(31,34,31,.22)] transition-transform hover:scale-105" aria-label="Chat with TerraForge on WhatsApp"><span className="text-lg font-semibold">W</span></a>
     </div>
