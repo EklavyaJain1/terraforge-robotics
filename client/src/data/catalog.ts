@@ -110,9 +110,8 @@ export const machineChoices = [
   "Rancher UGV",
   "Canopy Scout",
   "Fleet / B2B order",
+  "Government / Civil enquiry",
   "Government / Defence enquiry",
   "Attachment only",
   "Not sure yet",
 ];
-
-export const serviceOptions = machineChoices;

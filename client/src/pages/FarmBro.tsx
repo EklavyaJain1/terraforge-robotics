@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Check, MoveUpRight } from "lucide-react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import SavingsCalculator from "@/components/SavingsCalculator";
 import SectionKicker from "@/components/SectionKicker";
 import { useOrderForm } from "@/contexts/OrderContext";
 import usePageTitle from "@/hooks/usePageTitle";
@@ -44,7 +45,7 @@ function RobotCard({ robot }: { robot: Robot }) {
       <p className="mt-4 max-w-[430px] text-sm leading-6 text-white/55">{robot.body}</p>
 
       <div className="relative mt-6 h-[190px] overflow-hidden bg-[#17201B] sm:h-[220px]">
-        <img src={robot.image} alt={`TerraForge ${robot.name} agricultural robot`} className="h-full w-full object-cover" loading="lazy" />
+        <img src={robot.image} alt={`FarmBro ${robot.name} agricultural robot`} className="h-full w-full object-cover" loading="lazy" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#111311]/85 via-transparent to-transparent" />
         <div className="absolute bottom-3 left-4 grid grid-cols-3 gap-3">
           {robot.specs.map(([label, value]) => (
@@ -81,7 +82,7 @@ function RobotCard({ robot }: { robot: Robot }) {
 }
 
 export default function FarmBro() {
-  usePageTitle("FarmBro — TerraForge robot lineup for sale");
+  usePageTitle("FarmBro — robot lineup for sale");
   const { openOrderForm } = useOrderForm();
   const [compare, setCompare] = useState(false);
 
@@ -127,7 +128,7 @@ export default function FarmBro() {
                     <tr key={rowKey} className="border-b border-white/10">
                       <td className="py-3 pr-4 capitalize text-white/50"><span className="tf-mono text-[9px]">{rowKey}</span></td>
                       {robots.map((robot) => {
-                        const keywords = rowKey === "endurance" ? ["endurance", "flight"] : rowKey === "coverage" ? ["coverage", "navigation", "camera"] : [rowKey];
+                        const keywords = rowKey === "endurance" ? ["endurance", "flight time"] : rowKey === "coverage" ? ["coverage"] : [rowKey];
                         const spec = robot.specs.find(([label]) => keywords.some((k) => label.toLowerCase().includes(k)));
                         return (
                           <td key={robot.id} className="py-3 pr-4 text-sm text-white/85">
@@ -150,6 +151,8 @@ export default function FarmBro() {
             ))}
           </div>
         </section>
+
+        <SavingsCalculator />
 
         <section className="tf-surface py-16 sm:py-20">
           <div className="tf-container">

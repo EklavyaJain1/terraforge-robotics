@@ -40,7 +40,7 @@ const services = [
 ];
 
 export default function Services() {
-  usePageTitle("Services — TerraForge Robotics");
+  usePageTitle("Services — FarmBro Robotics");
   const { openOrderForm } = useOrderForm();
 
   return (
@@ -54,7 +54,7 @@ export default function Services() {
               We stand behind the machine.
             </h1>
             <p className="mt-6 max-w-[460px] text-base leading-7 text-[#3F4B45]">
-              A robot is only worth its field days. Every TerraForge service exists to keep the season moving — before purchase, through the season, and across years.
+              A robot is only worth its field days. Every FarmBro service exists to keep the season moving — before purchase, through the season, and across years.
             </p>
           </div>
         </section>

@@ -1,7 +1,8 @@
-/* TerraForge Robotics / Field Notes direction: one editorial home story with quiet chrome and field-ready interactions. */
+import { useState } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Route, Switch } from "wouter";
+import BootScreen from "./components/BootScreen";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { OrderProvider } from "./contexts/OrderContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -30,13 +31,20 @@ function Router() {
 }
 
 export default function App() {
+  const [booted, setBooted] = useState(false);
+
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">
         <OrderProvider>
           <TooltipProvider>
-            <Toaster />
-            <Router />
+            {/* The app mounts underneath immediately; the boot screen covers it
+                and wipes away once the first frame can actually paint. */}
+            {!booted && <BootScreen onDone={() => setBooted(true)} />}
+            <div aria-hidden={!booted}>
+              <Toaster />
+              <Router />
+            </div>
           </TooltipProvider>
         </OrderProvider>
       </ThemeProvider>

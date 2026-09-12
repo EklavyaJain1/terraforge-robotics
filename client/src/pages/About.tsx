@@ -13,7 +13,7 @@ const principles = [
 ];
 
 export default function About() {
-  usePageTitle("About — TerraForge Robotics");
+  usePageTitle("About — FarmBro Robotics");
   const { openOrderForm } = useOrderForm();
 
   return (
@@ -22,12 +22,12 @@ export default function About() {
       <main className="pt-[72px]">
         <section className="tf-surface py-16 sm:py-24">
           <div className="tf-container">
-            <SectionKicker number="WHO" label="About TerraForge" />
+            <SectionKicker number="WHO" label="About FarmBro" />
             <h1 className="mt-7 max-w-[720px] text-5xl font-medium leading-[.95] tracking-[-.055em] sm:text-7xl">
               Built for the row you run.
             </h1>
             <p className="mt-6 max-w-[480px] text-base leading-7 text-[#3F4B45]">
-              TerraForge started with a simple observation: the machines that could help growers were either too expensive to own or too fragile to trust. We build field-ready autonomous platforms that earn their place one season at a time.
+              FarmBro started with a simple observation: the machines that could help growers were either too expensive to own or too fragile to trust. We build field-ready autonomous platforms that earn their place one season at a time.
             </p>
           </div>
         </section>
