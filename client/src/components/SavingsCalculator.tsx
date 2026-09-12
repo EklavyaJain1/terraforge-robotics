@@ -7,6 +7,7 @@ const fields = [
   { key: "acres", label: "Acres under cultivation", suffix: "acres" },
   { key: "workers", label: "Workers on a typical pass", suffix: "people" },
   { key: "days", label: "Working days per cycle", suffix: "days" },
+  { key: "cycles", label: "Growing cycles per year", suffix: "cycles" },
   { key: "wage", label: "Average daily wage", suffix: "₹ / day" },
 ] as const;
 
@@ -18,6 +19,7 @@ export default function SavingsCalculator() {
     acres: "120",
     workers: "8",
     days: "12",
+    cycles: "2",
     wage: "650",
   });
 
@@ -25,9 +27,10 @@ export default function SavingsCalculator() {
     const acres = Number(calculator.acres) || 0;
     const workers = Number(calculator.workers) || 0;
     const days = Number(calculator.days) || 0;
+    const cycles = Number(calculator.cycles) || 0;
     const wage = Number(calculator.wage) || 0;
-    const traditional = acres * workers * days * wage;
-    const operatorCost = acres * Math.max(1, days * 0.16) * wage;
+    const traditional = acres * workers * days * wage * cycles;
+    const operatorCost = acres * Math.max(1, days * 0.16) * wage * cycles;
     const annual = Math.max(0, traditional - operatorCost);
     return { annual, percent: traditional ? Math.round((annual / traditional) * 100) : 0 };
   }, [calculator]);
