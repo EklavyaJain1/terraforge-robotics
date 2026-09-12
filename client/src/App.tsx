@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Route, Switch, useLocation } from "wouter";
 import BootScreen from "./components/BootScreen";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { LanguageProvider } from "./contexts/LanguageContext";
 import { OrderProvider } from "./contexts/OrderContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import About from "./pages/About";
@@ -48,6 +49,7 @@ export default function App() {
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">
         <OrderProvider>
+          <LanguageProvider>
           <TooltipProvider>
             {/* The app mounts underneath immediately; the boot screen covers it
                 and wipes away once the first frame can actually paint. */}
@@ -58,6 +60,7 @@ export default function App() {
               <Router />
             </div>
           </TooltipProvider>
+          </LanguageProvider>
         </OrderProvider>
       </ThemeProvider>
     </ErrorBoundary>
