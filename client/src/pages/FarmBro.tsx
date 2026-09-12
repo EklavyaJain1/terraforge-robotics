@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MoveUpRight } from "lucide-react";
+import { Link } from "wouter";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
@@ -84,24 +85,27 @@ function RobotCard({ robot }: { robot: Robot }) {
   return (
     <article className={`relative flex flex-col border bg-[#111311] p-6 sm:p-8 ${robot.badge ? "border-[#1B8F6A]" : "border-white/15"}`}>
       {robot.badge && (
-        <span className="absolute -top-3 left-6 bg-[#1B8F6A] px-3 py-1 text-[10px] font-semibold text-white">{robot.badge}</span>
+        <span className="absolute -top-3 left-6 z-10 bg-[#1B8F6A] px-3 py-1 text-[10px] font-semibold text-white">{robot.badge}</span>
       )}
-      <div className="tf-mono text-[10px] text-[#B9F4D4]">{robot.number} / {robot.tier}</div>
-      <h3 className="mt-3 max-w-[420px] text-2xl font-medium leading-[1.1] tracking-[-.04em] text-white">{robot.name}</h3>
-      <p className="mt-1 text-base text-white/75">{robot.tagline}</p>
+      {/* Image, name, and specs open the product page — the Order button stays separate. */}
+      <Link href={`/farmbro/${robot.slug}`} aria-label={`View ${robot.name}`} className="tf-focus group block">
+        <div className="tf-mono text-[10px] text-[#B9F4D4]">{robot.number} / {robot.tier}</div>
+        <h3 className="mt-3 max-w-[420px] text-2xl font-medium leading-[1.1] tracking-[-.04em] text-white transition-colors group-hover:text-[#B9F4D4]">{robot.name}</h3>
+        <p className="mt-1 text-base text-white/75">{robot.tagline}</p>
 
-      <div className="relative mt-6 h-[190px] overflow-hidden bg-[#17201B] sm:h-[220px]">
-        <img src={robot.image} alt={`FarmBro ${robot.name}`} className="h-full w-full object-cover" loading="lazy" decoding="async" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#111311]/85 via-transparent to-transparent" />
-        <div className="absolute bottom-3 left-4 grid grid-cols-2 gap-x-4 gap-y-1">
-          {robot.specs.slice(0, 4).map(([label, value]) => (
-            <div key={label}>
-              <div className="tf-mono text-[8px] text-white/45">{label}</div>
-              <div className="mt-0.5 text-xs text-white">{value}</div>
-            </div>
-          ))}
+        <div className="relative mt-6 h-[190px] overflow-hidden bg-[#17201B] sm:h-[220px]">
+          <img src={robot.image} alt={`FarmBro ${robot.name}`} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" decoding="async" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#111311]/85 via-transparent to-transparent" />
+          <div className="absolute bottom-3 left-4 grid grid-cols-2 gap-x-4 gap-y-1">
+            {robot.specs.slice(0, 4).map(([label, value]) => (
+              <div key={label}>
+                <div className="tf-mono text-[8px] text-white/45">{label}</div>
+                <div className="mt-0.5 text-xs text-white">{value}</div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      </Link>
 
       <div className="mt-6 flex flex-wrap items-end justify-between gap-4 border-t border-white/15 pt-5">
         <div>
