@@ -40,11 +40,17 @@ function CompareRow({ label, keywords }: { label: string; keywords: string[] }) 
     <tr className="border-b border-white/10">
       <td className="py-3 pr-4 capitalize text-white/50"><span className="tf-mono text-[9px]">{label}</span></td>
       {robots.map((robot) => {
-        const spec = robot.specs.find(([specLabel]) => keywords.some((k) => specLabel.toLowerCase().includes(k)));
+        // Configuration comes from the machine's own field, so every robot with
+        // one (e.g. the Canopy Scout, whose spec list has no "configuration"
+        // row) still resolves its real value.
+        const value =
+          label === "price"
+            ? robot.priceLabel
+            : label === "configuration"
+              ? robot.configuration
+              : robot.specs.find(([specLabel]) => keywords.some((k) => specLabel.toLowerCase().includes(k)))?.[1] ?? "—";
         return (
-          <td key={robot.id} className="py-3 pr-4 text-sm text-white/85">
-            {label === "price" ? robot.priceLabel : spec ? spec[1] : "—"}
-          </td>
+          <td key={robot.id} className="py-3 pr-4 text-sm text-white/85">{value}</td>
         );
       })}
     </tr>
@@ -137,7 +143,7 @@ export default function FarmBro() {
             <div className="mt-7 flex flex-wrap items-end justify-between gap-8">
               <div>
                 <h1 className="max-w-[720px] text-5xl font-medium leading-[.95] tracking-[-.055em] text-white sm:text-7xl">
-                  FarmBro UGV's
+                  FarmBro UGVs
                   <br />
                   <span className="text-[#B9F4D4]">{t.farmbroTitleB}</span>
                 </h1>

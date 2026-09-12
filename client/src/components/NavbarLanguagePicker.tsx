@@ -15,9 +15,11 @@ export default function NavbarLanguagePicker() {
     <DropdownMenu>
       <DropdownMenuTrigger
         aria-label={`${t.changeLanguage} — ${language.english}`}
-        className="tf-focus flex min-h-[34px] items-center gap-1.5 rounded-full border border-white/20 bg-white/[.06] px-3 text-[11px] font-medium text-white/85 transition-colors hover:bg-white/[.14] data-[state=open]:bg-white/[.18]"
+        className="tf-focus flex min-h-[34px] items-center gap-1.5 rounded-full border border-white/20 bg-white/[.06] px-2.5 text-[11px] font-medium text-white/85 transition-colors hover:bg-white/[.14] data-[state=open]:bg-white/[.18] sm:px-3"
       >
         <Languages size={14} className="text-[#B9F4D4]" />
+        {/* Full native name ≥640px; bare code below — keeps the right header
+            group clear of the centered dock toggle at phone widths. */}
         <span className="hidden sm:inline">{language.native}</span>
         <span className="uppercase sm:hidden">{language.code}</span>
       </DropdownMenuTrigger>
