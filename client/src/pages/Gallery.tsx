@@ -6,11 +6,11 @@ import { agriImages, attachments } from "@/data/catalog";
 import usePageTitle from "@/hooks/usePageTitle";
 
 const galleryItems = [
-  { src: agriImages.hero, caption: "FarmX-500 on an estate trial row", tag: "Platform" },
+  { src: agriImages.hero, caption: "The hybrid mulcher on an estate trial row", tag: "Platform" },
   { src: agriImages.wide, caption: "Open field trial, black soil", tag: "Field ops" },
-  { src: agriImages.farmx, caption: "FarmX-500 autonomous farm platform", tag: "Platform" },
-  { src: agriImages.rancher, caption: "Rancher UGV between plantation rows", tag: "Platform" },
-  { src: agriImages.canopy, caption: "Canopy Scout multispectral pass", tag: "Field ops" },
+  { src: agriImages.farmx, caption: "Remote Controlled Mulcher (Hybrid) at work", tag: "Platform" },
+  { src: agriImages.rancher, caption: "Mulcher, Sprayer & Cargo Carrier between plantation rows", tag: "Platform" },
+  { src: agriImages.canopy, caption: "Mini Mulcher (Electric) on hard ground", tag: "Field ops" },
   { src: agriImages.division, caption: "Implement rail study, pre-season", tag: "Attachments" },
 ];
 

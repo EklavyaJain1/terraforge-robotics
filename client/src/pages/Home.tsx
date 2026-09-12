@@ -1,86 +1,31 @@
 import { useState } from "react";
-import { ArrowDownRight, ArrowUpRight, Blocks, Check, ChevronDown, Crosshair, Radar, Zap } from "lucide-react";
-import { Link } from "wouter";
+import { ArrowDownRight, ArrowUpRight, Blocks, Check, ChevronDown, Fuel, Mountain, Radio } from "lucide-react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import ProductCard from "@/components/ProductCard";
 import SectionKicker from "@/components/SectionKicker";
 import { useOrderForm } from "@/contexts/OrderContext";
 import usePageTitle from "@/hooks/usePageTitle";
-import { robots, type RobotId } from "@/data/catalog";
-
-type AudienceId = "farm" | "fleet" | "def";
-
-const audiences: { id: AudienceId; code: string; label: string; line1: string; mint: string; rest: string; sub: string; cta: string }[] = [
-  {
-    id: "farm",
-    code: "FARM",
-    label: "For Farmers",
-    line1: "More acres.",
-    mint: "Fewer",
-    rest: "compromises.",
-    sub: "Field-ready autonomous machines for growers who need more capacity without adding more complexity.",
-    cta: "See the machines",
-  },
-  {
-    id: "fleet",
-    code: "FLEET",
-    label: "For Enterprises",
-    line1: "Fleets that keep",
-    mint: "every pass",
-    rest: "on schedule.",
-    sub: "Multi-machine programmes for estates and agri-enterprises — dashboards, operator certification, and pilot-first deployment.",
-    cta: "Request fleet pricing",
-  },
-  {
-    id: "def",
-    code: "DEF",
-    label: "For Defence",
-    line1: "Indigenous unmanned",
-    mint: "platforms,",
-    rest: "built for the field.",
-    sub: "Make-in-India autonomy for government and defence programmes — engineered at home, proven in the field.",
-    cta: "Talk to engineering",
-  },
-];
+import { robots } from "@/data/catalog";
 
 const proofBar = [
   { value: "1,200+", label: "Acres piloted" },
   { value: "9", label: "Platforms engineered" },
-  { value: "100%", label: "Electric drive" },
+  { value: "100%", label: "Remote operated" },
   { value: "IND", label: "Make in India" },
 ];
 
 const pillars = [
-  { icon: Crosshair, title: "GPS autopilot", copy: "Sub-10 cm accuracy keeps every pass true to the row, season after season." },
-  { icon: Radar, title: "Follow-Me", copy: "The platform shadows its operator and the harvest crew between rows." },
-  { icon: Blocks, title: "Modular implements", copy: "One implement rail: tiller, sprayer, seeder, trailer — swapped in minutes." },
-  { icon: Zap, title: "100% electric", copy: "Zero fuel, quiet passes, and a lower running cost per acre." },
-];
-
-const divisions = [
-  {
-    name: "Agriculture",
-    status: "Live",
-    copy: "Field X platforms on sale now — FarmX-500, Rancher UGV, and Canopy Scout, with attachments, training, and field trials.",
-  },
-  {
-    name: "Civil",
-    status: "In service",
-    copy: "Utility autonomy for public works and industry. Engineering today, deployments next.",
-    enquiry: "Government / Civil enquiry",
-  },
-  {
-    name: "Defence",
-    status: "In service",
-    copy: "Indigenous unmanned platforms for institutional programmes, built to procurement standards.",
-    enquiry: "Government / Defence enquiry",
-  },
+  { icon: Radio, title: "Remote controlled", copy: "The operator works from a safe distance — never on the machine, never in the cut." },
+  { icon: Fuel, title: "Hybrid & electric", copy: "Hybrid power for long mulching days; electric for quiet, fume-free passes in tight blocks." },
+  { icon: Blocks, title: "Modular implements", copy: "One implement rail: tiller, sprayer, cutter, trailer — swapped in minutes." },
+  { icon: Mountain, title: "Slope capable", copy: "The Mini Mulcher holds and works slopes up to 45° where tractors stall." },
 ];
 
 const faqs = [
-  ["Do I need a robotics background to operate it?", "No. FarmBro robots are designed around a remote control workflow that feels familiar from the first session. We train operators on the machine, the attachment, and the safety checks before a field trial."],
-  ["Can the robot work without a cellular connection?", "Core driving and attachment controls remain available locally. Connected features such as live status, remote diagnostics, and fleet reporting use the available network connection."],
-  ["How do field trials work?", "We start with a short discovery call, then bring the right platform and tool to a representative patch of your farm. The output is a practical operating plan—not a showroom demonstration."],
+  ["Do I need a robotics background to operate it?", "No. FarmBro machines are remote-controlled with a workflow that feels familiar from the first session. We train operators on the machine, the attachment, and the safety checks before a field trial."],
+  ["Can the machine work without a cellular connection?", "Core driving and attachment controls remain available locally. Connected features such as live status and remote diagnostics use the available network connection."],
+  ["How do field demonstrations work?", "We start with a short call, then bring the machine to a representative patch of your farm. The output is a practical operating plan — not a showroom demonstration."],
 ];
 
 function scrollToId(id: string) {
@@ -90,19 +35,14 @@ function scrollToId(id: string) {
 export default function Home() {
   usePageTitle("FarmBro Robotics — More acres. Fewer compromises.");
   const { openOrderForm } = useOrderForm();
-  const [audience, setAudience] = useState<AudienceId>("farm");
-  const [model, setModel] = useState<RobotId>("farmx-500");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-
-  const activeAudience = audiences.find((a) => a.id === audience) ?? audiences[0];
-  const currentModel = robots.find((robot) => robot.id === model) ?? robots[0];
 
   return (
     <div id="top" className="tf-page">
       <Navbar />
 
       <main>
-        {/* Hero — audience thesis over the field film */}
+        {/* Hero — the field film and the thesis, no audience tabs */}
         <section
           className="tf-scanline relative min-h-[720px] overflow-hidden bg-[#111311] text-white sm:min-h-[860px] lg:min-h-[100svh]"
           aria-label="FarmBro Robotics introduction"
@@ -114,49 +54,19 @@ export default function Home() {
 
           <div className="tf-container relative flex min-h-[720px] flex-col justify-end pb-[210px] pt-32 sm:min-h-[860px] sm:pb-[136px] lg:min-h-[100svh]">
             <div className="max-w-[620px]">
-              {/* Audience switcher — the buyer picks the thesis */}
-              <div className="reveal flex flex-wrap items-center gap-2" role="group" aria-label="Choose your audience">
-                {audiences.map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => setAudience(item.id)}
-                    aria-pressed={audience === item.id}
-                    className={`tf-focus tf-mono border px-4 py-2.5 text-[10px] transition-colors ${
-                      audience === item.id
-                        ? "border-[#53C98B] bg-[#1B8F6A]/20 text-[#B9F4D4]"
-                        : "border-white/25 text-white/65 hover:border-[#B9F4D4] hover:text-white"
-                    }`}
-                  >
-                    {item.code} <span className="hidden sm:inline text-white/40">/ {item.label}</span>
-                  </button>
-                ))}
-              </div>
-
-              <h1
-                key={audience}
-                className="reveal reveal-delay-1 mt-6 max-w-[620px] text-[clamp(2.6rem,7.5vw,6.5rem)] font-medium leading-[.92] tracking-[-.07em] text-white"
-              >
-                {activeAudience.line1}
+              <h1 className="reveal text-[clamp(2.6rem,7.5vw,6.5rem)] font-medium leading-[.92] tracking-[-.07em] text-white">
+                More acres.
                 <br />
-                <span className="text-[#B9F4D4]">{activeAudience.mint}</span> {activeAudience.rest}
+                <span className="text-[#B9F4D4]">Fewer compromises.</span>
               </h1>
-              <p className="reveal reveal-delay-2 mt-6 max-w-[430px] text-sm leading-6 text-white/75 sm:text-base">{activeAudience.sub}</p>
+              <p className="reveal reveal-delay-1 mt-6 max-w-[430px] text-sm leading-6 text-white/75 sm:text-base">
+                Remote-controlled farm machines for growers who need more capacity without adding more complexity.
+              </p>
 
-              <div className="reveal reveal-delay-3 mt-8">
-                {audience === "farm" ? (
-                  <button type="button" onClick={() => scrollToId("machine")} className="tf-btn tf-btn-primary">
-                    {activeAudience.cta} <ArrowDownRight size={15} />
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => openOrderForm(audience === "fleet" ? "Fleet / B2B order" : "Government / Defence enquiry")}
-                    className="tf-btn tf-btn-primary"
-                  >
-                    {activeAudience.cta} <ArrowUpRight size={15} />
-                  </button>
-                )}
+              <div className="reveal reveal-delay-2 mt-8">
+                <button type="button" onClick={() => scrollToId("machines")} className="tf-btn tf-btn-primary">
+                  See the machines <ArrowDownRight size={15} />
+                </button>
               </div>
             </div>
           </div>
@@ -175,69 +85,32 @@ export default function Home() {
 
           <button
             type="button"
-            onClick={() => scrollToId("machine")}
+            onClick={() => scrollToId("machines")}
             className="tf-focus absolute bottom-[128px] left-1/2 hidden -translate-x-1/2 items-center gap-2 text-white/70 lg:flex"
-            aria-label="Scroll to the machine section"
+            aria-label="Scroll to the machines section"
           >
             <span className="tf-mono text-[9px]">Scroll to explore</span>
             <ChevronDown size={14} />
           </button>
         </section>
 
-        {/* 01 — The machine + technology pillars */}
-        <section className="tf-surface border-b border-[#111311]/15 py-16 sm:py-20" id="machine">
+        {/* 01 — The machines: e-commerce cards; every card opens its product page */}
+        <section className="tf-surface border-b border-[#111311]/15 py-16 sm:py-20" id="machines">
           <div className="tf-container">
-            <div className="grid gap-12 lg:grid-cols-[.72fr_1.28fr] lg:gap-20">
+            <div className="grid items-end gap-8 lg:grid-cols-[.72fr_1.28fr] lg:gap-20">
               <div>
-                <SectionKicker number="01" label="The machine" />
+                <SectionKicker number="01" label="The machines" />
                 <h2 className="mt-7 max-w-[420px] text-4xl font-medium leading-[.98] tracking-[-.055em] sm:text-6xl">A small machine for a very big season.</h2>
-                <p className="mt-6 max-w-[390px] text-base leading-7 text-[#3F4B45]">FarmBro makes farm work more repeatable. One platform, a set of tools, and a calmer way to keep every pass on schedule.</p>
-                <div className="mt-8 flex flex-wrap gap-2">
-                  {robots.map((robot) => (
-                    <button
-                      key={robot.id}
-                      type="button"
-                      onClick={() => setModel(robot.id)}
-                      aria-pressed={model === robot.id}
-                      className={`tf-focus tf-mono border px-4 py-3 text-[10px] transition-colors ${
-                        model === robot.id
-                          ? "border-[#1B8F6A] bg-[#1B8F6A] text-white"
-                          : "border-[#111311]/25 text-[#3F4B45] hover:border-[#1B8F6A]"
-                      }`}
-                    >
-                      {robot.name}
-                    </button>
-                  ))}
-                </div>
               </div>
+              <p className="max-w-[460px] text-base leading-7 text-[#3F4B45] lg:justify-self-end">
+                Three machines, one remote in the operator's hands. Open any machine to see its configuration, gallery, and full specification.
+              </p>
+            </div>
 
-              <div className="relative min-h-[510px] overflow-hidden bg-[#17201B] sm:min-h-[580px]">
-                <img src={currentModel.image} alt={`${currentModel.name} agricultural robot platform`} className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 hover:scale-[1.03]" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F0D]/90 via-[#0B0F0D]/10 to-transparent" />
-                <div className="absolute left-6 top-6 flex items-center gap-2 text-white/75 sm:left-8 sm:top-8">
-                  <span className="h-2 w-2 rounded-full bg-[#53C98B]" />
-                  <span className="tf-mono text-[10px]">Live platform study</span>
-                </div>
-                <div className="absolute inset-x-6 bottom-6 sm:inset-x-8 sm:bottom-8">
-                  <div className="flex items-end justify-between gap-5">
-                    <div>
-                      <div className="tf-mono text-[10px] text-[#B9F4D4]">{currentModel.number} / {currentModel.tier}</div>
-                      <h3 className="mt-2 text-6xl font-medium tracking-[-.08em] text-white sm:text-8xl">{currentModel.name}</h3>
-                      <p className="mt-1 text-lg text-white/85">{currentModel.tagline}</p>
-                    </div>
-                    <span className="hidden border border-white/25 px-3 py-2 text-right text-[10px] leading-4 text-white/70 sm:block">{currentModel.availability}</span>
-                  </div>
-                  <p className="mt-5 max-w-[410px] text-sm leading-6 text-white/70">{currentModel.body}</p>
-                  <div className="mt-6 grid max-w-[520px] grid-cols-3 gap-3 border-t border-white/20 pt-4">
-                    {currentModel.specs.map(([label, value]) => (
-                      <div key={label}>
-                        <div className="tf-mono text-[9px] text-white/45">{label}</div>
-                        <div className="mt-1 text-sm text-white">{value}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+            <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {robots.map((robot) => (
+                <ProductCard key={robot.id} robot={robot} />
+              ))}
             </div>
 
             {/* Technology pillars — what evaluators scan for */}
@@ -253,52 +126,12 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 02 — Divisions */}
-        <section id="divisions" className="tf-dark py-20 sm:py-24">
-          <div className="tf-container">
-            <div className="grid items-end gap-8 lg:grid-cols-[.7fr_1.3fr] lg:gap-20">
-              <div>
-                <SectionKicker number="02" label="Divisions" light />
-                <h2 className="mt-7 max-w-[430px] text-4xl font-medium leading-[.98] tracking-[-.055em] text-white sm:text-6xl">One company. Three fronts.</h2>
-              </div>
-              <p className="max-w-[460px] text-base leading-7 text-white/60">The same autonomy stack, fielded in three worlds. Agriculture is on sale today; civil and defence programmes are in active engineering.</p>
-            </div>
-
-            <div className="mt-12 grid gap-px border border-white/15 bg-white/15 lg:grid-cols-3">
-              {divisions.map((division) => (
-                <div key={division.name} className="flex flex-col bg-[#111311] p-7 sm:p-8">
-                  <div className="flex items-center justify-between">
-                    <span className={`tf-mono text-[9px] ${division.status === "Live" ? "text-[#53C98B]" : "text-white/40"}`}>
-                      <span className={`mr-2 inline-block h-1.5 w-1.5 rounded-full align-middle ${division.status === "Live" ? "bg-[#53C98B]" : "bg-white/35"}`} />
-                      {division.status.toUpperCase()}
-                    </span>
-                    <span className="h-px w-8 bg-white/20" />
-                  </div>
-                  <h3 className="mt-8 text-3xl font-medium tracking-[-.05em] text-white">{division.name}</h3>
-                  <p className="mt-3 flex-1 text-sm leading-6 text-white/55">{division.copy}</p>
-                  <div className="mt-7">
-                    {division.status === "Live" ? (
-                      <Link href="/farmbro" className="tf-btn tf-btn-primary w-fit">
-                        Browse FarmBro <ArrowUpRight size={14} />
-                      </Link>
-                    ) : (
-                      <button type="button" onClick={() => openOrderForm(division.enquiry)} className="tf-btn tf-btn-quiet w-fit">
-                        Talk to engineering <ArrowUpRight size={14} />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* 03 — Questions */}
+        {/* 02 — Questions */}
         <section className="tf-surface py-20 sm:py-24" id="faq">
           <div className="tf-container">
             <div className="grid gap-12 lg:grid-cols-[.7fr_1.3fr] lg:gap-24">
               <div>
-                <SectionKicker number="03" label="Questions" />
+                <SectionKicker number="02" label="Questions" />
                 <h2 className="mt-7 max-w-[370px] text-4xl font-medium leading-[.98] tracking-[-.055em] sm:text-6xl">The practical answers.</h2>
               </div>
               <div className="border-t border-[#111311]/20">
@@ -321,16 +154,16 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 04 — Make it practical */}
+        {/* 03 — Make it practical */}
         <section id="order" className="relative overflow-hidden bg-[#1B8F6A] py-20 text-white sm:py-24">
           <div className="absolute -right-20 -top-24 h-72 w-72 rounded-full border-[40px] border-white/10" />
           <div className="absolute -bottom-32 left-1/3 h-80 w-80 rounded-full border-[1px] border-white/15" />
           <div className="tf-container relative">
             <div className="grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:gap-24">
               <div>
-                <SectionKicker number="04" label="Make it practical" light />
+                <SectionKicker number="03" label="Make it practical" light />
                 <h2 className="mt-7 max-w-[480px] text-4xl font-medium leading-[.96] tracking-[-.055em] sm:text-6xl">Bring us the row you actually run.</h2>
-                <p className="mt-6 max-w-[390px] text-base leading-7 text-white/80">Tell us what is slowing the season down. We'll come back with a platform, a tool, and a realistic next step.</p>
+                <p className="mt-6 max-w-[390px] text-base leading-7 text-white/80">Tell us what is slowing the season down. We'll come back with a machine, a tool, and a realistic next step.</p>
               </div>
               <div className="flex flex-col items-start justify-center gap-6">
                 <button type="button" onClick={() => openOrderForm()} className="tf-btn tf-btn-quiet text-sm">

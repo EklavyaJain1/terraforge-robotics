@@ -1,16 +1,21 @@
-export type RobotId = "farmx-500" | "rancher-ugv" | "canopy-scout";
+export type RobotId = "mulcher-hybrid" | "mulcher-sprayer-cargo" | "mini-mulcher-electric";
 
 export interface Robot {
   id: RobotId;
+  slug: string;
   number: string;
   name: string;
   tier: string;
+  configuration: string;
   tagline: string;
   body: string;
   image: string;
+  gallery: string[];
   priceLabel: string;
   institutionalNote: string;
   badge?: string;
+  /** Optional highlight chip shown on the store card, as in the reference design. */
+  valueNote?: string;
   specs: [string, string][];
   highlights: string[];
   availability: string;
@@ -27,65 +32,88 @@ export const agriImages = {
 
 export const robots: Robot[] = [
   {
-    id: "farmx-500",
+    id: "mulcher-hybrid",
+    slug: "remote-controlled-mulcher-hybrid",
     number: "01",
-    name: "FarmX-500",
-    tier: "Autonomous farm platform",
-    tagline: "Precision agriculture, redefined.",
-    body: "A full-scale autonomous farm platform designed for row-crop operations across Indian estates. FarmX-500 combines a rugged 4WD electric drivetrain with modular implements for sowing, spraying, and inter-row cultivation — all controlled from a single tablet interface.",
+    name: "Farm Bro Remote Controlled Mulcher (Hybrid)",
+    tier: "Agriculture platform",
+    configuration: "4X4 UGV",
+    tagline: "Heavy mulching, no driver on the machine.",
+    body: "A full-size remote-controlled mulcher for open fields and orchard blocks. The hybrid power pack keeps long mulching days going, while the operator works the machine from a safe distance with a rugged remote unit.",
     image: agriImages.farmx,
-    priceLabel: "from ₹18,50,000",
+    gallery: [agriImages.farmx, agriImages.wide, agriImages.hero, agriImages.division],
+    priceLabel: "Price on request",
     institutionalNote: "Fleet, lease & institutional pricing on request",
     badge: "Flagship",
-    specs: [["Payload", "500 kg"], ["Endurance", "18 hr"], ["Navigation", "GPS + LiDAR"]],
-    highlights: [
-      "Fully electric drivetrain — zero emissions",
-      "GPS autopilot with sub-10 cm precision",
-      "Modular implement rail: sprayer, tiller, seeder",
-      "18 hours continuous operation on a single charge",
-      "Follow-Me mode for supervised operations",
+    specs: [
+      ["Configuration", "4X4 UGV"],
+      ["Power", "Hybrid"],
+      ["Operation", "Remote controlled"],
+      ["Primary function", "Heavy-duty mulching"],
     ],
-    availability: "Field trials open for the coming season",
+    highlights: [
+      "4X4 unmanned ground vehicle platform",
+      "Hybrid power for long mulching sessions",
+      "Operator stays off the machine, at a safe distance",
+      "Built for open fields and orchard blocks",
+    ],
+    availability: "Field demonstrations open on request",
   },
   {
-    id: "rancher-ugv",
+    id: "mulcher-sprayer-cargo",
+    slug: "mulcher-sprayer-cargo-carrier",
     number: "02",
-    name: "Rancher UGV",
-    tier: "Plantation utility platform",
-    tagline: "Your smart plantation companion.",
-    body: "A compact utility platform purpose-built for plantation crops — coffee, areca, rubber, and horticulture. Rancher navigates narrow rows and steep gradients where full-scale tractors cannot, and hauls up to 250 kg of harvested produce or inputs.",
+    name: "Farm Bro Remote Controlled Mulcher, Sprayer & Cargo Carrier",
+    tier: "Agriculture platform",
+    configuration: "6X6 UGV",
+    tagline: "Mulch, spray, and carry — one unmanned carrier.",
+    body: "One unmanned carrier that covers three season jobs: mulching between rows, spraying on schedule, and moving harvest or inputs across the estate. The six-wheel configuration is made for plantation rows and uneven estate tracks.",
     image: agriImages.rancher,
-    priceLabel: "from ₹7,95,000",
+    gallery: [agriImages.rancher, agriImages.wide, agriImages.division, agriImages.hero],
+    priceLabel: "Price on request",
     institutionalNote: "Fleet, lease & institutional pricing on request",
     badge: "Best seller",
-    specs: [["Payload", "250 kg"], ["Width", "980 mm"], ["Ingress", "IP66"]],
-    highlights: [
-      "Compact chassis for narrow plantation rows",
-      "250 kg payload with dumping bed",
-      "Follow-Me mode for harvest crews",
-      "All-terrain 4WD with 30° gradient",
-      "IP66 rated for monsoon operations",
+    specs: [
+      ["Configuration", "6X6 UGV"],
+      ["Operation", "Remote controlled"],
+      ["Functions", "Mulching · Spraying · Cargo"],
+      ["Payload & tank", "Full specification on request"],
     ],
-    availability: "Ready for estate pilots",
+    highlights: [
+      "6X6 unmanned ground vehicle platform",
+      "Three jobs on one chassis — mulch, spray, carry",
+      "Made for plantation rows and estate tracks",
+      "One crew member runs the whole pass",
+    ],
+    availability: "Estate pilots open on request",
   },
   {
-    id: "canopy-scout",
+    id: "mini-mulcher-electric",
+    slug: "mini-mulcher-electric",
     number: "03",
-    name: "Canopy Scout",
-    tier: "Crop intelligence drone",
-    tagline: "Multispectral crop intelligence.",
-    body: "A tethered multispectral scouting drone that maps canopy health, water stress, and pest pressure across large estates. Data flows into a farm dashboard that plans variable-rate spraying for the FarmX fleet.",
+    name: "Farm Bro Remote Controlled Mini Mulcher (Electric)",
+    tier: "Agriculture platform",
+    configuration: "4X4 UGV",
+    tagline: "For the blocks a tractor can't reach.",
+    body: "The compact electric mulcher for hard-to-reach ground — terraces, orchard basins, and narrow blocks where bigger machines stall. Quiet, fume-free passes with full remote control.",
     image: agriImages.canopy,
-    priceLabel: "from ₹4,25,000",
+    gallery: [agriImages.canopy, agriImages.division, agriImages.hero, agriImages.wide],
+    priceLabel: "Price on request",
     institutionalNote: "Fleet, lease & institutional pricing on request",
-    specs: [["Flight time", "45 min"], ["Coverage", "180 acres/hr"], ["Camera", "5-band multispectral"]],
-    highlights: [
-      "5-band multispectral imaging",
-      "45 minutes flight time per battery",
-      "Automatic pest and stress detection",
-      "Direct integration with the FarmX fleet dashboard",
+    valueNote: "For hard to reach areas, capable of moving at 45° slope.",
+    specs: [
+      ["Configuration", "4X4 UGV"],
+      ["Power", "Electric"],
+      ["Operation", "Remote controlled"],
+      ["Slope capability", "Up to 45°"],
     ],
-    availability: "Available with every estate package",
+    highlights: [
+      "Compact 4X4 platform for tight ground",
+      "Electric drive — quiet and fume-free",
+      "Moves on slopes up to 45°",
+      "Reaches where tractors and carriers can't",
+    ],
+    availability: "Demonstrations open on request",
   },
 ];
 
@@ -100,15 +128,15 @@ export interface Attachment {
 
 export const attachments: Attachment[] = [
   { number: "A01", name: "Rotary tiller", copy: "Aerate 3–4 inches deep while cutting weed roots between rows.", stat: "3–4 in depth", priceLabel: "₹42,000", icon: "✣" },
-  { number: "A02", name: "Boom sprayer", copy: "Adjustable nozzles deliver a fine, even spray with less chemical drift. 300 L tank on the FarmX rail.", stat: "10–15 ft reach", priceLabel: "₹38,000", icon: "⌁" },
+  { number: "A02", name: "Boom sprayer", copy: "Adjustable nozzles deliver a fine, even spray with less chemical drift. 300 L tank on the implement rail.", stat: "10–15 ft reach", priceLabel: "₹38,000", icon: "⌁" },
   { number: "A03", name: "Brush cutter", copy: "Clear overgrowth cleanly without disturbing the crop beside it.", stat: "Row-safe cut", priceLabel: "₹26,000", icon: "╱" },
   { number: "A04", name: "Field trailer", copy: "Move tools, harvest crates, or inputs without adding another vehicle.", stat: "Up to 250 kg", priceLabel: "₹55,000", icon: "▱" },
 ];
 
 export const machineChoices = [
-  "FarmX-500",
-  "Rancher UGV",
-  "Canopy Scout",
+  "Farm Bro Remote Controlled Mulcher (Hybrid)",
+  "Farm Bro Remote Controlled Mulcher, Sprayer & Cargo Carrier",
+  "Farm Bro Remote Controlled Mini Mulcher (Electric)",
   "Fleet / B2B order",
   "Government / Civil enquiry",
   "Government / Defence enquiry",
