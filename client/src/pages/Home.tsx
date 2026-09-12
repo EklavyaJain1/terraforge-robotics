@@ -67,11 +67,13 @@ const divisions = [
     name: "Civil",
     status: "In service",
     copy: "Utility autonomy for public works and industry. Engineering today, deployments next.",
+    enquiry: "Government / Civil enquiry",
   },
   {
     name: "Defence",
     status: "In service",
     copy: "Indigenous unmanned platforms for institutional programmes, built to procurement standards.",
+    enquiry: "Government / Defence enquiry",
   },
 ];
 
@@ -280,7 +282,7 @@ export default function Home() {
                         Browse FarmBro <ArrowUpRight size={14} />
                       </Link>
                     ) : (
-                      <button type="button" onClick={() => openOrderForm("Government / Defence enquiry")} className="tf-btn tf-btn-quiet w-fit">
+                      <button type="button" onClick={() => openOrderForm(division.enquiry)} className="tf-btn tf-btn-quiet w-fit">
                         Talk to engineering <ArrowUpRight size={14} />
                       </button>
                     )}
