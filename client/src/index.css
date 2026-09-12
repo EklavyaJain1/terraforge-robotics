@@ -1,4 +1,4 @@
-/* TerraForge Robotics / Field Notes direction: warm earth neutrals, graphite machinery, Terra Orange actions, mono operational metadata. */
+/* FarmBro Robotics / Field Notes direction: warm earth neutrals, graphite machinery, jade actions, mono operational metadata. */
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -110,4 +110,30 @@
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+/* FarmBro boot screen */
+body.boot-lock { overflow: hidden; }
+
+.boot-screen { will-change: clip-path; }
+.boot-rows {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(90deg, rgba(185, 244, 212, .05) 0, rgba(185, 244, 212, .05) 1px, transparent 1px, transparent 72px);
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 78%);
+}
+.boot-bar { transition: width .18s linear; }
+
+.boot-screen.wipe-in { animation: boot-wipe .55s cubic-bezier(.65, 0, .35, 1) both; }
+.boot-screen.wipe-out { animation: boot-reveal .7s cubic-bezier(.77, 0, .18, 1) forwards; }
+
+@keyframes boot-wipe {
+  from { clip-path: inset(0 0 0 100%); }
+  to { clip-path: inset(0 0 0 0); }
+}
+@keyframes boot-reveal {
+  from { clip-path: inset(0 0 0 0); }
+  to { clip-path: inset(0 100% 0 0); }
 }

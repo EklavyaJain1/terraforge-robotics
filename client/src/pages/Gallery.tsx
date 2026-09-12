@@ -15,7 +15,7 @@ const galleryItems = [
 ];
 
 export default function Gallery() {
-  usePageTitle("Gallery — TerraForge Robotics");
+  usePageTitle("Gallery — FarmBro Robotics");
   const [filter, setFilter] = useState<string>("All");
   const tags = ["All", "Platform", "Attachments", "Field ops"];
   const visible = galleryItems.filter((item) => filter === "All" || item.tag === filter);

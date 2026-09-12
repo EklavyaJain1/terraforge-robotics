@@ -20,5 +20,5 @@
     <rect x="560" y="60" width="6" height="70" fill="#1B8F6A"/>
     <circle cx="563" cy="52" r="10" fill="#53C98B"/>
   </g>
-  <text x="600" y="570" text-anchor="middle" font-family="monospace" font-size="24" letter-spacing="8" fill="#B9F4D4" fill-opacity=".6">TERRAFORGE PLATFORM</text>
+  <text x="600" y="570" text-anchor="middle" font-family="monospace" font-size="24" letter-spacing="8" fill="#B9F4D4" fill-opacity=".6">FARMBRO PLATFORM</text>
 </svg>

@@ -9,18 +9,18 @@ import usePageTitle from "@/hooks/usePageTitle";
 const contactRows = [
   { label: "Call the field team", value: "+91 91541 53925", href: "tel:+919154153925" },
   { label: "WhatsApp support", value: "Chat with an engineer", href: "https://wa.me/919154153925" },
-  { label: "Email", value: "hello@terraforge.example", href: "mailto:hello@terraforge.example" },
+  { label: "Email", value: "hello@farmbro.example", href: "mailto:hello@farmbro.example" },
 ];
 
 export default function Contact() {
-  usePageTitle("Contact — TerraForge Robotics");
+  usePageTitle("Contact — FarmBro Robotics");
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({ name: "", contact: "", topic: "Field trial", message: "" });
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSubmitted(true);
-    toast.success("Message sent", { description: "A TerraForge specialist will follow up shortly." });
+    toast.success("Message sent", { description: "A FarmBro specialist will follow up shortly." });
   }
 
   return (
@@ -65,7 +65,7 @@ export default function Contact() {
                   </div>
                   <h2 className="mt-6 text-3xl font-medium tracking-[-.05em]">We have your note.</h2>
                   <p className="mt-3 max-w-[340px] text-sm leading-6 text-[#59655F]">
-                    A TerraForge field specialist will follow up shortly to understand your crop, rows, and timing.
+                    A FarmBro field specialist will follow up shortly to understand your crop, rows, and timing.
                   </p>
                   <button type="button" onClick={() => setSubmitted(false)} className="tf-btn tf-btn-outline mt-7 w-fit">
                     Send another note

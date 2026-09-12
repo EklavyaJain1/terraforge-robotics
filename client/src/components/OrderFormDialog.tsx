@@ -35,7 +35,7 @@ export default function OrderFormDialog({ open, onOpenChange, defaultRobot }: Or
     event.preventDefault();
     setSubmitted(true);
     toast.success("Order request received", {
-      description: "A TerraForge specialist will call you to confirm configuration and delivery timing.",
+      description: "A FarmBro specialist will call you to confirm configuration and delivery timing.",
     });
   }
 
@@ -57,7 +57,7 @@ export default function OrderFormDialog({ open, onOpenChange, defaultRobot }: Or
           </div>
         ) : (
           <div className="p-7 sm:p-8">
-            <DialogTitle className="text-2xl font-medium tracking-[-.04em]">Order TerraForge</DialogTitle>
+            <DialogTitle className="text-2xl font-medium tracking-[-.04em]">Order FarmBro</DialogTitle>
             <DialogDescription className="mt-2 text-sm leading-6 text-white/55">
               Tell us the machine and quantity. A field specialist confirms pricing, attachments, and delivery.
             </DialogDescription>

@@ -114,5 +114,3 @@ export const machineChoices = [
   "Attachment only",
   "Not sure yet",
 ];
-
-export const serviceOptions = machineChoices;
