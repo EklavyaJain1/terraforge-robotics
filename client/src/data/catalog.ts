@@ -1,4 +1,4 @@
-export type RobotId = "mulcher-hybrid" | "mulcher-sprayer-cargo" | "mini-mulcher-electric";
+export type RobotId = "mulcher-hybrid" | "mulcher-sprayer-cargo" | "mini-mulcher-electric" | "canopy-scout";
 
 export interface Robot {
   id: RobotId;
@@ -96,8 +96,8 @@ export const robots: Robot[] = [
     configuration: "4X4 UGV",
     tagline: "For the blocks a tractor can't reach.",
     body: "The compact electric mulcher for hard-to-reach ground — terraces, orchard basins, and narrow blocks where bigger machines stall. Quiet, fume-free passes with full remote control.",
-    image: agriImages.canopy,
-    gallery: [agriImages.canopy, agriImages.division, agriImages.hero, agriImages.wide],
+    image: agriImages.hero,
+    gallery: [agriImages.hero, agriImages.rancher, agriImages.division, agriImages.wide],
     priceLabel: "Price on request",
     institutionalNote: "Fleet, lease & institutional pricing on request",
     valueNote: "For hard to reach areas, capable of moving at 45° slope.",
@@ -114,6 +114,34 @@ export const robots: Robot[] = [
       "Reaches where tractors and carriers can't",
     ],
     availability: "Demonstrations open on request",
+  },
+  {
+    id: "canopy-scout",
+    slug: "canopy-scout-drone",
+    number: "04",
+    name: "Farm Bro Canopy Scout",
+    tier: "Crop intelligence drone",
+    configuration: "Scouting drone",
+    tagline: "The estate from above, before you commit the crew.",
+    body: "A crop-scouting drone that flies the block before the machines roll — canopy health, water stress, and pest pressure mapped in one pass, so mulching and spraying go exactly where the field needs them.",
+    image: agriImages.canopy,
+    gallery: [agriImages.canopy, agriImages.wide, agriImages.division, agriImages.hero],
+    priceLabel: "Price on request",
+    institutionalNote: "Fleet, lease & institutional pricing on request",
+    badge: "Scout",
+    specs: [
+      ["Type", "Crop scouting drone"],
+      ["Operation", "Remote controlled / autopilot survey"],
+      ["Scouting", "Canopy health · water stress · pest pressure"],
+      ["Full specification", "On request"],
+    ],
+    highlights: [
+      "Scouts a block before the machines commit",
+      "Maps canopy health, water stress, and pest pressure in one pass",
+      "Pairs with the mulcher and carrier lineup",
+      "Flies from the same operator crew — no pilot on the field",
+    ],
+    availability: "Scouting demonstrations open on request",
   },
 ];
 
@@ -137,6 +165,7 @@ export const machineChoices = [
   "Farm Bro Remote Controlled Mulcher (Hybrid)",
   "Farm Bro Remote Controlled Mulcher, Sprayer & Cargo Carrier",
   "Farm Bro Remote Controlled Mini Mulcher (Electric)",
+  "Farm Bro Canopy Scout",
   "Fleet / B2B order",
   "Government / Civil enquiry",
   "Government / Defence enquiry",

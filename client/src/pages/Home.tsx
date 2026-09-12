@@ -5,15 +5,16 @@ import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
 import SectionKicker from "@/components/SectionKicker";
 import { useOrderForm } from "@/contexts/OrderContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import usePageTitle from "@/hooks/usePageTitle";
 import { robots } from "@/data/catalog";
 
 const proofBar = [
-  { value: "1,200+", label: "Acres piloted" },
-  { value: "9", label: "Platforms engineered" },
-  { value: "100%", label: "Remote operated" },
-  { value: "IND", label: "Make in India" },
-];
+  { value: "1,200+", key: "proofAcres" },
+  { value: "9", key: "proofPlatforms" },
+  { value: "100%", key: "proofRemote" },
+  { value: "IND", key: "proofIndia" },
+] as const;
 
 const pillars = [
   { icon: Radio, title: "Remote controlled", copy: "The operator works from a safe distance — never on the machine, never in the cut." },
@@ -35,6 +36,7 @@ function scrollToId(id: string) {
 export default function Home() {
   usePageTitle("FarmBro Robotics — More acres. Fewer compromises.");
   const { openOrderForm } = useOrderForm();
+  const { t } = useLanguage();
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   return (
@@ -55,17 +57,17 @@ export default function Home() {
           <div className="tf-container relative flex min-h-[720px] flex-col justify-end pb-[210px] pt-32 sm:min-h-[860px] sm:pb-[136px] lg:min-h-[100svh]">
             <div className="max-w-[620px]">
               <h1 className="reveal text-[clamp(2.6rem,7.5vw,6.5rem)] font-medium leading-[.92] tracking-[-.07em] text-white">
-                More acres.
+                {t.heroTitleA}
                 <br />
-                <span className="text-[#B9F4D4]">Fewer compromises.</span>
+                <span className="text-[#B9F4D4]">{t.heroTitleB}</span>
               </h1>
               <p className="reveal reveal-delay-1 mt-6 max-w-[430px] text-sm leading-6 text-white/75 sm:text-base">
-                Remote-controlled farm machines for growers who need more capacity without adding more complexity.
+                {t.heroSub}
               </p>
 
               <div className="reveal reveal-delay-2 mt-8">
                 <button type="button" onClick={() => scrollToId("machines")} className="tf-btn tf-btn-primary">
-                  See the machines <ArrowDownRight size={15} />
+                  {t.heroCta} <ArrowDownRight size={15} />
                 </button>
               </div>
             </div>
@@ -75,9 +77,9 @@ export default function Home() {
           <div className="absolute inset-x-0 bottom-0 border-t border-white/15 bg-[#0B0F0D]/45 backdrop-blur-[6px]">
             <div className="tf-container grid grid-cols-2 divide-x divide-white/10 sm:grid-cols-4">
               {proofBar.map((item) => (
-                <div key={item.label} className="px-4 py-4 first:pl-0 sm:px-6 sm:py-5">
+                <div key={item.key} className="px-4 py-4 first:pl-0 sm:px-6 sm:py-5">
                   <div className="text-xl font-medium tracking-[-.03em] text-white sm:text-2xl">{item.value}</div>
-                  <div className="tf-mono mt-1 text-[9px] uppercase tracking-[.08em] text-white/50">{item.label}</div>
+                  <div className="tf-mono mt-1 text-[9px] uppercase tracking-[.08em] text-white/50">{t[item.key]}</div>
                 </div>
               ))}
             </div>
@@ -89,7 +91,7 @@ export default function Home() {
             className="tf-focus absolute bottom-[128px] left-1/2 hidden -translate-x-1/2 items-center gap-2 text-white/70 lg:flex"
             aria-label="Scroll to the machines section"
           >
-            <span className="tf-mono text-[9px]">Scroll to explore</span>
+            <span className="tf-mono text-[9px]">{t.scrollHint}</span>
             <ChevronDown size={14} />
           </button>
         </section>
@@ -103,11 +105,11 @@ export default function Home() {
                 <h2 className="mt-7 max-w-[420px] text-4xl font-medium leading-[.98] tracking-[-.055em] sm:text-6xl">A small machine for a very big season.</h2>
               </div>
               <p className="max-w-[460px] text-base leading-7 text-[#3F4B45] lg:justify-self-end">
-                Three machines, one remote in the operator's hands. Open any machine to see its configuration, gallery, and full specification.
+                Four machines, one remote in the operator's hands. Open any machine to see its configuration, gallery, and full specification.
               </p>
             </div>
 
-            <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {robots.map((robot) => (
                 <ProductCard key={robot.id} robot={robot} />
               ))}

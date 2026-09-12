@@ -7,6 +7,7 @@ import ProductCard from "@/components/ProductCard";
 import SavingsCalculator from "@/components/SavingsCalculator";
 import SectionKicker from "@/components/SectionKicker";
 import { useOrderForm } from "@/contexts/OrderContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import usePageTitle from "@/hooks/usePageTitle";
 import { attachments, robots, type Robot } from "@/data/catalog";
 
@@ -123,6 +124,7 @@ function RobotCard({ robot }: { robot: Robot }) {
 export default function FarmBro() {
   usePageTitle("FarmBro — robot store");
   const { openOrderForm } = useOrderForm();
+  const { t } = useLanguage();
   const [compare, setCompare] = useState(false);
 
   return (
@@ -131,17 +133,15 @@ export default function FarmBro() {
       <main className="pt-[72px]">
         <section className="tf-dark py-16 sm:py-24">
           <div className="tf-container">
-            <SectionKicker number="SHOP" label="FarmBro store" light />
+            <SectionKicker number="SHOP" label={t.farmbroEyebrow} light />
             <div className="mt-7 flex flex-wrap items-end justify-between gap-8">
               <div>
-                <h1 className="max-w-[640px] text-5xl font-medium leading-[.95] tracking-[-.055em] text-white sm:text-7xl">
-                  FarmBro.
+                <h1 className="max-w-[720px] text-5xl font-medium leading-[.95] tracking-[-.055em] text-white sm:text-7xl">
+                  FarmBro UGV's
                   <br />
-                  <span className="text-[#B9F4D4]">Machines for every block.</span>
+                  <span className="text-[#B9F4D4]">{t.farmbroTitleB}</span>
                 </h1>
-                <p className="mt-6 max-w-[440px] text-base leading-7 text-white/60">
-                  Remote-controlled mulchers and carriers, engineered in India for Indian fields. Open any machine for its configuration, gallery, and specifications.
-                </p>
+                <p className="mt-6 max-w-[480px] text-base leading-7 text-white/60">{t.farmbroSub}</p>
               </div>
               <button type="button" onClick={() => setCompare(!compare)} className="tf-btn tf-btn-quiet" aria-pressed={compare}>
                 {compare ? "Hide comparison" : "Compare machines"}
@@ -153,7 +153,7 @@ export default function FarmBro() {
         {compare && <CompareTable />}
 
         <section className="tf-dark pb-16 sm:pb-20">
-          <div className="tf-container grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="tf-container grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {robots.map((robot) => (
               <RobotCard key={robot.id} robot={robot} />
             ))}
