@@ -7,6 +7,7 @@ import { useOrderForm } from "@/contexts/OrderContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import usePageTitle from "@/hooks/usePageTitle";
 import { robots } from "@/data/catalog";
+import { trackSpotlight } from "@/lib/spotlight";
 
 const proofBar = [
   { value: "1,200+", key: "proofAcres" },
@@ -102,7 +103,7 @@ export default function Home() {
           <div className="tf-container">
             <div>
               <SectionKicker number="01" label="The machines" />
-              <h2 className="mt-7 text-[clamp(2rem,5.2vw,3.75rem)] font-medium leading-[1.05] tracking-[-.05em]">
+              <h2 className="mt-7 text-[clamp(1.7rem,5.2vw,3.75rem)] font-medium leading-[1.05] tracking-[-.05em]">
                 Engineered for the field.
                 <br />
                 <span className="text-[#1B8F6A]">Built for the mission.</span>
@@ -124,7 +125,7 @@ export default function Home() {
               <h3 className="mt-3 max-w-[460px] text-3xl font-medium leading-[1.02] tracking-[-.04em] sm:text-4xl">Built on proven foundations.</h3>
               <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {pillars.map((pillar) => (
-                  <div key={pillar.title} className="product-card p-7">
+                  <div key={pillar.title} onPointerMove={trackSpotlight} className="product-card p-7">
                     <pillar.icon size={19} className="text-[#1B8F6A]" />
                     <h4 className="mt-5 text-lg font-medium leading-snug">{pillar.title}</h4>
                     <p className="mt-2 text-sm leading-6 text-[#59655F]">{pillar.copy}</p>
@@ -150,7 +151,7 @@ export default function Home() {
               </div>
 
               {whyFarmBro.slice(1, 5).map((item) => (
-                <div key={item.title} className="product-card p-7">
+                <div key={item.title} onPointerMove={trackSpotlight} className="product-card p-7">
                   <item.icon size={19} className="text-[#1B8F6A]" />
                   <h3 className="mt-5 text-lg font-medium leading-snug">{item.title}</h3>
                   <p className="mt-2 max-w-[320px] text-sm leading-6 text-[#59655F]">{item.copy}</p>
@@ -158,7 +159,7 @@ export default function Home() {
               ))}
 
               {/* Closing wide cell — the closer */}
-              <div className="product-card flex flex-col gap-5 p-7 sm:col-span-2 sm:flex-row sm:items-center sm:p-8 lg:col-span-3">
+              <div onPointerMove={trackSpotlight} className="product-card flex flex-col gap-5 p-7 sm:col-span-2 sm:flex-row sm:items-center sm:p-8 lg:col-span-3">
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#1B8F6A] text-white">
                   <Factory size={19} />
                 </span>

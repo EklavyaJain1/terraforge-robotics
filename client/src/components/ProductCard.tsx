@@ -1,24 +1,17 @@
-import { useCallback, type PointerEvent } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Link } from "wouter";
 import type { Robot } from "@/data/catalog";
+import { trackSpotlight } from "@/lib/spotlight";
 
 /** Store card in the reference e-commerce style: image, name, configuration line,
     optional value chip, arrow affordance. The whole card opens the product page.
     Depth: soft resting shadow, lift on hover, and a cursor-tracked jade spotlight
     (transform/opacity only, disabled for touch and reduced-motion users). */
 export default function ProductCard({ robot }: { robot: Robot }) {
-  const handlePointerMove = useCallback((event: PointerEvent<HTMLElement>) => {
-    const target = event.currentTarget;
-    const rect = target.getBoundingClientRect();
-    target.style.setProperty("--spot-x", `${event.clientX - rect.left}px`);
-    target.style.setProperty("--spot-y", `${event.clientY - rect.top}px`);
-  }, []);
-
   return (
     <Link
       href={`/farmbro/${robot.slug}`}
-      onPointerMove={handlePointerMove}
+      onPointerMove={trackSpotlight}
       className="product-card tf-focus group flex flex-col"
       aria-label={`View ${robot.name}`}
     >
