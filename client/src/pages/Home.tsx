@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { ArrowDownRight, ArrowUpRight, Blocks, Check, ChevronDown, Fuel, Mountain, Radio } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, Blocks, Check, ChevronDown, CircleDot, Cpu, Factory, Footprints, Globe, Layers, PlugZap, Radar } from "lucide-react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
@@ -17,16 +16,19 @@ const proofBar = [
 ] as const;
 
 const pillars = [
-  { icon: Radio, title: "Remote controlled", copy: "The operator works from a safe distance — never on the machine, never in the cut." },
-  { icon: Fuel, title: "Hybrid & electric", copy: "Hybrid power for long mulching days; electric for quiet, fume-free passes in tight blocks." },
-  { icon: Blocks, title: "Modular implements", copy: "One implement rail: tiller, sprayer, cutter, trailer — swapped in minutes." },
-  { icon: Mountain, title: "Slope capable", copy: "The Mini Mulcher holds and works slopes up to 45° where tractors stall." },
+  { icon: Radar, title: "Remote Controlled / Semi Autonomous", copy: "Remote control with intelligent assistance for semi-autonomous operation." },
+  { icon: Footprints, title: "Tethered Follow Me Mode", copy: "Automatically follows the operator while maintaining a safe distance." },
+  { icon: Blocks, title: "Modular Architecture", copy: "Interchangeable modules enable rapid adaptation across different applications." },
+  { icon: PlugZap, title: "Drivetrain Options: Hybrid & Electric", copy: "Hybrid and electric drivetrains optimized for different operational requirements." },
 ];
 
-const faqs = [
-  ["Do I need a robotics background to operate it?", "No. FarmBro machines are remote-controlled with a workflow that feels familiar from the first session. We train operators on the machine, the attachment, and the safety checks before a field trial."],
-  ["Can the machine work without a cellular connection?", "Core driving and attachment controls remain available locally. Connected features such as live status and remote diagnostics use the available network connection."],
-  ["How do field demonstrations work?", "We start with a short call, then bring the machine to a representative patch of your farm. The output is a practical operating plan — not a showroom demonstration."],
+const whyFarmBro = [
+  { icon: CircleDot, title: "Remove \"Autonomous\"", copy: "Simplifying field operations through reliable, purpose-built vehicle platforms." },
+  { icon: Layers, title: "Compact to heavy duty — Mini UGV to heavy haulers", copy: "A scalable platform range spanning utility vehicles to heavy haulers." },
+  { icon: Globe, title: "Designed for India, scalable globally", copy: "Engineered for Indian conditions with capabilities suited for global markets." },
+  { icon: Cpu, title: "Deep domain expertise", copy: "Expertise spanning automotive, agriculture, embedded systems, and robotics." },
+  { icon: PlugZap, title: "Drivetrain options — hybrid & electric", copy: "Flexible powertrains designed for efficient, sustainable field mobility." },
+  { icon: Factory, title: "Make in India", copy: "Fully designed, engineered, and manufactured in India." },
 ];
 
 function scrollToId(id: string) {
@@ -37,7 +39,6 @@ export default function Home() {
   usePageTitle("FarmBro Robotics — More acres. Fewer compromises.");
   const { openOrderForm } = useOrderForm();
   const { t } = useLanguage();
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   return (
     <div id="top" className="tf-page">
@@ -99,13 +100,15 @@ export default function Home() {
         {/* 01 — The machines: e-commerce cards; every card opens its product page */}
         <section className="tf-surface border-b border-[#111311]/15 py-16 sm:py-20" id="machines">
           <div className="tf-container">
-            <div className="grid items-end gap-8 lg:grid-cols-[.72fr_1.28fr] lg:gap-20">
-              <div>
-                <SectionKicker number="01" label="The machines" />
-                <h2 className="mt-7 max-w-[420px] text-4xl font-medium leading-[.98] tracking-[-.055em] sm:text-6xl">A small machine for a very big season.</h2>
-              </div>
-              <p className="max-w-[460px] text-base leading-7 text-[#3F4B45] lg:justify-self-end">
-                Four machines, one remote in the operator's hands. Open any machine to see its configuration, gallery, and full specification.
+            <div>
+              <SectionKicker number="01" label="The machines" />
+              <h2 className="mt-7 text-[clamp(2rem,5.2vw,3.75rem)] font-medium leading-[1.05] tracking-[-.05em]">
+                Engineered for the field.
+                <br />
+                <span className="text-[#1B8F6A]">Built for the mission.</span>
+              </h2>
+              <p className="mt-5 max-w-[520px] text-base leading-7 text-[#3F4B45]">
+                Four purpose-built machines, one command interface. Select a unit to explore its configuration, gallery, and full specification.
               </p>
             </div>
 
@@ -115,42 +118,54 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Technology pillars — what evaluators scan for */}
-            <div className="mt-16 grid gap-px border-y border-[#111311]/15 bg-[#111311]/15 sm:grid-cols-2 lg:grid-cols-4">
-              {pillars.map((pillar) => (
-                <div key={pillar.title} className="bg-[#FFFFFF] p-6 sm:p-7">
-                  <pillar.icon size={19} className="text-[#1B8F6A]" />
-                  <h3 className="mt-5 text-lg font-medium">{pillar.title}</h3>
-                  <p className="mt-2 max-w-[240px] text-sm leading-6 text-[#59655F]">{pillar.copy}</p>
-                </div>
-              ))}
+            {/* Four engineering pillars — below the listing */}
+            <div className="mt-20">
+              <div className="tf-mono text-[10px] uppercase tracking-[.16em] text-[#64736C]">Four engineering pillars</div>
+              <h3 className="mt-3 max-w-[460px] text-3xl font-medium leading-[1.02] tracking-[-.04em] sm:text-4xl">Built on proven foundations.</h3>
+              <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {pillars.map((pillar) => (
+                  <div key={pillar.title} className="product-card p-7">
+                    <pillar.icon size={19} className="text-[#1B8F6A]" />
+                    <h4 className="mt-5 text-lg font-medium leading-snug">{pillar.title}</h4>
+                    <p className="mt-2 text-sm leading-6 text-[#59655F]">{pillar.copy}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
-        {/* 02 — Questions */}
-        <section className="tf-surface py-20 sm:py-24" id="faq">
+        {/* 02 — Why FarmBro: bento grid */}
+        <section className="tf-surface py-20 sm:py-24" id="why">
           <div className="tf-container">
-            <div className="grid gap-12 lg:grid-cols-[.7fr_1.3fr] lg:gap-24">
-              <div>
-                <SectionKicker number="02" label="Questions" />
-                <h2 className="mt-7 max-w-[370px] text-4xl font-medium leading-[.98] tracking-[-.055em] sm:text-6xl">The practical answers.</h2>
+            <SectionKicker number="02" label="Why FarmBro" />
+            <h2 className="mt-7 max-w-[460px] text-4xl font-medium leading-[.98] tracking-[-.055em] sm:text-6xl">Why FarmBro.</h2>
+
+            <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {/* Anchor cell — the positioning statement */}
+              <div className="relative overflow-hidden bg-[#1B8F6A] p-8 text-white shadow-[0_18px_50px_rgba(27,143,106,.24)] transition-transform duration-300 hover:-translate-y-1 sm:row-span-2">
+                <CircleDot size={20} className="text-white/85" />
+                <h3 className="mt-16 text-2xl font-medium leading-tight tracking-[-.03em] sm:mt-28">{whyFarmBro[0].title}</h3>
+                <p className="mt-3 max-w-[260px] text-sm leading-6 text-white/85">{whyFarmBro[0].copy}</p>
               </div>
-              <div className="border-t border-[#111311]/20">
-                {faqs.map(([question, answer], index) => (
-                  <div key={question} className="border-b border-[#111311]/20">
-                    <button
-                      type="button"
-                      onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                      aria-expanded={openFaq === index}
-                      className="tf-focus flex w-full items-center justify-between gap-5 py-6 text-left"
-                    >
-                      <span className="text-base font-medium sm:text-lg">{question}</span>
-                      <ChevronDown size={17} className={`shrink-0 text-[#1B8F6A] transition-transform duration-200 ${openFaq === index ? "rotate-180" : ""}`} />
-                    </button>
-                    {openFaq === index && <div className="max-w-[650px] pb-7 pr-10 text-sm leading-6 text-[#59655F]">{answer}</div>}
-                  </div>
-                ))}
+
+              {whyFarmBro.slice(1, 5).map((item) => (
+                <div key={item.title} className="product-card p-7">
+                  <item.icon size={19} className="text-[#1B8F6A]" />
+                  <h3 className="mt-5 text-lg font-medium leading-snug">{item.title}</h3>
+                  <p className="mt-2 max-w-[320px] text-sm leading-6 text-[#59655F]">{item.copy}</p>
+                </div>
+              ))}
+
+              {/* Closing wide cell — the closer */}
+              <div className="product-card flex flex-col gap-5 p-7 sm:col-span-2 sm:flex-row sm:items-center sm:p-8 lg:col-span-3">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#1B8F6A] text-white">
+                  <Factory size={19} />
+                </span>
+                <div>
+                  <h3 className="text-lg font-medium sm:text-xl">{whyFarmBro[5].title}</h3>
+                  <p className="mt-1 text-sm leading-6 text-[#59655F]">{whyFarmBro[5].copy}</p>
+                </div>
               </div>
             </div>
           </div>
