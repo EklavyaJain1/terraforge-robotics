@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDownRight, ArrowUpRight, Blocks, Check, ChevronDown, CircleDot, Cpu, Factory, Footprints, Globe, Layers, PlugZap, Radar } from "lucide-react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
@@ -9,54 +11,96 @@ import usePageTitle from "@/hooks/usePageTitle";
 import { robots } from "@/data/catalog";
 import { trackSpotlight } from "@/lib/spotlight";
 
-const proofBar = [
-  { value: "1,200+", key: "proofAcres" },
-  { value: "9", key: "proofPlatforms" },
-  { value: "100%", key: "proofRemote" },
-  { value: "IND", key: "proofIndia" },
-] as const;
-
 const pillars = [
-  { icon: Radar, title: "Remote Controlled / Semi Autonomous", copy: "Remote control with intelligent assistance for semi-autonomous operation." },
-  { icon: Footprints, title: "Tethered Follow Me Mode", copy: "Automatically follows the operator while maintaining a safe distance." },
-  { icon: Blocks, title: "Modular Architecture", copy: "Interchangeable modules enable rapid adaptation across different applications." },
-  { icon: PlugZap, title: "Drivetrain Options: Hybrid & Electric", copy: "Hybrid and electric drivetrains optimized for different operational requirements." },
+  { icon: Radar },
+  { icon: Footprints },
+  { icon: Blocks },
+  { icon: PlugZap },
 ];
 
-const whyFarmBro = [
-  { icon: CircleDot, title: "Remove \"Autonomous\"", copy: "Simplifying field operations through reliable, purpose-built vehicle platforms." },
-  { icon: Layers, title: "Compact to heavy duty — Mini UGV to heavy haulers", copy: "A scalable platform range spanning utility vehicles to heavy haulers." },
-  { icon: Globe, title: "Designed for India, scalable globally", copy: "Engineered for Indian conditions with capabilities suited for global markets." },
-  { icon: Cpu, title: "Deep domain expertise", copy: "Expertise spanning automotive, agriculture, embedded systems, and robotics." },
-  { icon: PlugZap, title: "Drivetrain options — hybrid & electric", copy: "Flexible powertrains designed for efficient, sustainable field mobility." },
-  { icon: Factory, title: "Make in India", copy: "Fully designed, engineered, and manufactured in India." },
-];
+const whyIcons = [CircleDot, Layers, Globe, Cpu, PlugZap, Factory];
+
+/** Dashed jade connectors fanning from the centered pillars headline to the four card columns. */
+function NetworkLines() {
+  const branches = [150, 450, 750, 1050];
+  return (
+    <svg className="net-lines mx-auto mt-9 hidden h-20 w-full max-w-[1180px] lg:block" viewBox="0 0 1200 80" aria-hidden="true">
+      {branches.map((x) => (
+        <path key={x} d={`M600 0 C600 46 ${x} 34 ${x} 80`} vectorEffect="non-scaling-stroke" />
+      ))}
+    </svg>
+  );
+}
 
 function scrollToId(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const target = document.getElementById(id);
+  if (!target) return;
+  if (window.__lenis) window.__lenis.scrollTo(target, { offset: -64 });
+  else target.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 export default function Home() {
-  usePageTitle("FarmBro Robotics — More acres. Fewer compromises.");
-  const { openOrderForm } = useOrderForm();
   const { t } = useLanguage();
+  usePageTitle(t.homeTitle);
+  const { openOrderForm } = useOrderForm();
+
+  // Light parallax: the hero film drifts up slightly slower than the page scrolls.
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const heroVideoY = useTransform(heroProgress, [0, 1], ["0%", "10%"]);
+
+  // The jade highlight sweeps across "Why FarmBro." as the section scrolls into view.
+  // Driven by a direct rAF scroll listener: deterministic under Lenis, no re-renders.
+  const sweepRef = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    const el = sweepRef.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      el.style.backgroundSize = "100% 100%";
+      return;
+    }
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const start = vh * 0.9; // highlight begins as the heading enters the viewport
+      const end = vh * 0.45;  // and completes as it climbs toward mid-screen
+      const progress = Math.min(1, Math.max(0, (start - rect.top) / (start - end)));
+      el.style.backgroundSize = `${progress * 100}% 100%`;
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
 
   return (
     <div id="top" className="tf-page">
       <Navbar />
 
       <main>
-        {/* Hero — the field film and the thesis, no audience tabs */}
+        {/* Hero — the field film and the thesis */}
         <section
-          className="tf-scanline relative min-h-[720px] overflow-hidden bg-[#111311] text-white sm:min-h-[860px] lg:min-h-[100svh]"
+          ref={heroRef}
+          className="tf-scanline relative min-h-[720px] overflow-hidden border-b border-white/10 bg-[#111311] text-white sm:min-h-[860px] lg:min-h-[100svh]"
           aria-label="FarmBro Robotics introduction"
         >
-          <video autoPlay loop muted playsInline className="absolute inset-0 h-full w-full object-cover object-center">
+          <motion.video
+            autoPlay loop muted playsInline
+            className="absolute inset-0 h-full w-full object-cover object-center"
+            style={{ y: heroVideoY, scale: 1.1 }}
+          >
             <source src="/videos/hero.mp4" type="video/mp4" />
-          </video>
+          </motion.video>
           <div className="hero-fade absolute inset-0" />
 
-          <div className="tf-container relative flex min-h-[720px] flex-col justify-end pb-[210px] pt-32 sm:min-h-[860px] sm:pb-[136px] lg:min-h-[100svh]">
+          <div className="tf-container relative flex min-h-[720px] flex-col justify-end pb-32 pt-32 sm:min-h-[860px] sm:pb-40 lg:min-h-[100svh]">
             <div className="max-w-[620px]">
               <h1 className="reveal text-[clamp(2.6rem,7.5vw,6.5rem)] font-medium leading-[.92] tracking-[-.07em] text-white">
                 {t.heroTitleA}
@@ -75,22 +119,10 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Proof slate — the season log, docked to the video's bottom edge */}
-          <div className="absolute inset-x-0 bottom-0 border-t border-white/15 bg-[#0B0F0D]/45 backdrop-blur-[6px]">
-            <div className="tf-container grid grid-cols-2 divide-x divide-white/10 sm:grid-cols-4">
-              {proofBar.map((item) => (
-                <div key={item.key} className="px-4 py-4 first:pl-0 sm:px-6 sm:py-5">
-                  <div className="text-xl font-medium tracking-[-.03em] text-white sm:text-2xl">{item.value}</div>
-                  <div className="tf-mono mt-1 text-[9px] uppercase tracking-[.08em] text-white/50">{t[item.key]}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
           <button
             type="button"
             onClick={() => scrollToId("machines")}
-            className="tf-focus absolute bottom-[128px] left-1/2 hidden -translate-x-1/2 items-center gap-2 text-white/70 lg:flex"
+            className="tf-focus absolute bottom-10 left-1/2 hidden -translate-x-1/2 items-center gap-2 text-white/70 lg:flex"
             aria-label="Scroll to the machines section"
           >
             <span className="tf-mono text-[9px]">{t.scrollHint}</span>
@@ -102,14 +134,14 @@ export default function Home() {
         <section className="tf-surface border-b border-[#111311]/15 py-16 sm:py-20" id="machines">
           <div className="tf-container">
             <div>
-              <SectionKicker number="01" label="The machines" />
+              <SectionKicker number="01" label={t.machinesKicker} />
               <h2 className="mt-7 text-[clamp(1.7rem,5.2vw,3.75rem)] font-medium leading-[1.05] tracking-[-.05em]">
-                Engineered for the field.
+                {t.machinesTitleA}
                 <br />
-                <span className="text-[#1B8F6A]">Built for the mission.</span>
+                <span className="text-[#1B8F6A]">{t.machinesTitleB}</span>
               </h2>
               <p className="mt-5 max-w-[520px] text-base leading-7 text-[#3F4B45]">
-                Four purpose-built machines, one command interface. Select a unit to explore its configuration, gallery, and full specification.
+                {t.machinesSub}
               </p>
             </div>
 
@@ -119,17 +151,28 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Four engineering pillars — below the listing */}
+            {/* Four engineering pillars — centered headline, network lines down to the cards */}
             <div className="mt-20">
-              <div className="tf-mono text-[10px] uppercase tracking-[.16em] text-[#64736C]">Four engineering pillars</div>
-              <h3 className="mt-3 max-w-[460px] text-3xl font-medium leading-[1.02] tracking-[-.04em] sm:text-4xl">Built on proven foundations.</h3>
-              <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {pillars.map((pillar) => (
-                  <div key={pillar.title} onPointerMove={trackSpotlight} className="product-card p-7">
+              <div className="text-center">
+                <div className="tf-mono text-[10px] uppercase tracking-[.16em] text-[#64736C]">{t.pillarsKicker}</div>
+                <h3 className="mx-auto mt-3 max-w-[460px] text-3xl font-medium leading-[1.02] tracking-[-.04em] sm:text-4xl">{t.pillarsHeading}</h3>
+              </div>
+              <NetworkLines />
+              <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {pillars.map((pillar, index) => (
+                  <motion.div
+                    key={t.pillars[index].title}
+                    onPointerMove={trackSpotlight}
+                    className="product-card p-7"
+                    initial={{ opacity: 0, y: 18 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-60px" }}
+                    transition={{ duration: 0.5, delay: index * 0.08, ease: [0.23, 1, 0.32, 1] }}
+                  >
                     <pillar.icon size={19} className="text-[#1B8F6A]" />
-                    <h4 className="mt-5 text-lg font-medium leading-snug">{pillar.title}</h4>
-                    <p className="mt-2 text-sm leading-6 text-[#59655F]">{pillar.copy}</p>
-                  </div>
+                    <h4 className="mt-5 text-lg font-medium leading-snug">{t.pillars[index].title}</h4>
+                    <p className="mt-2 text-sm leading-6 text-[#59655F]">{t.pillars[index].copy}</p>
+                  </motion.div>
                 ))}
               </div>
             </div>
@@ -137,35 +180,48 @@ export default function Home() {
         </section>
 
         {/* 02 — Why FarmBro: bento grid */}
-        <section className="tf-surface py-20 sm:py-24" id="why">
+        <section className="tf-surface border-b border-[#111311]/12 py-20 sm:py-24" id="why">
           <div className="tf-container">
-            <SectionKicker number="02" label="Why FarmBro" />
-            <h2 className="mt-7 max-w-[460px] text-4xl font-medium leading-[.98] tracking-[-.055em] sm:text-6xl">Why FarmBro.</h2>
+            <div className="flex justify-center">
+              <SectionKicker number="02" label={t.whyKicker} />
+            </div>
+            <h2 className="mt-7 text-center text-4xl font-medium leading-[.98] tracking-[-.055em] sm:text-6xl">
+              <motion.span
+                ref={sweepRef}
+                className="bg-[linear-gradient(to_right,rgba(27,143,106,.16),rgba(27,143,106,.16))] bg-no-repeat px-2"
+                style={{ backgroundSize: "0% 100%" }}
+              >
+                {t.whyHeading}
+              </motion.span>
+            </h2>
 
             <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {/* Anchor cell — the positioning statement */}
               <div className="relative overflow-hidden bg-[#1B8F6A] p-8 text-white shadow-[0_18px_50px_rgba(27,143,106,.24)] transition-transform duration-300 hover:-translate-y-1 sm:row-span-2">
                 <CircleDot size={20} className="text-white/85" />
-                <h3 className="mt-16 text-2xl font-medium leading-tight tracking-[-.03em] sm:mt-28">{whyFarmBro[0].title}</h3>
-                <p className="mt-3 max-w-[260px] text-sm leading-6 text-white/85">{whyFarmBro[0].copy}</p>
+                <h3 className="mt-16 text-2xl font-medium leading-tight tracking-[-.03em] sm:mt-28">{t.whyItems[0].title}</h3>
+                <p className="mt-3 max-w-[260px] text-sm leading-6 text-white/85">{t.whyItems[0].copy}</p>
               </div>
 
-              {whyFarmBro.slice(1, 5).map((item) => (
-                <div key={item.title} onPointerMove={trackSpotlight} className="product-card p-7">
-                  <item.icon size={19} className="text-[#1B8F6A]" />
-                  <h3 className="mt-5 text-lg font-medium leading-snug">{item.title}</h3>
-                  <p className="mt-2 max-w-[320px] text-sm leading-6 text-[#59655F]">{item.copy}</p>
-                </div>
-              ))}
+              {t.whyItems.slice(1, 5).map((item, i) => {
+                const Icon = whyIcons[i + 1];
+                return (
+                  <div key={item.title} onPointerMove={trackSpotlight} className="product-card p-7">
+                    <Icon size={19} className="text-[#1B8F6A]" />
+                    <h3 className="mt-5 text-lg font-medium leading-snug">{item.title}</h3>
+                    <p className="mt-2 max-w-[320px] text-sm leading-6 text-[#59655F]">{item.copy}</p>
+                  </div>
+                );
+              })}
 
-              {/* Closing wide cell — the closer */}
-              <div onPointerMove={trackSpotlight} className="product-card flex flex-col gap-5 p-7 sm:col-span-2 sm:flex-row sm:items-center sm:p-8 lg:col-span-3">
+              {/* Closing wide cell — centered icon above centered copy */}
+              <div onPointerMove={trackSpotlight} className="product-card flex flex-col items-center gap-4 p-8 text-center sm:col-span-2 lg:col-span-3">
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#1B8F6A] text-white">
                   <Factory size={19} />
                 </span>
                 <div>
-                  <h3 className="text-lg font-medium sm:text-xl">{whyFarmBro[5].title}</h3>
-                  <p className="mt-1 text-sm leading-6 text-[#59655F]">{whyFarmBro[5].copy}</p>
+                  <h3 className="text-lg font-medium sm:text-xl">{t.whyItems[5].title}</h3>
+                  <p className="mx-auto mt-1 max-w-[440px] text-sm leading-6 text-[#59655F]">{t.whyItems[5].copy}</p>
                 </div>
               </div>
             </div>
@@ -173,36 +229,36 @@ export default function Home() {
         </section>
 
         {/* 03 — Make it practical */}
-        <section id="order" className="relative overflow-hidden bg-[#1B8F6A] py-20 text-white sm:py-24">
+        <section id="order" className="relative overflow-hidden border-b border-white/15 bg-[#1B8F6A] py-20 text-white sm:py-24">
           <div className="absolute -right-20 -top-24 h-72 w-72 rounded-full border-[40px] border-white/10" />
           <div className="absolute -bottom-32 left-1/3 h-80 w-80 rounded-full border-[1px] border-white/15" />
           <div className="tf-container relative">
             <div className="grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:gap-24">
               <div>
-                <SectionKicker number="03" label="Make it practical" light />
-                <h2 className="mt-7 max-w-[480px] text-4xl font-medium leading-[.96] tracking-[-.055em] sm:text-6xl">Bring us the row you actually run.</h2>
-                <p className="mt-6 max-w-[390px] text-base leading-7 text-white/80">Tell us what is slowing the season down. We'll come back with a machine, a tool, and a realistic next step.</p>
+                <SectionKicker number="03" label={t.orderKicker} light />
+                <h2 className="mt-7 max-w-[480px] text-4xl font-medium leading-[.96] tracking-[-.055em] sm:text-6xl">{t.orderHeading}</h2>
               </div>
               <div className="flex flex-col items-start justify-center gap-6">
                 <button type="button" onClick={() => openOrderForm()} className="tf-btn tf-btn-quiet text-sm">
-                  Request a machine <ArrowUpRight size={15} />
+                  {t.orderCta} <ArrowUpRight size={15} />
                 </button>
                 <div className="grid w-full gap-px border border-white/20 bg-white/20 sm:grid-cols-3">
                   <a href="tel:+919154153925" className="tf-focus bg-[#1B8F6A] px-4 py-4 transition-colors hover:bg-[#0F6F51]">
-                    <span className="tf-mono block text-[9px] text-white/60">CALL</span>
+                    <span className="tf-mono block text-[9px] text-white/60">{t.orderCallLabel}</span>
                     <span className="mt-1 block text-sm font-medium">+91 91541 53925</span>
                   </a>
                   <a href="https://wa.me/919154153925" target="_blank" rel="noreferrer" className="tf-focus bg-[#1B8F6A] px-4 py-4 transition-colors hover:bg-[#0F6F51]">
-                    <span className="tf-mono block text-[9px] text-white/60">WHATSAPP</span>
-                    <span className="mt-1 block text-sm font-medium">Message the field team</span>
+                    <span className="tf-mono block text-[9px] text-white/60">{t.orderWhatsappLabel}</span>
+                    <span className="mt-1 block text-sm font-medium">{t.whatsappCta}</span>
                   </a>
                   <a href="mailto:hello@farmbro.example" className="tf-focus bg-[#1B8F6A] px-4 py-4 transition-colors hover:bg-[#0F6F51]">
-                    <span className="tf-mono block text-[9px] text-white/60">EMAIL</span>
+                    <span className="tf-mono block text-[9px] text-white/60">{t.orderEmailLabel}</span>
                     <span className="mt-1 block text-sm font-medium">hello@farmbro.example</span>
                   </a>
                 </div>
-                <p className="flex items-center gap-2 text-xs text-white/70">
-                  <Check size={14} /> Every enquiry gets a reply from an engineer, not a bot.
+                <p className="flex items-center gap-2 text-base font-medium text-white">
+                  <Check size={16} className="shrink-0" />
+                  <span className="rounded bg-white/15 px-2.5 py-1">{t.engineerNote}</span>
                 </p>
               </div>
             </div>

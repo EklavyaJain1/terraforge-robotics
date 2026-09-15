@@ -56,6 +56,7 @@
 @layer base {
   * { @apply border-border outline-ring/50; }
   html { scroll-behavior: smooth; }
+  body { position: relative; }
   body {
     @apply bg-background text-foreground;
     margin: 0;
@@ -91,11 +92,13 @@
   .tf-scanline { position: relative; }
   .tf-scanline::after { position: absolute; inset: 0; pointer-events: none; content: ""; opacity: .17; background: repeating-linear-gradient(0deg, transparent 0, transparent 4px, rgba(255,255,255,.13) 5px); mix-blend-mode: overlay; }
   /* Store card: soft depth at rest, cursor-tracked jade spotlight on hover (transform/opacity only). */
-  .product-card { position: relative; overflow: hidden; background: #FFFFFF; border: 1px solid rgba(17, 19, 17, .15); box-shadow: 0 10px 30px rgba(17, 19, 17, .06); transition: transform .35s cubic-bezier(.23, 1, .32, 1), box-shadow .35s ease, border-color .35s ease; }
+  .product-card { position: relative; overflow: hidden; background: #FFFFFF; border: 1px solid rgba(17, 19, 17, .15); box-shadow: 0 18px 44px rgba(17, 19, 17, .12), 0 6px 16px rgba(17, 19, 17, .07); transition: transform .35s cubic-bezier(.23, 1, .32, 1), box-shadow .35s ease, border-color .35s ease; }
   .product-card:hover { transform: translateY(-4px); border-color: rgba(27, 143, 106, .35); box-shadow: 0 26px 60px rgba(17, 19, 17, .10), 0 8px 24px rgba(27, 143, 106, .10); }
   .product-card::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0; transition: opacity .35s ease; background: radial-gradient(340px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(27, 143, 106, .09), transparent 65%); }
   .product-card:hover::before { opacity: 1; }
   .tf-chip-jade { background: rgba(27, 143, 106, .12); color: #12503C; border: 1px solid rgba(27, 143, 106, .18); }
+  /* Network lines: dashed jade connectors from the pillars headline to its cards, drifting continuously. */
+  .net-lines path { stroke: rgba(27, 143, 106, .5); stroke-width: 1.25; fill: none; stroke-dasharray: 5 7; animation: net-flow 2.6s linear infinite; }
 }
 
 .hero-fade { background: linear-gradient(180deg, rgba(13,15,14,.26) 0%, rgba(13,15,14,.04) 38%, rgba(13,15,14,.76) 100%); }
@@ -107,6 +110,7 @@
 
 @keyframes rise-in { to { opacity: 1; transform: translateY(0); } }
 @keyframes slow-pan { from { transform: scale(1.03); } to { transform: scale(1.08); } }
+@keyframes net-flow { to { stroke-dashoffset: -96; } }
 
 @media (max-width: 760px) {
   .tf-container { width: min(100% - 32px, 620px); }
@@ -121,6 +125,7 @@
 @media (prefers-reduced-motion: reduce) {
   .product-card::before { content: none; }
   .product-card:hover { transform: none; }
+  .net-lines path { animation: none; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
