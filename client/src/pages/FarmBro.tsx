@@ -10,7 +10,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import usePageTitle from "@/hooks/usePageTitle";
 import { attachments, robots, type Robot } from "@/data/catalog";
 
-function CompareRow({ label, keywords }: { label: string; keywords: string[] }) {
+function CompareRow({ label, keywords, machineField }: { label: string; keywords: string[]; machineField?: "power" | "slope" }) {
   const { t } = useLanguage();
   const labelKey =
     label === "price" ? t.comparePrice : label === "configuration" ? t.compareConfiguration : label === "power" ? t.comparePower : t.compareSlope;
@@ -19,12 +19,16 @@ function CompareRow({ label, keywords }: { label: string; keywords: string[] }) 
       <td className="py-3 pr-4 capitalize text-white/50"><span className="tf-mono text-[9px]">{labelKey}</span></td>
       {robots.map((robot) => {
         const m = t.machines[robot.id];
+        // power/slope resolve from dedicated fields (compare-table contract);
+        // other rows fall back to spec-label matching within the active language.
         const value =
           label === "price"
             ? m.priceLabel
             : label === "configuration"
               ? m.configuration
-              : m.specs.find(([specLabel]) => keywords.some((k) => specLabel.toLowerCase().includes(k)))?.[1] ?? "—";
+              : machineField && m[machineField]
+                ? m[machineField]
+                : m.specs.find(([specLabel]) => keywords.some((k) => specLabel.toLowerCase().includes(k)))?.[1] ?? "—";
         return (
           <td key={robot.id} className="py-3 pr-4 text-sm text-white/85">{value}</td>
         );
@@ -34,11 +38,11 @@ function CompareRow({ label, keywords }: { label: string; keywords: string[] }) 
 }
 
 function CompareTable() {
-  const rows: { label: string; keywords: string[] }[] = [
+  const rows: { label: string; keywords: string[]; machineField?: "power" | "slope" }[] = [
     { label: "price", keywords: [] },
     { label: "configuration", keywords: ["configuration"] },
-    { label: "power", keywords: ["power"] },
-    { label: "slope", keywords: ["slope"] },
+    { label: "power", keywords: ["power"], machineField: "power" },
+    { label: "slope", keywords: ["slope"], machineField: "slope" },
   ];
   const { t } = useLanguage();
   return (
@@ -55,7 +59,7 @@ function CompareTable() {
           </thead>
           <tbody>
             {rows.map((row) => (
-              <CompareRow key={row.label} label={row.label} keywords={row.keywords} />
+              <CompareRow key={row.label} label={row.label} keywords={row.keywords} machineField={row.machineField} />
             ))}
           </tbody>
         </table>

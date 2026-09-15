@@ -2,8 +2,18 @@ import { useEffect, useState } from "react";
 import { Check, MoveUpRight } from "lucide-react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
-import { machineChoiceIds } from "@/data/catalog";
+import { machineChoiceIds, type MachineChoiceId } from "@/data/catalog";
 import { useLanguage } from "@/contexts/LanguageContext";
+
+/** Callers pass either a machine-choice id ("m1", "fleet", ...) or a robot id
+    ("mulcher-hybrid", ...). Robot ids map onto their machine-choice option so
+    the controlled select always matches an <option> value. */
+const robotToChoice: Record<string, MachineChoiceId> = {
+  "mulcher-hybrid": "m1",
+  "mulcher-sprayer-cargo": "m2",
+  "mini-mulcher-electric": "m3",
+  "canopy-scout": "m4",
+};
 
 export interface OrderRequest {
   name: string;
@@ -27,7 +37,8 @@ export default function OrderFormDialog({ open, onOpenChange, defaultRobot }: Or
   useEffect(() => {
     if (open) {
       setSubmitted(false);
-      setForm((prev) => ({ ...prev, robot: defaultRobot ?? (prev.robot || machineChoiceIds[0]) }));
+      const choice = defaultRobot ? robotToChoice[defaultRobot] ?? (defaultRobot as MachineChoiceId) : undefined;
+      setForm((prev) => ({ ...prev, robot: choice ?? (prev.robot || machineChoiceIds[0]) }));
     }
   }, [open, defaultRobot]);
 

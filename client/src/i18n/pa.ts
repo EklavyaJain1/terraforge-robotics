@@ -86,6 +86,7 @@ export const pa: UiStrings = {
   heroTitleB: "ਘੱਟ ਸਮਝੌਤੇ।",
   heroSub: "ਵਾਧੂ ਗੁੰਝਲ ਤੋਂ ਬਿਨਾਂ ਵਾਧੂ ਸਮਰੱਥਾ ਚਾਹੁਣ ਵਾਲਿਆਂ ਲਈ ਰਿਮੋਟ-ਕੰਟਰੋਲ ਖੇਤੀ ਮਸ਼ੀਨਾਂ।",
   heroCta: "ਮਸ਼ੀਨਾਂ ਵੇਖੋ",
+  scrollAria: "इस भाग पर स्क्रोल करें",
   scrollHint: "ਵੇਖਣ ਲਈ ਸਕ੍ਰੋਲ ਕਰੋ",
   machinesKicker: "ਮਸ਼ੀਨਾਂ",
   machinesTitleA: "ਖੇਤ ਲਈ ਇੰਜੀਨੀਅਰਡ।",
@@ -163,6 +164,7 @@ export const pa: UiStrings = {
   aboutCtaSub: "ਫਾਰਮਬਰੋ ਤੇ ਪੂਰੀ ਲਾਈਨਅਪ ਵੇਖੋ।",
   aboutOrder: "ਹੁਣੇ ਆਰਡਰ ਕਰੋ",
   aboutBrowse: "ਫਾਰਮਬਰੋ ਵੇਖੋ",
+  servicesKicker: "ਸੇਵਾਵਾਂ",
   servicesTitle: "ਸੇਵਾਵਾਂ — ਫਾਰਮਬਰੋ ਰੋਬੋਟਿਕਸ",
   serviceEntries: [
     { name: "ਤੁਹਾਡੀ ਮਿੱਟੀ ਤੇ ਖੇਤ ਟ੍ਰਾਇਲ", copy: "ਸ਼ੋਰੂਮ ਡੈਮੋ ਨਹੀਂ, ਅਸਲ ਕੰਮ ਕਰਨ ਲਈ ਸਹੀ ਪਲੇਟਫਾਰਮ ਲਿਆਉਂਦੇ ਹਾਂ।", stat: "ਯੋਗ ਖੇਤਾਂ ਲਈ ਮੁਫ਼ਤ" },

@@ -76,6 +76,7 @@ export const gu: UiStrings = {
   heroTitleB: "ઓછા સમાધાન.",
   heroSub: "વધુ જટિલતા વિના વધુ ક્ષમતા ઇચ્છનારા ખેડૂતો માટે રિમોટ કંટ્રોલ્ડ ખેતી મશીનો.",
   heroCta: "મશીનો જુઓ",
+  scrollAria: "इस भाग पर स्क्रोल करें",
   scrollHint: "જોવા માટે સ્ક્રોલ કરો",
   machinesKicker: "મશીનો",
   machinesTitleA: "ખેતર માટે એન્જિનિયર્ડ.",
@@ -153,6 +154,7 @@ export const gu: UiStrings = {
   aboutCtaSub: "ફાર્મબ્રો પર સંપૂર્ણ લાઇનઅપ જુઓ.",
   aboutOrder: "હવે ઓર્ડર કરો",
   aboutBrowse: "ફાર્મબ્રો જુઓ",
+  servicesKicker: "સેવાઓ",
   servicesTitle: "સેવાઓ — ફાર્મબ્રો રોબોટિક્સ",
   serviceEntries: [
     { name: "તમારી જમીન પર ખેતર ટ્રાયલ્સ", copy: "શોરૂમ ડેમો નહીં, વાસ્તવિક કામ કરવા માટે યોગ્ય પ્લેટફોર્મ લાવીએ છીએ.", stat: "પાત્ર ખેતરો માટે મફત" },

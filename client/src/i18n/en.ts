@@ -107,6 +107,7 @@ export const en = {
   heroSub: "Remote-controlled farm machines for growers who need more capacity without adding more complexity.",
   heroCta: "See the machines",
   scrollHint: "Scroll to explore",
+  scrollAria: "Scroll to the machines section",
   machinesKicker: "The machines",
   machinesTitleA: "Engineered for the field.",
   machinesTitleB: "Built for the mission.",

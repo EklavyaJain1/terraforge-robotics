@@ -102,6 +102,7 @@ export const hi: UiStrings = {
   heroTitleB: "कम समझौते।",
   heroSub: "बिना अतिरिक्त जटिलता के ज़्यादा क्षमता चाहने वाले किसानों के लिए रिमोट-कंट्रोल्ड खेती की मशीनें।",
   heroCta: "मशीनें देखें",
+  scrollAria: "मशीनों वाले भाग पर स्क्रॉल करें",
   scrollHint: "नीचे स्क्रॉल करें",
   machinesKicker: "मशीनें",
   machinesTitleA: "खेत के लिए इंजीनियर्ड।",

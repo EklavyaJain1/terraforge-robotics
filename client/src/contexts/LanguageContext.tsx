@@ -17,7 +17,7 @@ const STORAGE_KEY = "farmbro-language";
 function readStoredLanguage(): LanguageCode {
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY);
-    if (stored && stored in dictionaries) return stored as LanguageCode;
+    if (stored && Object.prototype.hasOwnProperty.call(dictionaries, stored)) return stored as LanguageCode;
   } catch {
     /* storage unavailable — English stays the default */
   }

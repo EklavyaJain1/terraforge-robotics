@@ -52,6 +52,8 @@ export default function Home() {
   // The jade highlight sweeps across "Why FarmBro." as the section scrolls into view.
   // Driven by a direct rAF scroll listener: deterministic under Lenis, no re-renders.
   const sweepRef = useRef<HTMLSpanElement>(null);
+  const prefersReducedMotion =
+    typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   useEffect(() => {
     const el = sweepRef.current;
     if (!el) return;
@@ -89,12 +91,12 @@ export default function Home() {
         <section
           ref={heroRef}
           className="tf-scanline relative min-h-[720px] overflow-hidden border-b border-white/10 bg-[#111311] text-white sm:min-h-[860px] lg:min-h-[100svh]"
-          aria-label="FarmBro Robotics introduction"
+          aria-label={t.heroAria}
         >
           <motion.video
             autoPlay loop muted playsInline
             className="absolute inset-0 h-full w-full object-cover object-center"
-            style={{ y: heroVideoY, scale: 1.1 }}
+            style={prefersReducedMotion ? { scale: 1.1 } : { y: heroVideoY, scale: 1.1 }}
           >
             <source src="/videos/hero.mp4" type="video/mp4" />
           </motion.video>
@@ -123,7 +125,7 @@ export default function Home() {
             type="button"
             onClick={() => scrollToId("machines")}
             className="tf-focus absolute bottom-10 left-1/2 hidden -translate-x-1/2 items-center gap-2 text-white/70 lg:flex"
-            aria-label="Scroll to the machines section"
+            aria-label={t.scrollHint}
           >
             <span className="tf-mono text-[9px]">{t.scrollHint}</span>
             <ChevronDown size={14} />
@@ -273,7 +275,7 @@ export default function Home() {
         target="_blank"
         rel="noreferrer"
         className="tf-focus fixed bottom-5 right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-[#53C98B] text-[#0B0F0D] shadow-[0_10px_30px_rgba(31,34,31,.22)] transition-transform hover:scale-105"
-        aria-label="Chat with FarmBro on WhatsApp"
+        aria-label={t.whatsappAria}
       >
         <span className="text-lg font-semibold">W</span>
       </a>
