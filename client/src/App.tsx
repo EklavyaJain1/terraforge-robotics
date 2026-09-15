@@ -7,6 +7,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { OrderProvider } from "./contexts/OrderContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { useSmoothScroll } from "./lib/smoothScroll";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import FarmBro from "./pages/FarmBro";
@@ -44,12 +45,13 @@ function Router() {
 
 export default function App() {
   const [booted, setBooted] = useState(false);
+  useSmoothScroll();
 
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light">
-        <OrderProvider>
-          <LanguageProvider>
+        <LanguageProvider>
+          <OrderProvider>
           <TooltipProvider>
             {/* The app mounts underneath immediately; the boot screen covers it
                 and wipes away once the first frame can actually paint. */}
@@ -60,8 +62,8 @@ export default function App() {
               <Router />
             </div>
           </TooltipProvider>
-          </LanguageProvider>
-        </OrderProvider>
+          </OrderProvider>
+        </LanguageProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );

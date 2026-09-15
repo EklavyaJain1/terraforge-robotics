@@ -1,16 +1,13 @@
 import { useEffect, useRef, useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 /* FarmBro boot screen. Shows the mission for MIN_SHOW (3s) so it always
    reads as a deliberate title card; MAX_WAIT is only a safety cap. */
 const MIN_SHOW = 3000;
 const MAX_WAIT = 3400;
 
-const missionLines = [
-  "Autonomous machines for the people who feed us.",
-  "Made in India. Proven in the field.",
-];
-
 export default function BootScreen({ onDone }: { onDone: () => void }) {
+  const { t } = useLanguage();
   const [progress, setProgress] = useState(4);
   const [wiping, setWiping] = useState("wipe-in");
   const [gone, setGone] = useState(false);
@@ -54,7 +51,7 @@ export default function BootScreen({ onDone }: { onDone: () => void }) {
     <div
       className={`boot-screen fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#0B0F0D] text-white ${wiping}`}
       role="status"
-      aria-label="FarmBro is loading"
+      aria-label={t.bootAria}
     >
       {/* Field texture: faint plough rows */}
       <div aria-hidden="true" className="boot-rows" />
@@ -66,7 +63,7 @@ export default function BootScreen({ onDone }: { onDone: () => void }) {
         </div>
 
         <p className="reveal reveal-delay-1 mt-9 max-w-[380px] text-sm leading-6 text-white/60">
-          {missionLines[0]} {missionLines[1]}
+          {t.bootMissionA} {t.bootMissionB}
         </p>
 
         <div className="reveal reveal-delay-2 mt-9 w-full">
@@ -77,7 +74,7 @@ export default function BootScreen({ onDone }: { onDone: () => void }) {
             />
           </div>
           <div className="tf-mono mt-3 flex items-center justify-between text-[10px] text-white/40">
-            <span>PREPARING THE FIELD</span>
+            <span>{t.bootPreparing}</span>
             <span aria-hidden="true">{Math.round(progress)}%</span>
           </div>
         </div>

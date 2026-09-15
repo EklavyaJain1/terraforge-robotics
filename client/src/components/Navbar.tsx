@@ -7,8 +7,9 @@ import { useOrderForm } from "@/contexts/OrderContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 function AppMark() {
+  const { t } = useLanguage();
   return (
-    <Link href="/" className="tf-focus flex items-center gap-2" aria-label="FarmBro home">
+    <Link href="/" className="tf-focus flex items-center gap-2" aria-label={t.appMarkAria}>
       <img src="/images/mark-fallback.svg" alt="" className="h-6 w-6 object-contain brightness-0 invert" />
       <span className="text-[10px] font-semibold tracking-[.14em] text-white">FARM BRO</span>
     </Link>
@@ -37,7 +38,7 @@ export default function Navbar() {
           <AppMark />
 
           {/* Floating dock — the primary navigation, top-center */}
-          <nav aria-label="Primary navigation" className="contents">
+          <nav aria-label={t.navAria} className="contents">
             <FloatingDock
               items={navItems}
               desktopClassName="fixed left-1/2 top-1 -translate-x-1/2"
