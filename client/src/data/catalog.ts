@@ -25,7 +25,6 @@ export interface Robot {
   tagline: string;
   body: string;
   priceLabel: string;
-  institutionalNote: string;
   badge?: string;
   valueNote?: string;
   availability: string;
@@ -57,7 +56,6 @@ export const robots: Robot[] = [
     tagline: "Heavy mulching, no driver on the machine.",
     body: "A full-size remote-controlled mulcher for open fields and orchard blocks. The hybrid power pack keeps long mulching days going, while the operator works the machine from a safe distance with a rugged remote unit.",
     priceLabel: "Price on request",
-    institutionalNote: "Fleet, lease & institutional pricing on request",
     badge: "Flagship",
     availability: "Field demonstrations open on request",
     power: "Hybrid",
@@ -86,7 +84,6 @@ export const robots: Robot[] = [
     tagline: "Mulch, spray, and carry — one unmanned carrier.",
     body: "One unmanned carrier that covers three season jobs: mulching between rows, spraying on schedule, and moving harvest or inputs across the estate. The six-wheel configuration is made for plantation rows and uneven estate tracks.",
     priceLabel: "Price on request",
-    institutionalNote: "Fleet, lease & institutional pricing on request",
     badge: "Best seller",
     availability: "Estate pilots open on request",
     specs: [
@@ -114,7 +111,6 @@ export const robots: Robot[] = [
     tagline: "For the blocks a tractor can't reach.",
     body: "The compact electric mulcher for hard-to-reach ground — terraces, orchard basins, and narrow blocks where bigger machines stall. Quiet, fume-free passes with full remote control.",
     priceLabel: "Price on request",
-    institutionalNote: "Fleet, lease & institutional pricing on request",
     valueNote: "For hard to reach areas, capable of moving at 45° slope.",
     availability: "Demonstrations open on request",
     power: "Electric",
@@ -144,7 +140,6 @@ export const robots: Robot[] = [
     tagline: "The estate from above, before you commit the crew.",
     body: "A crop-scouting drone that flies the block before the machines roll — canopy health, water stress, and pest pressure mapped in one pass, so mulching and spraying go exactly where the field needs them.",
     priceLabel: "Price on request",
-    institutionalNote: "Fleet, lease & institutional pricing on request",
     badge: "Scout",
     availability: "Scouting demonstrations open on request",
     specs: [
