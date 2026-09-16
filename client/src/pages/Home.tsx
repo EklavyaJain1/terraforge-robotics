@@ -100,9 +100,7 @@ export default function Home() {
           >
             <source src="/videos/hero.mp4" type="video/mp4" />
           </motion.video>
-          <div className="hero-fade absolute inset-0" />
-
-          <div className="tf-container relative flex min-h-[720px] flex-col justify-end pb-32 pt-32 sm:min-h-[860px] sm:pb-40 lg:min-h-[100svh]">
+          <div className="hero-fade absolute inset-0" />          <div className="relative flex min-h-[720px] flex-col justify-end px-6 pb-24 pt-32 sm:min-h-[860px] sm:px-10 sm:pb-28 lg:min-h-[100svh] lg:px-14 lg:pb-32">
             <div className="max-w-[620px]">
               <h1 className="reveal text-[clamp(2.6rem,7.5vw,6.5rem)] font-medium leading-[.92] tracking-[-.07em] text-white">
                 {t.heroTitleA}
@@ -124,8 +122,8 @@ export default function Home() {
           <button
             type="button"
             onClick={() => scrollToId("machines")}
-            className="tf-focus absolute bottom-10 left-1/2 hidden -translate-x-1/2 items-center gap-2 text-white/70 lg:flex"
-            aria-label={t.scrollHint}
+            className="tf-focus absolute bottom-10 left-14 hidden items-center gap-2 text-white/70 lg:flex"
+            aria-label={t.scrollAria}
           >
             <span className="tf-mono text-[9px]">{t.scrollHint}</span>
             <ChevronDown size={14} />

@@ -9,9 +9,16 @@ import { useLanguage } from "@/contexts/LanguageContext";
 function AppMark() {
   const { t } = useLanguage();
   return (
-    <Link href="/" className="tf-focus flex items-center gap-2" aria-label={t.appMarkAria}>
+    <Link href="/" className="tf-focus group flex items-center gap-2" aria-label={t.appMarkAria}>
       <img src="/images/mark-fallback.svg" alt="" className="h-6 w-6 object-contain brightness-0 invert" />
-      <span className="text-[10px] font-semibold tracking-[.14em] text-white">FARM BRO</span>
+      <span className="relative text-[10px] font-semibold tracking-[.14em] text-white">
+        FARM BRO
+        {/* Underline slides out from the left on hover */}
+        <span
+          aria-hidden="true"
+          className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-[#B9F4D4] transition-transform duration-300 ease-out group-hover:scale-x-100"
+        />
+      </span>
     </Link>
   );
 }

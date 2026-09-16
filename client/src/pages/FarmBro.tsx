@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import SavingsCalculator from "@/components/SavingsCalculator";
 import SectionKicker from "@/components/SectionKicker";
+import TiltCard from "@/components/ui/tilt-card";
 import { useOrderForm } from "@/contexts/OrderContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import usePageTitle from "@/hooks/usePageTitle";
@@ -73,40 +74,46 @@ function RobotCard({ robot }: { robot: Robot }) {
   const { t } = useLanguage();
   const m = t.machines[robot.id];
   return (
-    <article className={`relative flex flex-col border bg-[#111311] p-6 sm:p-8 ${m.badge ? "border-[#1B8F6A]" : "border-white/15"}`}>
-      {m.badge && (
-        <span className="absolute -top-3 left-6 z-10 bg-[#1B8F6A] px-3 py-1 text-[10px] font-semibold text-white">{m.badge}</span>
-      )}
-      {/* Image, name, and specs open the product page — the Order button stays separate. */}
-      <Link href={`/farmbro/${robot.slug}`} aria-label={t.cardViewAria.replace("{name}", m.name)} className="tf-focus group block">
-        <div className="tf-mono text-[10px] text-[#B9F4D4]">{robot.number} / {m.tier}</div>
-        <h3 className="mt-3 max-w-[420px] text-2xl font-medium leading-[1.1] tracking-[-.04em] text-white transition-colors group-hover:text-[#B9F4D4]">{m.name}</h3>
-        <p className="mt-1 text-base text-white/75">{m.tagline}</p>
+    <TiltCard className="h-full">
+      <article
+        className={`relative flex h-full flex-col border bg-[#111311] p-6 shadow-[0_22px_54px_rgba(17,19,17,.32)] sm:p-8 ${m.badge ? "border-[#1B8F6A]" : "border-white/15"}`}
+        style={{ transform: "translateZ(0)" }}
+      >
+        {m.badge && (
+          <span className="absolute -top-3 left-6 z-10 bg-[#1B8F6A] px-3 py-1 text-[10px] font-semibold text-white">{m.badge}</span>
+        )}
+        {/* Image, name, and specs open the product page — the Visit button below does the same. */}
+        <Link href={`/farmbro/${robot.slug}`} aria-label={t.cardViewAria.replace("{name}", m.name)} className="tf-focus group block">
+          <div className="tf-mono text-[10px] text-[#B9F4D4]">{robot.number} / {m.tier}</div>
+          <h3 className="mt-3 max-w-[420px] text-2xl font-medium leading-[1.1] tracking-[-.04em] text-white transition-colors group-hover:text-[#B9F4D4]">{m.name}</h3>
+          <p className="mt-1 text-base text-white/75">{m.tagline}</p>
 
-        <div className="relative mt-6 h-[190px] overflow-hidden bg-[#17201B] sm:h-[220px]">
-          <img src={robot.image} alt={m.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" decoding="async" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#111311]/85 via-transparent to-transparent" />
-          <div className="absolute bottom-3 left-4 grid grid-cols-2 gap-x-4 gap-y-1">
-            {m.specs.slice(0, 4).map(([label, value]) => (
-              <div key={label}>
-                <div className="tf-mono text-[8px] text-white/45">{label}</div>
-                <div className="mt-0.5 text-xs text-white">{value}</div>
-              </div>
-            ))}
+          <div className="relative mt-6 h-[190px] overflow-hidden bg-[#17201B] sm:h-[220px]">
+            <img src={robot.image} alt={m.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" loading="lazy" decoding="async" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#111311]/85 via-transparent to-transparent" />
+            <div className="absolute bottom-3 left-4 grid grid-cols-2 gap-x-4 gap-y-1">
+              {m.specs.slice(0, 4).map(([label, value]) => (
+                <div key={label}>
+                  <div className="tf-mono text-[8px] text-white/45">{label}</div>
+                  <div className="mt-0.5 text-xs text-white">{value}</div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </Link>
+        </Link>
 
-      <div className="mt-6 flex flex-wrap items-end justify-between gap-4 border-t border-white/15 pt-5">
-        <div>
-          <div className="tf-mono text-[9px] text-white/40">{t.cardPriceLabel}</div>
-          <div className="mt-1 text-xl font-medium tracking-[-.04em] text-white">{m.priceLabel}</div>
+        {/* Price centered above the single centered Visit CTA (as requested: no Get Started) */}
+        <div className="mt-6 flex flex-1 flex-col items-center gap-4 border-t border-white/15 pt-5 text-center">
+          <div>
+            <div className="tf-mono text-[9px] text-white/40">{t.cardPriceLabel}</div>
+            <div className="mt-1 text-xl font-medium tracking-[-.04em] text-white">{m.priceLabel}</div>
+          </div>
+          <Link href={`/farmbro/${robot.slug}`} className="tf-btn tf-btn-quiet mt-auto w-full max-w-[220px]">
+            {t.cardVisit} <MoveUpRight size={14} />
+          </Link>
         </div>
-        <button type="button" onClick={() => openOrderForm(robot.id)} className="tf-btn tf-btn-primary">
-          {t.cardOrderNow} <MoveUpRight size={14} />
-        </button>
-      </div>
-    </article>
+      </article>
+    </TiltCard>
   );
 }
 
