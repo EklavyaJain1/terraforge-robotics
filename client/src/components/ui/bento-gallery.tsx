@@ -31,15 +31,28 @@ export function BentoGallery({ cards }: { cards: BentoCard[] }) {
           initial="rest"
           animate="rest"
         >
-          <motion.img
-            src={card.thumbnail}
-            alt={card.alt}
-            loading="lazy"
-            decoding="async"
-            variants={{ rest: { scale: 1 }, hover: { scale: 1.06 } }}
-            transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
+          {card.thumbnail.endsWith(".mp4") ? (
+            <motion.video
+              src={card.thumbnail}
+              autoPlay
+              loop
+              muted
+              playsInline
+              variants={{ rest: { scale: 1 }, hover: { scale: 1.06 } }}
+              transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          ) : (
+            <motion.img
+              src={card.thumbnail}
+              alt={card.alt}
+              loading="lazy"
+              decoding="async"
+              variants={{ rest: { scale: 1 }, hover: { scale: 1.06 } }}
+              transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          )}
           <motion.div
             variants={{ rest: { opacity: 0 }, hover: { opacity: 1 } }}
             transition={{ duration: 0.35, ease: "easeOut" }}

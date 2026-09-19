@@ -11,6 +11,7 @@ import { useOrderForm } from "@/contexts/OrderContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import usePageTitle from "@/hooks/usePageTitle";
 import { robots } from "@/data/catalog";
+import { motion } from "framer-motion";
 
 /** Highlight card — the v-card-15 pattern in FarmBro's jade-on-ivory theme. */
 function HighlightCard({ index, label, copy, visit }: { index: string; label: string; copy: string; visit: string }) {
@@ -101,6 +102,20 @@ export default function ProductDetail() {
             </span>
             <h1 className="mt-6 max-w-[520px] text-4xl font-medium leading-[1.02] tracking-[-.04em] sm:text-6xl">{m.name}</h1>
             <p className="tf-mono mt-5 text-sm italic tracking-[.08em] text-[#1B8F6A]">{t.configLabel} {m.configuration}</p>
+            {m.valueNote && (
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="mt-6 flex items-center gap-3"
+              >
+                <span className="relative flex h-2.5 w-2.5 shrink-0">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#1B8F6A] opacity-75"></span>
+                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#1B8F6A]"></span>
+                </span>
+                <span className="text-sm font-medium leading-relaxed text-[#1B8F6A]">{m.valueNote}</span>
+              </motion.div>
+            )}
             <p className="mt-6 max-w-[480px] text-base leading-7 text-[#3F4B45]">{m.body}</p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <FillButton type="button" onClick={() => openOrderForm(robot.id)}>
@@ -116,13 +131,24 @@ export default function ProductDetail() {
 
           <div className="relative">
             <div className="relative aspect-[4/3] overflow-hidden bg-[#17201B]">
-              <img
-                src={robot.gallery[activeImage]}
-                alt={t.pdImageAlt.replace("{name}", m.name).replace("{n}", String(activeImage + 1))}
-                fetchPriority="high"
-                decoding="sync"
-                className="h-full w-full object-cover"
-              />
+              {robot.gallery[activeImage].endsWith(".mp4") ? (
+                <video
+                  src={robot.gallery[activeImage]}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <img
+                  src={robot.gallery[activeImage]}
+                  alt={t.pdImageAlt.replace("{name}", m.name).replace("{n}", String(activeImage + 1))}
+                  fetchPriority="high"
+                  decoding="sync"
+                  className="h-full w-full object-cover"
+                />
+              )}
               <button
                 type="button"
                 aria-label={t.pdPrevImage}
@@ -153,7 +179,11 @@ export default function ProductDetail() {
                     activeImage === index ? "border-[#1B8F6A]" : "border-transparent opacity-70 hover:opacity-100"
                   }`}
                 >
-                  <img src={src} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
+                  {src.endsWith(".mp4") ? (
+                    <video src={src} autoPlay loop muted playsInline className="h-full w-full object-cover" />
+                  ) : (
+                    <img src={src} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
+                  )}
                 </button>
               ))}
             </div>

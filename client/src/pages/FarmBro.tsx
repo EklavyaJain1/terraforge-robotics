@@ -9,7 +9,9 @@ import TiltCard from "@/components/ui/tilt-card";
 import { useOrderForm } from "@/contexts/OrderContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import usePageTitle from "@/hooks/usePageTitle";
-import { attachments, robots, type Robot } from "@/data/catalog";
+import { attachments, robots, agriImages, type Robot } from "@/data/catalog";
+import { motion, AnimatePresence } from "framer-motion";
+import { FlowButton } from "@/components/ui/flow-button";
 
 function CompareRow({ label, keywords, machineField }: { label: string; keywords: string[]; machineField?: "power" | "slope" }) {
   const { t } = useLanguage();
@@ -75,43 +77,41 @@ function RobotCard({ robot }: { robot: Robot }) {
   const m = t.machines[robot.id];
   return (
     <TiltCard className="h-full">
-      <article
-        className={`relative flex h-full flex-col border bg-[#111311] p-6 shadow-[0_22px_54px_rgba(17,19,17,.32)] sm:p-8 ${m.badge ? "border-[#1B8F6A]" : "border-white/15"}`}
-        style={{ transform: "translateZ(0)" }}
-      >
+      <article className="group relative flex h-full flex-col rounded-2xl bg-black text-white shadow-[0_22px_54px_rgba(0,0,0,.5)] border border-white/10 transition-colors duration-500 hover:border-[#1B8F6A]/50">
         {m.badge && (
-          <span className="absolute -top-3 left-6 z-10 bg-[#1B8F6A] px-3 py-1 text-[10px] font-semibold text-white">{m.badge}</span>
+          <span className="absolute top-4 right-4 z-20 rounded-full bg-[#1B8F6A] px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-white shadow-lg">
+            {m.badge}
+          </span>
         )}
-        {/* Image, name, and specs open the product page — the Visit button below does the same. */}
-        <Link href={`/farmbro/${robot.slug}`} aria-label={t.cardViewAria.replace("{name}", m.name)} className="tf-focus group block">
-          <div className="tf-mono text-[10px] text-[#B9F4D4]">{robot.number} / {m.tier}</div>
-          <h3 className="mt-3 max-w-[420px] text-2xl font-medium leading-[1.1] tracking-[-.04em] text-white transition-colors group-hover:text-[#B9F4D4]">{m.name}</h3>
-          <p className="mt-1 text-base text-white/75">{m.tagline}</p>
-
-          <div className="relative mt-6 h-[190px] overflow-hidden bg-[#17201B] sm:h-[220px]">
-            <img src={robot.image} alt={m.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" loading="lazy" decoding="async" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#111311]/85 via-transparent to-transparent" />
-            <div className="absolute bottom-3 left-4 grid grid-cols-2 gap-x-4 gap-y-1">
-              {m.specs.slice(0, 4).map(([label, value]) => (
-                <div key={label}>
-                  <div className="tf-mono text-[8px] text-white/45">{label}</div>
-                  <div className="mt-0.5 text-xs text-white">{value}</div>
-                </div>
-              ))}
+        <Link href={`/farmbro/${robot.slug}`} aria-label={t.cardViewAria.replace("{name}", m.name)} className="tf-focus flex flex-1 flex-col">
+          <div className="relative -mt-px overflow-hidden rounded-t-2xl">
+            {robot.hoverVideo ? (
+              <>
+                <img src={robot.image} alt={m.name} className="h-[270px] w-full object-cover object-top transition-opacity duration-500 group-hover:opacity-0" loading="lazy" decoding="async" />
+                <video src={robot.hoverVideo} autoPlay loop muted playsInline className="absolute inset-0 h-[270px] w-full object-cover object-top opacity-0 transition-all duration-500 group-hover:scale-105 group-hover:opacity-100" />
+              </>
+            ) : (
+              <img src={robot.image} alt={m.name} className="h-[270px] w-full object-cover object-top transition-transform duration-500 group-hover:scale-105" loading="lazy" decoding="async" />
+            )}
+            <div className="pointer-events-none absolute bottom-0 z-10 h-32 w-full bg-gradient-to-t from-black to-transparent"></div>
+          </div>
+          <div className="flex flex-1 flex-col px-6 pb-6 pt-4">
+            <h3 className="border-b border-gray-800 pb-5 text-2xl font-medium leading-snug tracking-tight text-white transition-colors group-hover:text-[#B9F4D4]">
+              {m.name}
+            </h3>
+            <p className="mt-5 flex-1 text-sm leading-relaxed text-gray-400">
+              {m.tagline}
+            </p>
+            <div className="mt-6 flex items-center justify-between">
+              <span className="bg-gradient-to-r from-[#B9F4D4] to-[#1B8F6A] bg-clip-text text-sm font-medium text-transparent">
+                {m.priceLabel}
+              </span>
+              <div className="inline-flex items-center gap-2 text-xs font-medium text-white transition-colors group-hover:text-[#B9F4D4]">
+                {t.cardVisit} <MoveUpRight size={14} className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </div>
             </div>
           </div>
         </Link>
-
-        {/* Price centered above the single centered Visit CTA (as requested: no Get Started) */}
-        <div className="mt-6 flex flex-1 flex-col items-center gap-4 border-t border-white/15 pt-5 text-center">
-          <div>
-            <div className="tf-mono text-[9px] text-white/40">{t.cardPriceLabel}</div>
-            <div className="mt-1 text-xl font-medium tracking-[-.04em] text-white">{m.priceLabel}</div>
-          </div>
-          <Link href={`/farmbro/${robot.slug}`} className="tf-btn tf-btn-quiet mt-auto w-full max-w-[220px]">
-            {t.cardVisit} <MoveUpRight size={14} />
-          </Link>
-        </div>
       </article>
     </TiltCard>
   );
@@ -127,22 +127,45 @@ export default function FarmBro() {
     <div className="tf-page">
       <Navbar />
       <main className="pt-[72px]">
-        <section className="tf-dark py-16 sm:py-24">
-          <div className="tf-container">
-            <SectionKicker number="SHOP" label={t.farmbroEyebrow} light />
-            <div className="mt-7 flex flex-wrap items-end justify-between gap-8">
-              <div>
-                <h1 className="max-w-[720px] text-5xl font-medium leading-[.95] tracking-[-.055em] text-white sm:text-7xl">
-                  {t.farmbroTitleA}
-                  <br />
-                  <span className="text-[#B9F4D4]">{t.farmbroTitleB}</span>
-                </h1>
-                <p className="mt-6 max-w-[480px] text-base leading-7 text-white/60">{t.farmbroSub}</p>
-              </div>
-              <button type="button" onClick={() => setCompare(!compare)} className="tf-btn tf-btn-quiet" aria-pressed={compare}>
-                {compare ? t.compareHide : t.compareShow}
-              </button>
-            </div>
+        <section className="tf-dark relative flex min-h-[calc(100vh-72px)] items-center overflow-hidden bg-[#0B0F0D]">
+          {/* Background image with overlay */}
+          <div className="absolute inset-0 z-0">
+            <img src={agriImages.wide} className="h-full w-full object-cover opacity-30 mix-blend-luminosity" alt="" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F0D] via-[#0B0F0D]/60 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0B0F0D] via-transparent to-[#0B0F0D]" />
+          </div>
+          <div className="tf-container relative z-10 flex flex-col items-center text-center">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+              <SectionKicker number="SHOP" label={t.farmbroEyebrow} light className="mx-auto" />
+            </motion.div>
+            
+            <motion.h1 
+              initial={{ opacity: 0, y: 30 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="mt-7 max-w-[800px] text-5xl font-medium leading-[.95] tracking-[-.055em] text-white sm:text-7xl"
+            >
+              {t.farmbroTitleA}{" "}
+              <span className="bg-gradient-to-r from-[#B9F4D4] to-[#1B8F6A] bg-clip-text text-transparent">{t.farmbroTitleB}</span>
+            </motion.h1>
+            
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="mt-6 max-w-[540px] text-base leading-7 text-white/70"
+            >
+              {t.farmbroSub}
+            </motion.p>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="mt-10"
+            >
+              <FlowButton text={compare ? t.compareHide : t.compareShow} onClick={() => setCompare(!compare)} />
+            </motion.div>
           </div>
         </section>
 
@@ -161,7 +184,7 @@ export default function FarmBro() {
         <section className="tf-surface py-16 sm:py-20">
           <div className="tf-container">
             <SectionKicker number="ADD-ONS" label={t.attachmentsKicker} />
-            <h2 className="mt-7 max-w-[560px] text-4xl font-medium leading-[.98] tracking-[-.055em] sm:text-5xl">{t.attachmentsHeading}</h2>
+            <h2 className="mt-7 max-w-[560px] text-4xl font-medium leading-[.98] tracking-[-.055em] sm:text-5xl">Add On</h2>
             <div className="mt-10 grid gap-px border border-[#111311]/15 bg-[#111311]/15 sm:grid-cols-2 lg:grid-cols-4">
               {attachments.map((item) => {
                 const a = t.attachments[item.id];
@@ -185,32 +208,11 @@ export default function FarmBro() {
               <button type="button" onClick={() => openOrderForm("attach")} className="tf-btn tf-btn-primary">
                 {t.attachmentsCta} <MoveUpRight size={14} />
               </button>
-              <p className="text-sm text-[#59655F]">{t.attachmentsFitNote}</p>
             </div>
           </div>
         </section>
 
-        <section className="tf-surface py-16 sm:py-20">
-          <div className="tf-container">
-            <SectionKicker number="WHO" label={t.whoKicker} />
-            <h2 className="mt-7 max-w-[560px] text-4xl font-medium leading-[.98] tracking-[-.055em] sm:text-5xl">{t.whoHeading}</h2>
-            <div className="mt-10 grid gap-px border border-[#111311]/15 bg-[#111311]/15 lg:grid-cols-3">
-              {t.audiences.map((audience, i) => (
-                <div key={audience.label} className="flex flex-col bg-white p-6 sm:p-7">
-                  <div className="flex items-center justify-between">
-                    <span className="tf-mono text-[10px] text-[#1B8F6A]">{["B2C", "B2B", "GOV"][i]}</span>
-                    <span className="h-px w-8 bg-[#111311]/20" />
-                  </div>
-                  <h3 className="mt-8 text-xl font-medium">{audience.label}</h3>
-                  <p className="mt-3 flex-1 text-sm leading-6 text-[#59655F]">{audience.copy}</p>
-                  <button type="button" onClick={() => openOrderForm(["unsure", "fleet", "gov-civil"][i])} className="tf-btn tf-btn-outline mt-6 w-fit">
-                    {audience.cta} <MoveUpRight size={13} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+
 
         <section className="tf-dark py-16 sm:py-20">
           <div className="tf-container flex flex-col items-start justify-between gap-6 border border-white/15 bg-[#17201B] p-8 sm:flex-row sm:items-center sm:p-10">

@@ -18,6 +18,7 @@ export interface Robot {
   slug: string;
   number: string;
   image: string;
+  hoverVideo?: string;
   gallery: string[];
   name: string;
   tier: string;
@@ -49,7 +50,8 @@ export const robots: Robot[] = [
     slug: "remote-controlled-mulcher-hybrid",
     number: "01",
     image: agriImages.farmx,
-    gallery: [agriImages.farmx, agriImages.wide, agriImages.hero, agriImages.division],
+    hoverVideo: "/videos/Farm Bro Remote Controlled Mulcher.mp4",
+    gallery: ["/videos/Farm Bro Remote Controlled Mulcher.mp4", agriImages.farmx, agriImages.wide, agriImages.hero, agriImages.division],
     name: "Farm Bro Remote Controlled Mulcher (Hybrid)",
     tier: "Agriculture platform",
     configuration: "4X4 UGV",
@@ -77,7 +79,8 @@ export const robots: Robot[] = [
     slug: "mulcher-sprayer-cargo-carrier",
     number: "02",
     image: agriImages.rancher,
-    gallery: [agriImages.rancher, agriImages.wide, agriImages.division, agriImages.hero],
+    hoverVideo: "/videos/farm-bro-sprayer-cargo.mp4",
+    gallery: ["/videos/farm-bro-sprayer-cargo.mp4", agriImages.rancher, agriImages.wide, agriImages.division, agriImages.hero],
     name: "Farm Bro Remote Controlled Mulcher, Sprayer & Cargo Carrier",
     tier: "Agriculture platform",
     configuration: "6X6 UGV",
@@ -104,7 +107,8 @@ export const robots: Robot[] = [
     slug: "mini-mulcher-electric",
     number: "03",
     image: agriImages.hero,
-    gallery: [agriImages.hero, agriImages.rancher, agriImages.division, agriImages.wide],
+    hoverVideo: "/videos/farm-bro-mini-mulcher.mp4",
+    gallery: ["/videos/farm-bro-mini-mulcher.mp4", agriImages.hero, agriImages.rancher, agriImages.division, agriImages.wide],
     name: "Farm Bro Remote Controlled Mini Mulcher (Electric)",
     tier: "Agriculture platform",
     configuration: "4X4 UGV",
@@ -133,7 +137,8 @@ export const robots: Robot[] = [
     slug: "canopy-scout-drone",
     number: "04",
     image: agriImages.canopy,
-    gallery: [agriImages.canopy, agriImages.wide, agriImages.division, agriImages.hero],
+    hoverVideo: "/videos/farm-bro-canopy-scout.mp4",
+    gallery: ["/videos/farm-bro-canopy-scout.mp4", agriImages.canopy, agriImages.wide, agriImages.division, agriImages.hero],
     name: "Farm Bro Canopy Scout",
     tier: "Crop intelligence drone",
     configuration: "Scouting drone",

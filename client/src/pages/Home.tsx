@@ -8,7 +8,7 @@ import SectionKicker from "@/components/SectionKicker";
 import { useOrderForm } from "@/contexts/OrderContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import usePageTitle from "@/hooks/usePageTitle";
-import { robots } from "@/data/catalog";
+import { robots, agriImages } from "@/data/catalog";
 import { trackSpotlight } from "@/lib/spotlight";
 
 const pillars = [
@@ -86,11 +86,11 @@ export default function Home() {
     <div id="top" className="tf-page">
       <Navbar />
 
-      <main>
+      <main className="relative">
         {/* Hero — the field film and the thesis */}
         <section
           ref={heroRef}
-          className="tf-scanline relative min-h-[720px] overflow-hidden border-b border-white/10 bg-[#111311] text-white sm:min-h-[860px] lg:min-h-[100svh]"
+          className="tf-scanline sticky top-0 z-0 h-[100svh] min-h-[720px] overflow-hidden border-b border-white/10 bg-[#111311] text-white sm:min-h-[860px]"
           aria-label={t.heroAria}
         >
           <motion.video
@@ -131,11 +131,17 @@ export default function Home() {
         </section>
 
         {/* 01 — The machines: e-commerce cards; every card opens its product page */}
-        <section className="tf-surface border-b border-[#111311]/15 py-16 sm:py-20" id="machines">
+        <section className="tf-surface relative z-10 border-b border-[#111311]/15 bg-[#F5F7F5] py-16 sm:py-20" id="machines">
           <div className="tf-container">
-            <div>
-              <SectionKicker number="01" label={t.machinesKicker} />
-              <h2 className="mt-7 text-[clamp(1.7rem,5.2vw,3.75rem)] font-medium leading-[1.05] tracking-[-.05em]">
+            <motion.div 
+              className="flex flex-col items-center text-center"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <SectionKicker number="01" label={t.machinesKicker} className="mx-auto" />
+              <h2 className="mt-7 max-w-[800px] text-[clamp(1.7rem,5.2vw,3.75rem)] font-medium leading-[1.05] tracking-[-.05em]">
                 {t.machinesTitleA}
                 <br />
                 <span className="text-[#1B8F6A]">{t.machinesTitleB}</span>
@@ -143,44 +149,135 @@ export default function Home() {
               <p className="mt-5 max-w-[520px] text-base leading-7 text-[#3F4B45]">
                 {t.machinesSub}
               </p>
-            </div>
+            </motion.div>
 
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {robots.map((robot) => (
-                <ProductCard key={robot.id} robot={robot} />
+            <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {robots.map((robot, i) => (
+                <motion.div
+                  key={robot.id}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.5, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <ProductCard robot={robot} />
+                </motion.div>
               ))}
-            </div>
-
-            {/* Four engineering pillars — centered headline, network lines down to the cards */}
-            <div className="mt-20">
-              <div className="text-center">
-                <div className="tf-mono text-[10px] uppercase tracking-[.16em] text-[#64736C]">{t.pillarsKicker}</div>
-                <h3 className="mx-auto mt-3 max-w-[460px] text-3xl font-medium leading-[1.02] tracking-[-.04em] sm:text-4xl">{t.pillarsHeading}</h3>
-              </div>
-              <NetworkLines />
-              <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {pillars.map((pillar, index) => (
-                  <motion.div
-                    key={t.pillars[index].title}
-                    onPointerMove={trackSpotlight}
-                    className="product-card p-7"
-                    initial={{ opacity: 0, y: 18 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-60px" }}
-                    transition={{ duration: 0.5, delay: index * 0.08, ease: [0.23, 1, 0.32, 1] }}
-                  >
-                    <pillar.icon size={19} className="text-[#1B8F6A]" />
-                    <h4 className="mt-5 text-lg font-medium leading-snug">{t.pillars[index].title}</h4>
-                    <p className="mt-2 text-sm leading-6 text-[#59655F]">{t.pillars[index].copy}</p>
-                  </motion.div>
-                ))}
-              </div>
             </div>
           </div>
         </section>
 
+        {/* In-Field Performance Section */}
+        <section className="tf-surface relative z-10 border-b border-[#111311]/15 bg-white py-20 sm:py-28" id="performance">
+          <div className="tf-container">
+            <motion.div 
+              className="flex flex-col items-center text-center"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <SectionKicker number="02" label="PERFORMANCE" className="mx-auto" />
+              <h2 className="mt-7 max-w-[800px] text-[clamp(1.7rem,5.2vw,3.75rem)] font-medium leading-[1.05] tracking-[-.05em]">
+                In-Field <span className="text-[#1B8F6A]">Performance</span>
+              </h2>
+              <p className="mt-5 max-w-[520px] text-base leading-7 text-[#3F4B45]">
+                See our robots tackle real-world agricultural challenges. From steep slopes to narrow vineyard rows.
+              </p>
+            </motion.div>
+
+            <div className="mt-16 grid gap-4 sm:grid-cols-3">
+              {[
+                { title: "Mulcher Hybrid", video: "/videos/Farm Bro Remote Controlled Mulcher.mp4" },
+                { title: "Sprayer & Cargo", video: "/videos/farm-bro-sprayer-cargo.mp4" },
+                { title: "Canopy Scout", video: "/videos/farm-bro-canopy-scout.mp4" },
+              ].map((item, i) => (
+                <motion.div 
+                  key={item.title}
+                  className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-black"
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <video
+                    src={item.video}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="absolute inset-0 h-full w-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-105 group-hover:opacity-100"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="absolute bottom-6 left-6 text-white">
+                    <h3 className="text-xl font-medium tracking-tight">{item.title}</h3>
+                    <div className="mt-2 flex items-center gap-2 text-sm text-[#B9F4D4]">
+                      <span>Watch in action</span> <ArrowUpRight size={14} />
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 03 — Engineering Pillars (Sticky Scroll) */}
+        <section id="pillars" className="relative z-10 border-b border-white/10 bg-[#111311] py-20 text-white sm:py-32">
+          <div className="tf-container">
+            <div className="grid gap-16 lg:grid-cols-2">
+              
+              {/* Sticky Left Column: Image/Visual */}
+              <div className="hidden lg:block">
+                <div className="sticky top-24 overflow-hidden rounded-2xl bg-[#17201B]">
+                  <img 
+                    src={agriImages.wide} 
+                    alt="FarmBro Engineering" 
+                    className="h-[600px] w-full object-cover opacity-80"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#111311] via-transparent to-transparent" />
+                  <div className="absolute bottom-10 left-10">
+                    <div className="tf-mono text-[10px] uppercase tracking-[.16em] text-[#B9F4D4]">{t.pillarsKicker}</div>
+                    <h3 className="mt-3 max-w-[320px] text-3xl font-medium leading-[1.02] tracking-[-.04em]">
+                      {t.pillarsHeading}
+                    </h3>
+                  </div>
+                </div>
+              </div>
+
+              {/* Scrolling Right Column: Pillar Cards */}
+              <div className="flex flex-col gap-12 lg:gap-32 lg:py-32">
+                <div className="lg:hidden">
+                  <div className="tf-mono text-[10px] uppercase tracking-[.16em] text-[#B9F4D4]">{t.pillarsKicker}</div>
+                  <h3 className="mt-3 text-3xl font-medium leading-[1.02] tracking-[-.04em]">{t.pillarsHeading}</h3>
+                </div>
+
+                {pillars.map((pillar, index) => (
+                  <motion.div
+                    key={t.pillars[index].title}
+                    className="relative flex flex-col gap-4 border-l-2 border-[#1B8F6A]/30 pl-8 transition-colors hover:border-[#1B8F6A]"
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: "-20% 0px -20% 0px" }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#1B8F6A]/10">
+                      <pillar.icon size={24} className="text-[#1B8F6A]" />
+                    </span>
+                    <div>
+                      <h4 className="text-2xl font-medium leading-snug">{t.pillars[index].title}</h4>
+                      <p className="mt-3 text-base leading-7 text-white/70">{t.pillars[index].copy}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+
         {/* 02 — Why FarmBro: bento grid */}
-        <section className="tf-surface border-b border-[#111311]/12 py-20 sm:py-24" id="why">
+        <section className="tf-surface relative z-10 border-b border-[#111311]/12 bg-white py-20 sm:py-24" id="why">
           <div className="tf-container">
             <div className="flex justify-center">
               <SectionKicker number="02" label={t.whyKicker} />
@@ -228,8 +325,29 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 03 — Make it practical */}
-        <section id="order" className="relative overflow-hidden border-b border-white/15 bg-[#1B8F6A] py-20 text-white sm:py-24">
+        {/* Our Mission */}
+        <section className="relative z-10 flex min-h-[60vh] flex-col items-center justify-center overflow-hidden bg-[#111311] py-24 text-center sm:py-32">
+          <div className="absolute inset-0">
+            <img src={agriImages.farmx} alt="Mission Background" className="h-full w-full object-cover opacity-20" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#111311] via-[#111311]/50 to-[#111311]" />
+          </div>
+          <div className="tf-container relative z-10 max-w-[900px]">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <SectionKicker number="03" label="OUR MISSION" light className="mx-auto" />
+              <h2 className="mt-8 text-[clamp(2rem,4vw,4rem)] font-medium leading-[1.1] tracking-tight text-white">
+                To arm every farmer and enterprise with <span className="text-[#B9F4D4]">precision automation</span>, preserving the soil for the next generation while driving unparalleled efficiency today.
+              </h2>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* 04 — Make it practical */}
+        <section id="order" className="relative z-10 overflow-hidden border-b border-white/15 bg-[#1B8F6A] py-20 text-white sm:py-24">
           <div className="absolute -right-20 -top-24 h-72 w-72 rounded-full border-[40px] border-white/10" />
           <div className="absolute -bottom-32 left-1/3 h-80 w-80 rounded-full border-[1px] border-white/15" />
           <div className="tf-container relative">
@@ -264,19 +382,73 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* FAQ */}
+        <section id="faq" className="relative z-10 border-b border-[#111311]/10 bg-[#F5F7F5] py-20 sm:py-28">
+          <div className="tf-container max-w-[800px]">
+            <motion.div
+              className="flex flex-col items-center text-center"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <SectionKicker number="05" label="FAQ" className="mx-auto" />
+              <h2 className="mt-7 text-[clamp(1.7rem,5.2vw,3.75rem)] font-medium leading-[1.05] tracking-[-.05em]">
+                Frequently Asked <span className="text-[#1B8F6A]">Questions</span>
+              </h2>
+            </motion.div>
+
+            <div className="mt-14 flex flex-col gap-3">
+              {[
+                {
+                  q: "What makes FarmBro different from a regular tractor?",
+                  a: "FarmBro machines are purpose-built, remote-controlled robots. They eliminate the need for a driver on the machine, work on slopes up to 45°, and are far lighter than tractors — meaning zero soil compaction."
+                },
+                {
+                  q: "Do I need any special training to operate the robots?",
+                  a: "No. Our remote units are designed for simplicity. Most operators are comfortable within 30 minutes of hands-on training. We provide on-site training with every delivery."
+                },
+                {
+                  q: "Can FarmBro robots work on steep terrain?",
+                  a: "Absolutely. Our 4×4 platform with independent electric drive handles slopes up to 45°. This makes them ideal for vineyards, tea estates, and hillside orchards where tractors cannot safely operate."
+                },
+                {
+                  q: "What is the range and battery life?",
+                  a: "Our hybrid models offer extended runtime for all-day operations. The electric models provide 4–6 hours of continuous operation depending on terrain and workload, with fast swap battery options available."
+                },
+                {
+                  q: "Is the Canopy Scout drone autonomous?",
+                  a: "The Canopy Scout flies pre-programmed survey missions autonomously, capturing multispectral imagery. It returns to base, uploads data, and generates actionable crop health maps — all without manual piloting."
+                },
+                {
+                  q: "Do you support enterprise and defense contracts?",
+                  a: "Yes. FarmBro works with enterprises, agricultural cooperatives, and defense organizations. We offer fleet management, custom integrations, and dedicated support for large-scale deployments."
+                },
+              ].map((item, i) => (
+                <motion.details
+                  key={i}
+                  className="group rounded-xl border border-[#111311]/10 bg-white px-6 py-5 transition-shadow hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] [&[open]]:shadow-[0_4px_20px_rgba(27,143,106,0.08)]"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.4, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <summary className="flex cursor-pointer items-center justify-between text-base font-medium leading-snug text-[#111311] sm:text-lg [&::-webkit-details-marker]:hidden">
+                    {item.q}
+                    <ChevronDown size={18} className="shrink-0 text-[#1B8F6A] transition-transform duration-300 group-open:rotate-180" />
+                  </summary>
+                  <p className="mt-3 text-sm leading-7 text-[#59655F] sm:text-base">{item.a}</p>
+                </motion.details>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
 
       <Footer />
 
-      <a
-        href="https://wa.me/919154153925"
-        target="_blank"
-        rel="noreferrer"
-        className="tf-focus fixed bottom-5 right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-[#53C98B] text-[#0B0F0D] shadow-[0_10px_30px_rgba(31,34,31,.22)] transition-transform hover:scale-105"
-        aria-label={t.whatsappAria}
-      >
-        <span className="text-lg font-semibold">W</span>
-      </a>
+
     </div>
   );
 }

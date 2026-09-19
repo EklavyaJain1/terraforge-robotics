@@ -16,6 +16,7 @@ import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import ProductDetail from "./pages/ProductDetail";
 import Services from "./pages/Services";
+import WhatsAppBadge from "./components/WhatsAppBadge";
 
 /* Every route change starts at the top — product pages open from card grids. */
 function ScrollToTop() {
@@ -60,6 +61,7 @@ export default function App() {
               <Toaster />
               <ScrollToTop />
               <Router />
+              <WhatsAppBadge />
             </div>
           </TooltipProvider>
           </OrderProvider>
