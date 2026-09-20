@@ -207,6 +207,74 @@ export const en = {
   servicesBookTrial: "Book a field trial",
   servicesBrowse: "Browse FarmBro",
 
+  // ── Home: in-field performance ───────────────────────────────────────
+  perfKicker: "Performance",
+  perfHeadingA: "In-Field",
+  perfHeadingB: "Performance",
+  perfSub: "See our robots tackle real-world agricultural challenges. From steep slopes to narrow vineyard rows.",
+  perfWatch: "Watch in action",
+  /** Titles aligned with the page's video order (mulcher, sprayer & cargo, canopy scout). */
+  perfVideos: ["Mulcher Hybrid", "Sprayer & Cargo", "Canopy Scout"],
+
+  // ── Home: mission ────────────────────────────────────────────────────
+  missionKicker: "Our Mission",
+  missionHeadingA: "To arm every farmer and enterprise with",
+  missionHighlight: "precision automation",
+  missionHeadingB: ", preserving the soil for the next generation while driving unparalleled efficiency today.",
+
+  // ── Home: FAQ ────────────────────────────────────────────────────────
+  faqKicker: "FAQ",
+  faqHeadingA: "Frequently Asked",
+  faqHeadingB: "Questions",
+  faqs: [
+    { q: "What makes FarmBro different from a regular tractor?", a: "FarmBro machines are purpose-built, remote-controlled robots. They eliminate the need for a driver on the machine, work on slopes up to 45°, and are far lighter than tractors — meaning zero soil compaction." },
+    { q: "Do I need any special training to operate the robots?", a: "No. Our remote units are designed for simplicity. Most operators are comfortable within 30 minutes of hands-on training. We provide on-site training with every delivery." },
+    { q: "Can FarmBro robots work on steep terrain?", a: "Absolutely. Our 4×4 platform with independent electric drive handles slopes up to 45°. This makes them ideal for vineyards, tea estates, and hillside orchards where tractors cannot safely operate." },
+    { q: "What is the range and battery life?", a: "Our hybrid models offer extended runtime for all-day operations. The electric models provide 4–6 hours of continuous operation depending on terrain and workload, with fast swap battery options available." },
+    { q: "Is the Canopy Scout drone autonomous?", a: "The Canopy Scout flies pre-programmed survey missions autonomously, capturing multispectral imagery. It returns to base, uploads data, and generates actionable crop health maps — all without manual piloting." },
+    { q: "Do you support enterprise and defense contracts?", a: "Yes. FarmBro works with enterprises, agricultural cooperatives, and defense organizations. We offer fleet management, custom integrations, and dedicated support for large-scale deployments." },
+  ],
+
+  // ── Services: Beyond the Platform ────────────────────────────────────
+  svcHeroKicker: "What we do",
+  svcHeroHeadingA: "Beyond the",
+  svcHeroHeadingB: "Platform",
+  svcHeroSub: "Farm Bro delivers end‑to‑end services around every platform — from the first site assessment to lifetime support in the field.",
+  /** Names/copy aligned with the page's six service cards (icons and numbers stay in the page). */
+  svcEntries: [
+    { name: "Site Assessment & Pilots", copy: "Terrain surveys, workflow mapping, and paid pilots on your farm, site, or forward base." },
+    { name: "Custom Implements", copy: "Bespoke payloads and implements engineered against your specific field or mission requirements." },
+    { name: "Integration & Deployment", copy: "Turnkey deployment — commissioning, calibration, mission planning, and go‑live support." },
+    { name: "Operator Training", copy: "Certified operator programs in English, Hindi, and regional languages, on‑site or at our Dehradun facility." },
+    { name: "Fleet Operations", copy: "Managed fleet operations for organisations that want the outcome without owning the platforms." },
+    { name: "Lifecycle Support", copy: "24×7 remote diagnostics, spare parts SLAs, and annual maintenance contracts across India." },
+  ],
+
+  // ── Services: warranty & support ─────────────────────────────────────
+  warrantyPromiseKicker: "Our Promise",
+  warrantyPromiseHeading: "Built to last, backed for life.",
+  warrantyKicker: "Coverage",
+  warrantyHeadingA: "Warranty &",
+  warrantyHeadingB: "Support",
+  warrantySub: "Every FarmBro platform ships with comprehensive warranty coverage and pan-India service reach.",
+  warrantyItems: [
+    { name: "Mechanical Components", duration: "6 Months", copy: "6 months warranty on all mechanical parts — chassis, drivetrain, linkages, and structural assemblies." },
+    { name: "Electronic Components", duration: "3 Months", copy: "3 months warranty on electronic components — control boards, sensors, wiring harnesses, and power systems." },
+    { name: "Support & Claims", duration: "Pan-India", copy: "Raise a claim through our service team or your dealer. Spare parts and service reach pan-India with clear SLA-backed timelines." },
+  ],
+  warrantyFaqKicker: "FAQ",
+  warrantyFaqHeadingA: "Warranty",
+  warrantyFaqHeadingB: "Questions",
+  warrantyFaqSub: "Everything you need to know about FarmBro warranty coverage and support.",
+  warrantyFaqs: [
+    { q: "What does the warranty cover?", a: "Our warranty covers manufacturing defects in mechanical and electronic components. Mechanical parts (chassis, drivetrain, linkages, structural assemblies) are covered for 6 months, and electronic parts (control boards, sensors, wiring harnesses, power systems) for 3 months from delivery." },
+    { q: "How do I raise a warranty claim?", a: "Contact our service team directly via phone, WhatsApp, or email. You can also raise a claim through your authorized FarmBro dealer. We'll guide you through diagnosis and resolution — most issues are triaged remotely within 24 hours." },
+    { q: "Does the warranty cover accidental damage?", a: "The warranty covers manufacturing defects only. Damage from accidents, misuse, unauthorized modifications, or operating outside recommended parameters is not covered. We do offer paid repair services for such cases." },
+    { q: "What are the spare parts SLA timelines?", a: "Critical spare parts are dispatched within 48 hours for metros and 72 hours for remote locations. We maintain regional service hubs across India to minimize downtime for our customers." },
+    { q: "Can I extend my warranty?", a: "Yes. We offer Annual Maintenance Contracts (AMCs) that extend coverage beyond the standard warranty period. AMCs include preventive maintenance visits, priority support, and discounted spare parts." },
+    { q: "Is on-site repair included in the warranty?", a: "For issues that cannot be resolved remotely, our field engineers will visit your site at no additional cost during the warranty period. Travel time depends on your location but typically within 3–5 business days." },
+  ],
+
   // ── Gallery ────────────────────────────────────────────────────────────
   galleryTitle: "Gallery — FarmBro Robotics",
   galleryKicker: "Gallery",
