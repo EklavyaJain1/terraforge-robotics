@@ -177,23 +177,23 @@ export default function Home() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             >
-              <SectionKicker number="02" label="PERFORMANCE" className="mx-auto" />
+              <SectionKicker number="02" label={t.perfKicker} className="mx-auto" />
               <h2 className="mt-7 max-w-[800px] text-[clamp(1.7rem,5.2vw,3.75rem)] font-medium leading-[1.05] tracking-[-.05em]">
-                In-Field <span className="text-[#1B8F6A]">Performance</span>
+                {t.perfHeadingA} <span className="text-[#1B8F6A]">{t.perfHeadingB}</span>
               </h2>
               <p className="mt-5 max-w-[520px] text-base leading-7 text-[#3F4B45]">
-                See our robots tackle real-world agricultural challenges. From steep slopes to narrow vineyard rows.
+                {t.perfSub}
               </p>
             </motion.div>
 
             <div className="mt-16 grid gap-4 sm:grid-cols-3">
               {[
-                { title: "Mulcher Hybrid", video: "/videos/Farm Bro Remote Controlled Mulcher.mp4" },
-                { title: "Sprayer & Cargo", video: "/videos/farm-bro-sprayer-cargo.mp4" },
-                { title: "Canopy Scout", video: "/videos/farm-bro-canopy-scout.mp4" },
+                { video: "/videos/Farm Bro Remote Controlled Mulcher.mp4" },
+                { video: "/videos/farm-bro-sprayer-cargo.mp4" },
+                { video: "/videos/farm-bro-canopy-scout.mp4" },
               ].map((item, i) => (
                 <motion.div 
-                  key={item.title}
+                  key={item.video}
                   className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-black"
                   initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -210,9 +210,9 @@ export default function Home() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   <div className="absolute bottom-6 left-6 text-white">
-                    <h3 className="text-xl font-medium tracking-tight">{item.title}</h3>
+                    <h3 className="text-xl font-medium tracking-tight">{t.perfVideos[i]}</h3>
                     <div className="mt-2 flex items-center gap-2 text-sm text-[#B9F4D4]">
-                      <span>Watch in action</span> <ArrowUpRight size={14} />
+                      <span>{t.perfWatch}</span> <ArrowUpRight size={14} />
                     </div>
                   </div>
                 </motion.div>
@@ -338,9 +338,9 @@ export default function Home() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
-              <SectionKicker number="03" label="OUR MISSION" light className="mx-auto" />
+              <SectionKicker number="03" label={t.missionKicker} light className="mx-auto" />
               <h2 className="mt-8 text-[clamp(2rem,4vw,4rem)] font-medium leading-[1.1] tracking-tight text-white">
-                To arm every farmer and enterprise with <span className="text-[#B9F4D4]">precision automation</span>, preserving the soil for the next generation while driving unparalleled efficiency today.
+                {t.missionHeadingA} <span className="text-[#B9F4D4]">{t.missionHighlight}</span>{t.missionHeadingB}
               </h2>
             </motion.div>
           </div>
@@ -393,39 +393,14 @@ export default function Home() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             >
-              <SectionKicker number="05" label="FAQ" className="mx-auto" />
+              <SectionKicker number="05" label={t.faqKicker} className="mx-auto" />
               <h2 className="mt-7 text-[clamp(1.7rem,5.2vw,3.75rem)] font-medium leading-[1.05] tracking-[-.05em]">
-                Frequently Asked <span className="text-[#1B8F6A]">Questions</span>
+                {t.faqHeadingA} <span className="text-[#1B8F6A]">{t.faqHeadingB}</span>
               </h2>
             </motion.div>
 
             <div className="mt-14 flex flex-col gap-3">
-              {[
-                {
-                  q: "What makes FarmBro different from a regular tractor?",
-                  a: "FarmBro machines are purpose-built, remote-controlled robots. They eliminate the need for a driver on the machine, work on slopes up to 45°, and are far lighter than tractors — meaning zero soil compaction."
-                },
-                {
-                  q: "Do I need any special training to operate the robots?",
-                  a: "No. Our remote units are designed for simplicity. Most operators are comfortable within 30 minutes of hands-on training. We provide on-site training with every delivery."
-                },
-                {
-                  q: "Can FarmBro robots work on steep terrain?",
-                  a: "Absolutely. Our 4×4 platform with independent electric drive handles slopes up to 45°. This makes them ideal for vineyards, tea estates, and hillside orchards where tractors cannot safely operate."
-                },
-                {
-                  q: "What is the range and battery life?",
-                  a: "Our hybrid models offer extended runtime for all-day operations. The electric models provide 4–6 hours of continuous operation depending on terrain and workload, with fast swap battery options available."
-                },
-                {
-                  q: "Is the Canopy Scout drone autonomous?",
-                  a: "The Canopy Scout flies pre-programmed survey missions autonomously, capturing multispectral imagery. It returns to base, uploads data, and generates actionable crop health maps — all without manual piloting."
-                },
-                {
-                  q: "Do you support enterprise and defense contracts?",
-                  a: "Yes. FarmBro works with enterprises, agricultural cooperatives, and defense organizations. We offer fleet management, custom integrations, and dedicated support for large-scale deployments."
-                },
-              ].map((item, i) => (
+              {t.faqs.map((item, i) => (
                 <motion.details
                   key={i}
                   className="group rounded-xl border border-[#111311]/10 bg-white px-6 py-5 transition-shadow hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] [&[open]]:shadow-[0_4px_20px_rgba(27,143,106,0.08)]"
