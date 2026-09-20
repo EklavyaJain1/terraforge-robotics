@@ -193,7 +193,7 @@ export default function Services() {
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             >
-              <SectionKicker number={t.warrantyFaqKicker} label={t.warrantyKicker} className="mx-auto" />
+              <SectionKicker number={t.warrantyFaqKicker} label={t.warrantyFaqHeadingA} className="mx-auto" />
               <h2 className="mt-7 text-[clamp(1.7rem,5.2vw,3.75rem)] font-medium leading-[1.05] tracking-[-.05em]">
                 {t.warrantyFaqHeadingA} <span className="text-[#1B8F6A]">{t.warrantyFaqHeadingB}</span>
               </h2>
