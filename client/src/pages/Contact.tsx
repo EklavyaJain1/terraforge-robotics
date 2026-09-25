@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import SectionKicker from "@/components/SectionKicker";
 import { useLanguage } from "@/contexts/LanguageContext";
 import usePageTitle from "@/hooks/usePageTitle";
+import { apiFetch } from "@/lib/api";
 
 export default function Contact() {
   const { t } = useLanguage();
@@ -19,10 +20,18 @@ export default function Contact() {
     { label: t.contactRowEmail, value: "hello@farmbro.example", href: "mailto:hello@farmbro.example" },
   ];
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSubmitted(true);
-    toast.success(t.contactToastTitle, { description: t.contactToastDesc });
+    try {
+      await apiFetch("/api/enquiries", {
+        method: "POST",
+        body: JSON.stringify({ ...form, companyWebsite: "" }),
+      });
+      setSubmitted(true);
+      toast.success(t.contactToastTitle, { description: t.contactToastDesc });
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : t.contactToastTitle);
+    }
   }
 
   return (
@@ -120,6 +129,10 @@ export default function Contact() {
                       placeholder={t.contactMessagePlaceholder}
                       className="tf-focus mt-2 w-full resize-none border-b border-[#111311]/25 bg-transparent px-0 py-3 text-sm outline-none placeholder:text-[#7E8983] focus:border-[#1B8F6A]"
                     />
+                  </label>
+                  <label className="hidden" aria-hidden="true">
+                    <span>Company website</span>
+                    <input tabIndex={-1} autoComplete="off" name="companyWebsite" />
                   </label>
                   <button type="submit" className="tf-btn tf-btn-primary mt-2">
                     {t.contactSend} <MoveUpRight size={15} />
