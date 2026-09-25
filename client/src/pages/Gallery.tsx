@@ -7,6 +7,8 @@ import { agriImages, attachments } from "@/data/catalog";
 import usePageTitle from "@/hooks/usePageTitle";
 
 /** Gallery captions/tags are keyed by asset so the dictionary carries the copy. */
+import MasonryGallery from "@/components/ui/MasonryGallery";
+
 const galleryItems = [
   { src: agriImages.hero, captionKey: 0, tagKey: "platform" },
   { src: agriImages.wide, captionKey: 1, tagKey: "fieldOps" },
@@ -19,15 +21,12 @@ const galleryItems = [
 export default function Gallery() {
   const { t } = useLanguage();
   usePageTitle(t.galleryTitle);
-  const [filter, setFilter] = useState<string>("all");
-  const tags: { id: string; label: string }[] = [
-    { id: "all", label: t.filterAll },
-    { id: "platform", label: t.filterPlatform },
-    { id: "attachments", label: t.filterAttachments },
-    { id: "fieldOps", label: t.filterFieldOps },
-  ];
-  const tagLabel = (key: string) => tags.find((tag) => tag.id === key)?.label ?? key;
-  const visible = galleryItems.filter((item) => filter === "all" || item.tagKey === filter);
+
+  const masonryItems = galleryItems.map((item, index) => ({
+    id: String(index),
+    img: item.src,
+    height: [400, 300, 500, 350, 450, 280][index],
+  }));
 
   return (
     <div className="tf-page">
@@ -42,40 +41,19 @@ export default function Gallery() {
             <p className="mt-6 max-w-[440px] text-base leading-7 text-[#3F4B45]">
               {t.gallerySub}
             </p>
-            <div className="mt-10 flex flex-wrap gap-2">
-              {tags.map((tag) => (
-                <button
-                  key={tag.id}
-                  type="button"
-                  onClick={() => setFilter(tag.id)}
-                  aria-pressed={filter === tag.id}
-                  className={`tf-focus tf-mono border px-4 py-2.5 text-[10px] transition-colors ${
-                    filter === tag.id
-                      ? "border-[#1B8F6A] bg-[#1B8F6A] text-white"
-                      : "border-[#111311]/25 text-[#3F4B45] hover:border-[#1B8F6A]"
-                  }`}
-                >
-                  {tag.label}
-                </button>
-              ))}
-            </div>
           </div>
         </section>
 
         <section className="tf-dark py-14 sm:py-20">
-          <div className="tf-container grid gap-4 sm:grid-cols-2">
-            {visible.map((item) => {
-              const caption = t.galleryCaptions[item.captionKey];
-              return (
-                <figure key={item.src} className="group relative overflow-hidden bg-[#17201B]">
-                  <img src={item.src} alt={caption} loading="lazy" className="h-[280px] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] sm:h-[340px]" />
-                  <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 bg-gradient-to-t from-[#0B0F0D]/90 to-transparent p-5">
-                    <span className="max-w-[280px] text-sm text-white">{caption}</span>
-                    <span className="tf-mono shrink-0 text-[9px] text-[#B9F4D4]">{tagLabel(item.tagKey)}</span>
-                  </figcaption>
-                </figure>
-              );
-            })}
+          <div className="tf-container">
+            <MasonryGallery 
+              items={masonryItems}
+              animateFrom="bottom"
+              blurToFocus={true}
+              stagger={0.08}
+              scaleOnHover={true}
+              hoverScale={0.96}
+            />
           </div>
         </section>
 

@@ -333,15 +333,29 @@ export default function Home() {
           </div>
           <div className="tf-container relative z-10 w-full">
             <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <SectionKicker number="03" label="Company" light className="justify-center mx-auto" />
+            </motion.div>
+            <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             >
-              <SectionKicker number="03" label="Company" light className="mx-auto" />
               <h2 className="mt-6 text-[clamp(2.5rem,6vw,5.5rem)] font-bold leading-none tracking-[-.04em] text-white uppercase">
                 {t.missionKicker}
               </h2>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            >
               <p className="mx-auto mt-8 max-w-[1200px] text-[clamp(1.15rem,2.2vw,2.25rem)] font-medium leading-[1.4] tracking-wide text-white/90">
                 {t.missionHeadingA} <span className="text-[#B9F4D4]">{t.missionHighlight}</span>{t.missionHeadingB}
               </p>
@@ -374,14 +388,14 @@ export default function Home() {
                     <span className="mt-1 block text-sm font-medium">hello@farmbro.example</span>
                   </a>
                 </div>
-                <div className="flex flex-wrap items-center gap-4">
-                  <button type="button" onClick={() => openOrderForm()} className="tf-btn tf-btn-quiet text-sm">
+                <div className="flex items-center gap-4">
+                  <p className="flex items-center gap-2 text-sm font-medium text-white">
+                    <Check size={14} className="shrink-0" />
+                    <span className="rounded bg-white/15 px-2.5 py-1 leading-snug">{t.engineerNote}</span>
+                  </p>
+                  <button type="button" onClick={() => openOrderForm()} className="tf-btn tf-btn-quiet text-sm shrink-0 whitespace-nowrap">
                     {t.orderCta} <ArrowUpRight size={15} />
                   </button>
-                  <p className="flex items-center gap-2 text-base font-medium text-white">
-                    <Check size={16} className="shrink-0" />
-                    <span className="rounded bg-white/15 px-2.5 py-1">{t.engineerNote}</span>
-                  </p>
                 </div>
               </div>
             </div>
