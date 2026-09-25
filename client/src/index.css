@@ -1,6 +1,7 @@
 /* FarmBro Robotics / Field Notes direction: warm earth neutrals, graphite machinery, jade actions, mono operational metadata. */
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "@clerk/ui/themes/shadcn.css";
 
 @custom-variant dark (&:is(.dark *));
 

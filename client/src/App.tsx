@@ -9,6 +9,7 @@ import { OrderProvider } from "./contexts/OrderContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { useSmoothScroll } from "./lib/smoothScroll";
 import About from "./pages/About";
+import AccountPage from "./pages/AccountPage";
 import Contact from "./pages/Contact";
 import FarmBro from "./pages/FarmBro";
 import Gallery from "./pages/Gallery";
@@ -16,6 +17,8 @@ import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import ProductDetail from "./pages/ProductDetail";
 import Services from "./pages/Services";
+import SignInPage from "./pages/SignInPage";
+import SignUpPage from "./pages/SignUpPage";
 import WhatsAppBadge from "./components/WhatsAppBadge";
 
 /* Every route change starts at the top — product pages open from card grids. */
@@ -37,6 +40,11 @@ function Router() {
       <Route path="/gallery" component={Gallery} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
+      <Route path="/sign-in" component={SignInPage} />
+      <Route path="/sign-in/:rest*" component={SignInPage} />
+      <Route path="/sign-up" component={SignUpPage} />
+      <Route path="/sign-up/:rest*" component={SignUpPage} />
+      <Route path="/account" component={AccountPage} />
       <Route path="/404" component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

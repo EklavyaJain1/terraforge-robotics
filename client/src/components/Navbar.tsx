@@ -1,6 +1,7 @@
 import { Check, Languages, MoveUpRight } from "lucide-react";
 import { House, Images, Info, Mail, Tractor, Wrench } from "lucide-react";
 import { Link } from "wouter";
+import AuthControls from "@/components/AuthControls";
 import NavbarLanguagePicker from "@/components/NavbarLanguagePicker";
 import { FloatingDock } from "@/components/ui/floating-dock";
 import { useOrderForm } from "@/contexts/OrderContext";
@@ -55,6 +56,7 @@ export default function Navbar() {
 
           <div className="flex items-center gap-2">
             <NavbarLanguagePicker />
+            <AuthControls />
             <button
               type="button"
               onClick={() => openOrderForm()}
