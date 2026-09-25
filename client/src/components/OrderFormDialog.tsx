@@ -52,93 +52,133 @@ export default function OrderFormDialog({ open, onOpenChange, defaultRobot }: Or
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] w-[calc(100%-2rem)] max-w-[460px] overflow-y-auto border-white/15 bg-[#111311] p-0 text-white sm:w-[460px] sm:rounded-none">
+      <DialogContent className="max-h-[90vh] w-[calc(100%-2rem)] max-w-[440px] overflow-y-auto border-0 bg-transparent p-0 shadow-none sm:w-[440px]">
         {submitted ? (
-          <div className="flex min-h-[380px] flex-col items-start justify-center p-8">
-            <div className="flex h-12 w-12 items-center justify-center bg-[#1B8F6A] text-white">
+          /* ── Success state ──────────────────────────────────── */
+          <div className="rounded-[19px] border border-white/10 bg-[#111311] p-8 shadow-[0px_47px_47px_rgba(0,0,0,0.09),0px_12px_26px_rgba(0,0,0,0.1)]">
+            <div className="flex h-12 w-12 items-center justify-center rounded-md bg-[#1B8F6A] text-white">
               <Check size={22} />
             </div>
-            <DialogTitle className="mt-6 text-3xl font-medium tracking-[-.05em]">{t.orderSuccessTitle}</DialogTitle>
+            <DialogTitle className="mt-6 text-3xl font-medium tracking-[-.05em] text-white">{t.orderSuccessTitle}</DialogTitle>
             <DialogDescription className="mt-3 max-w-[320px] text-sm leading-6 text-white/60">
               {t.orderSuccessBody}
             </DialogDescription>
-            <button type="button" onClick={() => onOpenChange(false)} className="tf-btn tf-btn-primary mt-8 w-fit">
+            <button
+              type="button"
+              onClick={() => onOpenChange(false)}
+              className="mt-8 flex items-center justify-center gap-2.5 rounded-[7px] border border-[#1B8F6A] bg-[#1B8F6A]/60 px-5 py-2.5 text-[13px] font-semibold text-white shadow-[0px_0.5px_0.5px_rgba(27,143,106,0.75)] transition-all duration-300 hover:bg-[#1B8F6A]/80"
+            >
               {t.orderDone}
             </button>
           </div>
         ) : (
-          <div className="p-7 sm:p-8">
-            <DialogTitle className="text-2xl font-medium tracking-[-.04em]">{t.orderTitle}</DialogTitle>
-            <DialogDescription className="mt-2 text-sm leading-6 text-white/55">
-              {t.orderSub}
-            </DialogDescription>
-            <form onSubmit={handleSubmit} className="mt-7 space-y-5">
-              <div className="grid gap-5 sm:grid-cols-2">
+          /* ── Card form ──────────────────────────────────────── */
+          <div className="order-card grid gap-0 overflow-hidden rounded-[19px] bg-[#111311] shadow-[0px_105px_63px_rgba(0,0,0,0.05),0px_47px_47px_rgba(0,0,0,0.09),0px_12px_26px_rgba(0,0,0,0.1)]">
+
+            {/* ── Cart section: title ──────────────────────────── */}
+            <div className="flex h-[44px] items-center border-b border-[#1B8F6A]/40 px-5">
+              <DialogTitle className="text-[11px] font-bold uppercase tracking-[.1em] text-white">
+                {t.orderTitle}
+              </DialogTitle>
+            </div>
+
+            {/* ── Cart section: form fields ───────────────────── */}
+            <form onSubmit={handleSubmit} className="grid gap-0">
+              <div className="space-y-0 px-5 pt-5 pb-4">
+                <DialogDescription className="mb-5 text-[11px] font-semibold leading-5 text-white/50">
+                  {t.orderSub}
+                </DialogDescription>
+
+                {/* Step 1: Name & Contact */}
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <label className="block">
+                    <span className="tf-mono text-[9px] text-[#1B8F6A]/80">{t.orderNameLabel}</span>
+                    <input
+                      required
+                      type="text"
+                      value={form.name}
+                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      placeholder={t.orderNamePlaceholder}
+                      className="order-input mt-2 h-[36px] w-full rounded-[5px] border border-[#1B8F6A]/40 bg-[#1a211d] px-3 text-[13px] font-semibold text-white outline-none transition-all duration-300 placeholder:text-white/25 focus:border-transparent focus:bg-[#242e28] focus:shadow-[0_0_0_2px_rgba(27,143,106,0.4)]"
+                    />
+                  </label>
+                  <label className="block">
+                    <span className="tf-mono text-[9px] text-[#1B8F6A]/80">{t.orderContactLabel}</span>
+                    <input
+                      required
+                      type="text"
+                      value={form.contact}
+                      onChange={(e) => setForm({ ...form, contact: e.target.value })}
+                      placeholder={t.orderContactPlaceholder}
+                      className="order-input mt-2 h-[36px] w-full rounded-[5px] border border-[#1B8F6A]/40 bg-[#1a211d] px-3 text-[13px] font-semibold text-white outline-none transition-all duration-300 placeholder:text-white/25 focus:border-transparent focus:bg-[#242e28] focus:shadow-[0_0_0_2px_rgba(27,143,106,0.4)]"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              {/* ── Divider ───────────────────────────────────── */}
+              <div className="mx-5 h-px bg-[#1B8F6A]/25" />
+
+              {/* Step 2: Machine & Quantity (promo-style row) */}
+              <div className="space-y-4 px-5 pt-4 pb-4">
+                <div className="grid gap-4 sm:grid-cols-[1fr_100px]">
+                  <label className="block">
+                    <span className="tf-mono text-[9px] text-[#1B8F6A]/80">{t.orderMachineLabel}</span>
+                    <select
+                      required
+                      value={form.robot}
+                      onChange={(e) => setForm({ ...form, robot: e.target.value })}
+                      className="order-input mt-2 h-[36px] w-full rounded-[5px] border border-[#1B8F6A]/40 bg-[#1a211d] px-3 text-[13px] font-semibold text-white outline-none transition-all duration-300 focus:border-transparent focus:bg-[#242e28] focus:shadow-[0_0_0_2px_rgba(27,143,106,0.4)]"
+                    >
+                      {machineChoiceIds.map((id, i) => (
+                        <option key={id} value={id}>
+                          {t.orderMachineOptions[i] ?? id}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="block">
+                    <span className="tf-mono text-[9px] text-[#1B8F6A]/80">{t.orderQuantityLabel}</span>
+                    <input
+                      required
+                      type="number"
+                      min={1}
+                      max={99}
+                      value={form.quantity}
+                      onChange={(e) => setForm({ ...form, quantity: e.target.value })}
+                      className="order-input mt-2 h-[36px] w-full rounded-[5px] border border-[#1B8F6A]/40 bg-[#1a211d] px-3 text-[13px] font-semibold text-white outline-none transition-all duration-300 focus:border-transparent focus:bg-[#242e28] focus:shadow-[0_0_0_2px_rgba(27,143,106,0.4)]"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              {/* ── Divider ───────────────────────────────────── */}
+              <div className="mx-5 h-px bg-[#1B8F6A]/25" />
+
+              {/* Step 3: Notes (payments-style detail) */}
+              <div className="px-5 pt-4 pb-5">
                 <label className="block">
-                  <span className="tf-mono text-[9px] text-white/45">{t.orderNameLabel}</span>
-                  <input
-                    required
-                    type="text"
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    placeholder={t.orderNamePlaceholder}
-                    className="tf-focus mt-2 w-full border-b border-white/25 bg-transparent px-0 py-3 text-sm outline-none placeholder:text-white/30 focus:border-[#1B8F6A]"
-                  />
-                </label>
-                <label className="block">
-                  <span className="tf-mono text-[9px] text-white/45">{t.orderContactLabel}</span>
-                  <input
-                    required
-                    type="text"
-                    value={form.contact}
-                    onChange={(e) => setForm({ ...form, contact: e.target.value })}
-                    placeholder={t.orderContactPlaceholder}
-                    className="tf-focus mt-2 w-full border-b border-white/25 bg-transparent px-0 py-3 text-sm outline-none placeholder:text-white/30 focus:border-[#1B8F6A]"
+                  <span className="tf-mono text-[9px] text-[#1B8F6A]/80">{t.orderNotesLabel}</span>
+                  <textarea
+                    rows={3}
+                    value={form.notes}
+                    onChange={(e) => setForm({ ...form, notes: e.target.value })}
+                    placeholder={t.orderNotesPlaceholder}
+                    className="order-input mt-2 w-full resize-none rounded-[5px] border border-[#1B8F6A]/40 bg-[#1a211d] px-3 py-2.5 text-[13px] font-semibold text-white outline-none transition-all duration-300 placeholder:text-white/25 focus:border-transparent focus:bg-[#242e28] focus:shadow-[0_0_0_2px_rgba(27,143,106,0.4)]"
                   />
                 </label>
               </div>
-              <div className="grid gap-5 sm:grid-cols-[1fr_110px]">
-                <label className="block">
-                  <span className="tf-mono text-[9px] text-white/45">{t.orderMachineLabel}</span>
-                  <select
-                    required
-                    value={form.robot}
-                    onChange={(e) => setForm({ ...form, robot: e.target.value })}
-                    className="tf-focus mt-2 w-full border-b border-white/25 bg-[#111311] px-0 py-3 text-sm outline-none focus:border-[#1B8F6A]"
-                  >
-                    {machineChoiceIds.map((id, i) => (
-                      <option key={id} value={id}>
-                        {t.orderMachineOptions[i] ?? id}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label className="block">
-                  <span className="tf-mono text-[9px] text-white/45">{t.orderQuantityLabel}</span>
-                  <input
-                    required
-                    type="number"
-                    min={1}
-                    max={99}
-                    value={form.quantity}
-                    onChange={(e) => setForm({ ...form, quantity: e.target.value })}
-                    className="tf-focus mt-2 w-full border-b border-white/25 bg-transparent px-0 py-3 text-sm outline-none focus:border-[#1B8F6A]"
-                  />
-                </label>
+
+              {/* ── Checkout footer ───────────────────────────── */}
+              <div className="flex items-center justify-between rounded-b-[19px] bg-[#1B8F6A]/20 px-5 py-3">
+                <span className="text-[11px] font-semibold text-white/40">FarmBro</span>
+                <button
+                  type="submit"
+                  className="flex items-center justify-center gap-2.5 rounded-[7px] border border-[#1B8F6A] bg-[#1B8F6A]/60 px-5 py-2.5 text-[13px] font-semibold text-white shadow-[0px_0.5px_0.5px_rgba(27,143,106,0.75)] transition-all duration-300 hover:bg-[#1B8F6A]/80 active:scale-[.97]"
+                >
+                  {t.orderSubmit} <MoveUpRight size={14} />
+                </button>
               </div>
-              <label className="block">
-                <span className="tf-mono text-[9px] text-white/45">{t.orderNotesLabel}</span>
-                <textarea
-                  rows={3}
-                  value={form.notes}
-                  onChange={(e) => setForm({ ...form, notes: e.target.value })}
-                  placeholder={t.orderNotesPlaceholder}
-                  className="tf-focus mt-2 w-full resize-none border-b border-white/25 bg-transparent px-0 py-3 text-sm outline-none placeholder:text-white/30 focus:border-[#1B8F6A]"
-                />
-              </label>
-              <button type="submit" className="tf-btn tf-btn-primary mt-2 w-full">
-                {t.orderSubmit} <MoveUpRight size={15} />
-              </button>
             </form>
           </div>
         )}
@@ -146,3 +186,4 @@ export default function OrderFormDialog({ open, onOpenChange, defaultRobot }: Or
     </Dialog>
   );
 }
+

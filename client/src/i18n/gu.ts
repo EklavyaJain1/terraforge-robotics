@@ -2,7 +2,7 @@ import { en, type UiStrings } from "./en";
 
 export const gu: UiStrings = {
   ...en,
-  orderNow: "હવે ઓર્ડર કરો",
+  orderNow: "હવે બુક કરો",
   home: "હોમ",
   farmbro: "ફાર્મબ્રો",
   services: "સેવાઓ",
@@ -53,7 +53,7 @@ export const gu: UiStrings = {
   cardViewAria: "{name} જુઓ",
   cardVisit: "મશીન જુઓ",
   cardPriceLabel: "સૂચના ભાવ",
-  cardOrderNow: "હવે ઓર્ડર કરો",
+  cardOrderNow: "હવે બુક કરો",
   calcKickerLabel: "બચત કેલ્ક્યુલેટર",
   calcHeading: "એક ઓપરેટર એક સીઝનમાં શું કરી શકે તે જુઓ.",
   calcSub: "ત્વરિત અંદાજ માટે તમારી વર્તમાન શ્રમ પ્રોફાઇલ ભરો.",

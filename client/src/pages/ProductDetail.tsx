@@ -14,7 +14,7 @@ import { robots } from "@/data/catalog";
 import { motion } from "framer-motion";
 
 /** Highlight card — the v-card-15 pattern in FarmBro's jade-on-ivory theme. */
-function HighlightCard({ index, label, copy, visit }: { index: string; label: string; copy: string; visit: string }) {
+function HighlightCard({ index, label, copy }: { index: string; label: string; copy: string }) {
   return (
     <Card className="product-card w-full gap-0 rounded-none border-[#111311]/15 bg-white p-0 shadow-[0_14px_34px_rgba(17,19,17,.08)] transition-transform duration-300 ease-out hover:-translate-y-1">
       <CardContent className="p-0">
@@ -27,13 +27,6 @@ function HighlightCard({ index, label, copy, visit }: { index: string; label: st
         </div>
         <div className="space-y-3 p-4">
           <p className="text-sm leading-relaxed text-[#59655F]">{copy}</p>
-          <a
-            className="group/link inline-flex items-center gap-1 text-xs font-medium text-[#1B8F6A] hover:underline"
-            href="#specifications"
-          >
-            <LinkIcon aria-hidden="true" className="size-2.5 shrink-0 transition-transform duration-200 group-hover/link:translate-x-0.5" />
-            {visit}
-          </a>
         </div>
       </CardContent>
     </Card>
@@ -201,7 +194,6 @@ export default function ProductDetail() {
                   index={String(i + 1).padStart(2, "0")}
                   label={t.pdHighlightLabel.replace("{n}", String(i + 1))}
                   copy={highlight}
-                  visit={t.cardVisit}
                 />
               ))}
             </div>

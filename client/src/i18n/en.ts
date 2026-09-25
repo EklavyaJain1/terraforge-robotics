@@ -7,7 +7,7 @@ import type { AttachmentId, RobotId } from "@/data/catalog";
  */
 export const en = {
   // ── Header / navigation ────────────────────────────────────────────────
-  orderNow: "Order Now",
+  orderNow: "Book Now",
   home: "Home",
   farmbro: "FarmBro",
   services: "Services",
@@ -79,7 +79,7 @@ export const en = {
   cardViewAria: "View {name}",
   cardVisit: "Visit machine",
   cardPriceLabel: "Indicative price",
-  cardOrderNow: "Order now",
+  cardOrderNow: "Book now",
 
   // ── Savings calculator ─────────────────────────────────────────────────
   calcKickerLabel: "Savings calculator",
@@ -187,7 +187,7 @@ export const en = {
   ],
   aboutCtaHeading: "Come see the machine on real soil.",
   aboutCtaSub: "Meet the lineup on FarmBro, or talk to the field team about a trial on your farm.",
-  aboutOrder: "Order now",
+  aboutOrder: "Book now",
   aboutBrowse: "Browse FarmBro",
 
   // ── Services ───────────────────────────────────────────────────────────
@@ -218,9 +218,9 @@ export const en = {
 
   // ── Home: mission ────────────────────────────────────────────────────
   missionKicker: "Our Mission",
-  missionHeadingA: "To arm every farmer and enterprise with",
-  missionHighlight: "precision automation",
-  missionHeadingB: ", preserving the soil for the next generation while driving unparalleled efficiency today.",
+  missionHeadingA: "To revolutionize Indian agriculture with affordable, ",
+  missionHighlight: "Made-in-India robotics",
+  missionHeadingB: " — empowering every farmer, business, and enterprise to automate the work that matters, save time and labour, and grow more efficiently.",
 
   // ── Home: FAQ ────────────────────────────────────────────────────────
   faqKicker: "FAQ",

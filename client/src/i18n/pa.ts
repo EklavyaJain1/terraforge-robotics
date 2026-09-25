@@ -2,7 +2,7 @@ import { en, type UiStrings } from "./en";
 
 export const pa: UiStrings = {
   ...en,
-  orderNow: "ਹੁਣੇ ਆਰਡਰ ਕਰੋ",
+  orderNow: "ਹੁਣੇ ਬੁੱਕ ਕਰੋ",
   home: "ਹੋਮ",
   farmbro: "ਫਾਰਮਬਰੋ",
   services: "ਸੇਵਾਵਾਂ",
@@ -63,7 +63,7 @@ export const pa: UiStrings = {
   cardViewAria: "{name} ਵੇਖੋ",
   cardVisit: "ਮਸ਼ੀਨ ਵੇਖੋ",
   cardPriceLabel: "ਸੰਕੇਤ ਕੀਮਤ",
-  cardOrderNow: "ਹੁਣੇ ਆਰਡਰ ਕਰੋ",
+  cardOrderNow: "ਹੁਣੇ ਬੁੱਕ ਕਰੋ",
   calcKickerLabel: "ਬੱਚਤ ਕੈਲਕੁਲੇਟਰ",
   calcHeading: "ਇੱਕ ਆਪਰੇਟਰ ਇੱਕ ਸੀਜ਼ਨ ਵਿੱਚ ਕੀ ਕਰ ਸਕਦਾ ਹੈ ਵੇਖੋ।",
   calcSub: "ਤੁਰੰਤ ਅੰਦਾਜ਼ੇ ਲਈ ਆਪਣੀ ਮੌਜੂਦਾ ਮਜ਼ਦੂਰੀ ਪ੍ਰੋਫਾਈਲ ਭਰੋ।",

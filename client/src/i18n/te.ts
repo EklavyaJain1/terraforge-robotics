@@ -2,7 +2,7 @@ import { en, type UiStrings } from "./en";
 
 export const te: UiStrings = {
   ...en,
-  orderNow: "ఇప్పుడే ఆర్డర్ చేయండి",
+  orderNow: "ఇప్పుడే బుక్ చేయండి",
   home: "హోమ్",
   farmbro: "ఫార్మ్‌బ్రో",
   services: "సేవలు",
@@ -63,7 +63,7 @@ export const te: UiStrings = {
   cardViewAria: "{name} చూడండి",
   cardVisit: "మెషీన్ చూడండి",
   cardPriceLabel: "సూచన ధర",
-  cardOrderNow: "ఇప్పుడే ఆర్డర్ చేయండి",
+  cardOrderNow: "ఇప్పుడే బుక్ చేయండి",
   calcKickerLabel: "ఆదా కాల్క్యులేటర్",
   calcHeading: "ఒక ఆపరేటర్ ఒక సీజన్‌లో ఎంత చేయగలరో చూడండి.",
   calcSub: "వేగవంతమైన అంచనా కోసం మీ ప్రస్తుత కార్మిక ప్రొఫైల్ నమోదు చేయండి. దానిని ఫార్మ్-స్పెసిఫిక్ ప్లాన్‌గా మార్చుతాము.",

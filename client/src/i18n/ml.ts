@@ -2,7 +2,7 @@ import { en, type UiStrings } from "./en";
 
 export const ml: UiStrings = {
   ...en,
-  orderNow: "ഇപ്പോൾ ഓർഡർ ചെയ്യുക",
+  orderNow: "ഇപ്പോൾ ബുക്ക് ചെയ്യുക",
   home: "ഹോം",
   farmbro: "ഫാംബ്രോ",
   services: "സേവനങ്ങൾ",
@@ -63,7 +63,7 @@ export const ml: UiStrings = {
   cardViewAria: "{name} കാണുക",
   cardVisit: "മെഷീൻ കാണുക",
   cardPriceLabel: "സൂചക വില",
-  cardOrderNow: "ഇപ്പോൾ ഓർഡർ ചെയ്യുക",
+  cardOrderNow: "ഇപ്പോൾ ബുക്ക് ചെയ്യുക",
   calcKickerLabel: "ലാഭ കാൽക്കുലേറ്റർ",
   calcHeading: "ഒരു ഓപ്പറേറ്റർ ഒരു സീസണിൽ എത്ര ചെയ്യുമെന്ന് കാണുക.",
   calcSub: "വേഗത്തിലുള്ള കണക്കിന് നിങ്ങളുടെ നിലവിലെ തൊഴിലാളി സാഹചര്യം നൽകുക. അത് ഫാം-നിർദ്ദിഷ്ട പദ്ധതിയാക്കാം.",

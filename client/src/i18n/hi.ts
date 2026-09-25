@@ -4,7 +4,7 @@ import { en, type AttachmentStrings, type MachineStrings, type UiStrings } from 
 export const hi: UiStrings = {
   ...en,
   // ── Header / navigation ────────────────────────────────────────────────
-  orderNow: "अभी ऑर्डर करें",
+  orderNow: "अभी बुक करें",
   home: "होम",
   farmbro: "फ़ार्मब्रो",
   services: "सेवाएँ",
@@ -75,7 +75,7 @@ export const hi: UiStrings = {
   cardViewAria: "{name} देखें",
   cardVisit: "मशीन देखें",
   cardPriceLabel: "सांकेतिक कीमत",
-  cardOrderNow: "अभी ऑर्डर करें",
+  cardOrderNow: "अभी बुक करें",
 
   // ── Savings calculator ─────────────────────────────────────────────────
   calcKickerLabel: "बचत कैलकुलेटर",

@@ -2,7 +2,7 @@ import { en, type UiStrings } from "./en";
 
 export const kn: UiStrings = {
   ...en,
-  orderNow: "ಈಗ ಆರ್ಡರ್ ಮಾಡಿ",
+  orderNow: "ಈಗ ಬುಕ್ ಮಾಡಿ",
   home: "ಹೋಮ್",
   farmbro: "ಫಾರ್ಮ್‌ಬ್ರೋ",
   services: "ಸೇವೆಗಳು",
@@ -63,7 +63,7 @@ export const kn: UiStrings = {
   cardViewAria: "{name} ನೋಡಿ",
   cardVisit: "ಯಂತ್ರ ನೋಡಿ",
   cardPriceLabel: "ಸೂಚನಾ ಬೆಲೆ",
-  cardOrderNow: "ಈಗ ಆರ್ಡರ್ ಮಾಡಿ",
+  cardOrderNow: "ಈಗ ಬುಕ್ ಮಾಡಿ",
   calcKickerLabel: "ಉಳಿತಾಯ ಕ್ಯಾಲ್ಕುಲೇಟರ್",
   calcHeading: "ಒಬ್ಬ ಆಪರೇಟರ್ ಒಂದು ಸೀಸನ್‌ನಲ್ಲಿ ಏನು ಮಾಡಬಹುದು ನೋಡಿ.",
   calcSub: "ತ್ವರಿತ ಅಂದಾಜಿಗಾಗಿ ನಿಮ್ಮ ಪ್ರಸ್ತುತ ಕಾರ್ಮಿಕ ಪ್ರೊಫೈಲ್ ಭರ್ತಿ ಮಾಡಿ.",

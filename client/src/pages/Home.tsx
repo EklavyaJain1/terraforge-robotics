@@ -331,17 +331,20 @@ export default function Home() {
             <img src={agriImages.farmx} alt="Mission Background" className="h-full w-full object-cover opacity-20" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#111311] via-[#111311]/50 to-[#111311]" />
           </div>
-          <div className="tf-container relative z-10 max-w-[900px]">
+          <div className="tf-container relative z-10 w-full">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
-              <SectionKicker number="03" label={t.missionKicker} light className="mx-auto" />
-              <h2 className="mt-8 text-[clamp(2rem,4vw,4rem)] font-medium leading-[1.1] tracking-tight text-white">
-                {t.missionHeadingA} <span className="text-[#B9F4D4]">{t.missionHighlight}</span>{t.missionHeadingB}
+              <SectionKicker number="03" label="Company" light className="mx-auto" />
+              <h2 className="mt-6 text-[clamp(2.5rem,6vw,5.5rem)] font-bold leading-none tracking-[-.04em] text-white uppercase">
+                {t.missionKicker}
               </h2>
+              <p className="mx-auto mt-8 max-w-[1200px] text-[clamp(1.15rem,2.2vw,2.25rem)] font-medium leading-[1.4] tracking-wide text-white/90">
+                {t.missionHeadingA} <span className="text-[#B9F4D4]">{t.missionHighlight}</span>{t.missionHeadingB}
+              </p>
             </motion.div>
           </div>
         </section>
@@ -357,9 +360,6 @@ export default function Home() {
                 <h2 className="mt-7 max-w-[480px] text-4xl font-medium leading-[.96] tracking-[-.055em] sm:text-6xl">{t.orderHeading}</h2>
               </div>
               <div className="flex flex-col items-start justify-center gap-6">
-                <button type="button" onClick={() => openOrderForm()} className="tf-btn tf-btn-quiet text-sm">
-                  {t.orderCta} <ArrowUpRight size={15} />
-                </button>
                 <div className="grid w-full gap-px border border-white/20 bg-white/20 sm:grid-cols-3">
                   <a href="tel:+919154153925" className="tf-focus bg-[#1B8F6A] px-4 py-4 transition-colors hover:bg-[#0F6F51]">
                     <span className="tf-mono block text-[9px] text-white/60">{t.orderCallLabel}</span>
@@ -374,10 +374,15 @@ export default function Home() {
                     <span className="mt-1 block text-sm font-medium">hello@farmbro.example</span>
                   </a>
                 </div>
-                <p className="flex items-center gap-2 text-base font-medium text-white">
-                  <Check size={16} className="shrink-0" />
-                  <span className="rounded bg-white/15 px-2.5 py-1">{t.engineerNote}</span>
-                </p>
+                <div className="flex flex-wrap items-center gap-4">
+                  <button type="button" onClick={() => openOrderForm()} className="tf-btn tf-btn-quiet text-sm">
+                    {t.orderCta} <ArrowUpRight size={15} />
+                  </button>
+                  <p className="flex items-center gap-2 text-base font-medium text-white">
+                    <Check size={16} className="shrink-0" />
+                    <span className="rounded bg-white/15 px-2.5 py-1">{t.engineerNote}</span>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
