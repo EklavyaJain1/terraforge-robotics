@@ -1,54 +1,111 @@
-import { useState } from "react";
-import { ArrowLeft, BookOpenIcon, Check, ChevronLeft, ChevronRight, LinkIcon, MoveUpRight } from "lucide-react";
+import { useRef } from "react";
+import { ArrowLeft, MoveUpRight } from "lucide-react";
 import { Link, useLocation } from "wouter";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
+import { useGSAP } from "@gsap/react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import SectionKicker from "@/components/SectionKicker";
-import { Card, CardContent } from "@/components/ui/card";
-import BentoGallery, { type BentoCard } from "@/components/ui/bento-gallery";
-import FillButton from "@/components/ui/fill-button";
 import { useOrderForm } from "@/contexts/OrderContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import usePageTitle from "@/hooks/usePageTitle";
-import { robots } from "@/data/catalog";
-import { motion } from "framer-motion";
+import { attachments, robots, type RobotId } from "@/data/catalog";
 
-/** Highlight card — the v-card-15 pattern in FarmBro's jade-on-ivory theme. */
-function HighlightCard({ index, label, copy }: { index: string; label: string; copy: string }) {
-  return (
-    <Card className="product-card w-full gap-0 rounded-none border-[#111311]/15 bg-white p-0 shadow-[0_14px_34px_rgba(17,19,17,.08)] transition-transform duration-300 ease-out hover:-translate-y-1">
-      <CardContent className="p-0">
-        <div className="border-b border-[#111311]/12 px-4 py-3">
-          <div className="flex items-center gap-2 text-[#3F4B45] [&_svg]:size-4 [&_svg]:text-[#1B8F6A]">
-            <BookOpenIcon aria-hidden="true" />
-            <span className="tf-mono text-[10px] uppercase tracking-[.14em]">{index}</span>
-            <span className="text-sm font-medium text-[#111311]">{label}</span>
-          </div>
-        </div>
-        <div className="space-y-3 p-4">
-          <p className="text-sm leading-relaxed text-[#59655F]">{copy}</p>
-        </div>
-      </CardContent>
-    </Card>
-  );
+gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
+
+const giantWord: Record<RobotId, string> = {
+  "mulcher-hybrid": "Hybrid",
+  "mulcher-sprayer-cargo": "6×6",
+  "mini-mulcher-electric": "45°",
+  "canopy-scout": "Scout",
+};
+
+const buyerChoice = ["", "fleet", "gov-civil"] as const;
+
+function isVideo(src: string) {
+  return src.endsWith(".mp4");
+}
+
+function FrameMedia({ src, alt, className }: { src: string; alt: string; className: string }) {
+  if (isVideo(src)) {
+    return <video src={src} className={className} autoPlay muted loop playsInline />;
+  }
+  return <img src={src} alt={alt} className={className} />;
 }
 
 export default function ProductDetail() {
+  const rootRef = useRef<HTMLDivElement>(null);
   const [location] = useLocation();
   const { openOrderForm } = useOrderForm();
   const { t } = useLanguage();
   const robot = robots.find((r) => r.slug === location.split("/").pop());
   const m = robot ? t.machines[robot.id] : undefined;
-  const [activeImage, setActiveImage] = useState(0);
 
   usePageTitle(robot && m ? `${m.name} — FarmBro` : t.pdNotFoundTitle);
 
+  useGSAP(
+    () => {
+      if (!robot || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      const split = SplitText.create(".pd-hero-title", {
+        type: "words",
+        autoSplit: true,
+        aria: "auto",
+        onSplit(self) {
+          return gsap.from(self.words, {
+            y: 36,
+            autoAlpha: 0,
+            stagger: 0.035,
+            duration: 0.7,
+            ease: "power3.out",
+          });
+        },
+      });
+
+      gsap.from(".pd-glass", {
+        x: 56,
+        autoAlpha: 0,
+        duration: 0.85,
+        delay: 0.15,
+        ease: "power3.out",
+      });
+
+      gsap.utils.toArray<HTMLElement>(".pd-reveal").forEach((el) => {
+        gsap.from(el, {
+          y: 28,
+          opacity: 0,
+          duration: 0.7,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 86%",
+          },
+        });
+      });
+
+      gsap.to(".pd-giant", {
+        xPercent: -6,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".pd-giant-wrap",
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 0.6,
+        },
+      });
+
+      return () => split.revert();
+    },
+    { scope: rootRef, dependencies: [robot?.id], revertOnUpdate: true },
+  );
+
   if (!robot || !m) {
     return (
-      <div className="tf-page">
+      <div ref={rootRef} className="tf-page bg-[#111311] text-white">
         <Navbar />
         <main className="flex min-h-[60vh] flex-col items-center justify-center gap-6 pt-[72px] text-center">
-          <p className="tf-mono text-[10px] uppercase tracking-[.14em] text-[#64736C]">{t.pdMissingKicker}</p>
+          <p className="tf-mono text-[10px] uppercase tracking-[.14em] text-white/50">{t.pdMissingKicker}</p>
           <h1 className="max-w-[420px] text-4xl font-medium tracking-[-.05em] sm:text-5xl">{t.pdMissingHeading}</h1>
           <Link href="/farmbro" className="tf-btn tf-btn-primary">
             <ArrowLeft size={15} /> {t.pdMissingCta}
@@ -59,214 +116,219 @@ export default function ProductDetail() {
     );
   }
 
+  const heroSrc = robot.hoverVideo ?? robot.image;
   const related = robots.filter((r) => r.id !== robot.id);
-
-  const bentoCards: BentoCard[] = robot.gallery.map((src, index) => ({
-    id: index + 1,
-    thumbnail: src,
-    alt: t.pdImageAlt.replace("{name}", m.name).replace("{n}", String(index + 1)),
-    className: index % 3 === 0 ? "sm:col-span-2 h-[260px] sm:h-[320px]" : "h-[260px] sm:h-[320px]",
-    content: (
-      <p className="tf-mono text-[10px] uppercase tracking-[.16em] text-white/85">
-        {t.pdShowImage.replace("{n}", String(index + 1))}
-      </p>
-    ),
+  const frames = robot.gallery.map((src, index) => ({
+    src,
+    index,
+    title: m.highlights[index] ?? m.specs[index]?.[0] ?? t.pdShowImage.replace("{n}", String(index + 1)),
+    copy: m.highlights[index] ? m.tagline : (m.specs[index]?.[1] ?? m.availability),
   }));
 
   return (
-    <div className="tf-page">
+    <div ref={rootRef} className="tf-page bg-[#111311] pb-20 text-white lg:pb-0">
       <Navbar />
-      <main className="pt-[72px]">
-        {/* Breadcrumb */}
-        <div className="tf-container pt-10">
-          <nav aria-label={t.pdBreadAria} className="flex items-center gap-2 text-[11px] text-[#64736C]">
-            <Link href="/farmbro" className="tf-focus hover:text-[#1B8F6A]">{t.pdStore}</Link>
-            <span aria-hidden="true">/</span>
-            <span className="text-[#111311]">{m.configuration}</span>
-          </nav>
-        </div>
+      <main>
+        <section className="relative min-h-[100svh] w-full overflow-hidden">
+          <FrameMedia
+            src={heroSrc}
+            alt={m.name}
+            className="absolute inset-0 h-full w-full object-cover opacity-60"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#111311] via-[#111311]/20 to-[#111311]/40" />
 
-        {/* Hero: configuration chip, name, description, CTAs — left. Carousel — right. */}
-        <section className="tf-container grid items-start gap-10 pt-8 pb-16 sm:pt-10 lg:grid-cols-[.92fr_1.08fr] lg:gap-14">
-          <div>
-            <span className="tf-mono inline-flex items-center gap-2 rounded-full border border-[#111311]/15 px-3 py-1.5 text-[10px] uppercase tracking-[.16em] text-[#3F4B45]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#1B8F6A]" aria-hidden="true" />
-              {m.tier}
-            </span>
-            <h1 className="mt-6 max-w-[520px] text-4xl font-medium leading-[1.02] tracking-[-.04em] sm:text-6xl">{m.name}</h1>
-            <p className="tf-mono mt-5 text-sm italic tracking-[.08em] text-[#1B8F6A]">{t.configLabel} {m.configuration}</p>
-            {m.valueNote && (
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="mt-6 flex items-center gap-3"
-              >
-                <span className="relative flex h-2.5 w-2.5 shrink-0">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#1B8F6A] opacity-75"></span>
-                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#1B8F6A]"></span>
-                </span>
-                <span className="text-sm font-medium leading-relaxed text-[#1B8F6A]">{m.valueNote}</span>
-              </motion.div>
-            )}
-            <p className="mt-6 max-w-[480px] text-base leading-7 text-[#3F4B45]">{m.body}</p>
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <FillButton type="button" onClick={() => openOrderForm(robot.id)}>
-                {t.cardOrderNow} <MoveUpRight size={15} />
-              </FillButton>
-              <a href="#specifications" className="tf-btn tf-btn-outline">{t.pdViewSpecs}</a>
-            </div>
-            <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-[#111311]/12 pt-6 text-sm text-[#3F4B45]">
-              <span className="font-medium">{m.priceLabel}</span>
-              <span className="text-[12px] text-[#59655F]">{m.availability}</span>
-            </div>
+          <div className="relative z-10 flex min-h-[100svh] flex-col justify-end px-6 pb-28 pt-28 sm:px-10 lg:w-[calc(100%-400px)] lg:px-14 lg:pb-24">
+            {m.badge && <p className="tf-mono mb-4 text-[#B9F4D4]">{m.badge}</p>}
+            <h1 className="pd-hero-title max-w-4xl text-5xl font-medium uppercase leading-[0.88] tracking-[-.05em] sm:text-7xl lg:text-[6.2vw]">
+              {m.tagline}
+            </h1>
+            <p className="tf-mono mt-6 text-[#B9F4D4]">{m.name}</p>
+            <p className="mt-5 max-w-xl text-base leading-7 text-white/75">{m.body}</p>
           </div>
 
-          <div className="relative">
-            <div className="relative aspect-[4/3] overflow-hidden bg-[#17201B]">
-              {robot.gallery[activeImage].endsWith(".mp4") ? (
-                <video
-                  src={robot.gallery[activeImage]}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <img
-                  src={robot.gallery[activeImage]}
-                  alt={t.pdImageAlt.replace("{name}", m.name).replace("{n}", String(activeImage + 1))}
-                  fetchPriority="high"
-                  decoding="sync"
-                  className="h-full w-full object-cover"
-                />
-              )}
-              <button
-                type="button"
-                aria-label={t.pdPrevImage}
-                onClick={() => setActiveImage((activeImage - 1 + robot.gallery.length) % robot.gallery.length)}
-                className="tf-focus absolute left-4 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#111311] shadow-md transition-transform duration-200 hover:scale-105 hover:bg-white"
-              >
-                <ChevronLeft size={18} />
-              </button>
-              <button
-                type="button"
-                aria-label={t.pdNextImage}
-                onClick={() => setActiveImage((activeImage + 1) % robot.gallery.length)}
-                className="tf-focus absolute right-4 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#111311] shadow-md transition-transform duration-200 hover:scale-105 hover:bg-white"
-              >
-                <ChevronRight size={18} />
-              </button>
-            </div>
-            {/* Thumbnails — the e-commerce gallery strip */}
-            <div className="mt-3 grid grid-cols-4 gap-3">
-              {robot.gallery.map((src, index) => (
-                <button
-                  key={src}
-                  type="button"
-                  onClick={() => setActiveImage(index)}
-                  aria-label={t.pdShowImage.replace("{n}", String(index + 1))}
-                  aria-pressed={activeImage === index}
-                  className={`tf-focus aspect-[4/3] overflow-hidden border-2 transition-all duration-200 hover:-translate-y-0.5 ${
-                    activeImage === index ? "border-[#1B8F6A]" : "border-transparent opacity-70 hover:opacity-100"
-                  }`}
-                >
-                  {src.endsWith(".mp4") ? (
-                    <video src={src} autoPlay loop muted playsInline className="h-full w-full object-cover" />
-                  ) : (
-                    <img src={src} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
-                  )}
+          <aside className="pd-glass relative z-20 border-t border-white/10 bg-[#111311]/75 px-6 py-8 backdrop-blur-xl sm:px-10 lg:absolute lg:inset-y-0 lg:right-0 lg:w-[400px] lg:border-l lg:border-t-0 lg:px-12 lg:py-0">
+            <div className="flex h-full flex-col justify-center gap-8">
+              <dl className="grid gap-6">
+                {m.specs.map(([label, value]) => (
+                  <div key={label}>
+                    <dt className="tf-mono mb-2 text-white/40">{label}</dt>
+                    <dd className="text-xl font-medium">{value}</dd>
+                  </div>
+                ))}
+              </dl>
+              <p className="text-sm text-white/70">
+                {m.priceLabel}
+                <span className="mt-1 block text-white/45">{m.availability}</span>
+              </p>
+              <div className="flex flex-col gap-3">
+                <button type="button" onClick={() => openOrderForm(robot.id)} className="tf-btn tf-btn-primary w-full">
+                  {t.cardOrderNow}
                 </button>
-              ))}
+                <button
+                  type="button"
+                  onClick={() => openOrderForm(robot.id)}
+                  className="tf-btn w-full border border-white/25 bg-transparent text-white hover:bg-white/10"
+                >
+                  {t.servicesBookTrial}
+                </button>
+              </div>
             </div>
-          </div>
+          </aside>
         </section>
 
-        {/* Highlights — v-card-15 pattern cards */}
-        <section className="border-y border-[#111311]/12 bg-[#FAFAF7] py-14">
-          <div className="tf-container">
-            <SectionKicker number="01" label={t.pdWhyKicker} />
-            <div className="mt-8 grid gap-5 sm:grid-cols-2">
-              {m.highlights.map((highlight, i) => (
-                <HighlightCard
-                  key={highlight}
-                  index={String(i + 1).padStart(2, "0")}
-                  label={t.pdHighlightLabel.replace("{n}", String(i + 1))}
-                  copy={highlight}
+        <section className="bg-[#111311] py-20 sm:py-28">
+          <div className="tf-container pd-reveal mb-10">
+            <h2 className="text-3xl font-medium tracking-tight">{t.pdWhyKicker}</h2>
+          </div>
+          <div className="pd-reveal flex gap-6 overflow-x-auto px-6 pb-2 sm:px-10 lg:px-14 [scrollbar-width:none]">
+            {frames.map((frame) => (
+              <figure key={`${frame.src}-${frame.index}`} className="relative h-[320px] w-[78vw] max-w-[560px] shrink-0 sm:h-[400px]">
+                <FrameMedia
+                  src={frame.src}
+                  alt={t.pdImageAlt.replace("{name}", m.name).replace("{n}", String(frame.index + 1))}
+                  className="h-full w-full object-cover"
                 />
-              ))}
-            </div>
+                <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0B0F0D] to-transparent p-6">
+                  <span className="tf-mono text-2xl text-[#1B8F6A]">{String(frame.index + 1).padStart(2, "0")}</span>
+                  <p className="mt-3 max-w-xs text-lg font-medium leading-snug">{frame.title}</p>
+                  <p className="mt-2 max-w-xs text-sm text-white/65">{frame.copy}</p>
+                </figcaption>
+              </figure>
+            ))}
           </div>
         </section>
 
-        {/* Specifications */}
-        <section id="specifications" className="py-16 sm:py-20">
-          <div className="tf-container grid gap-10 lg:grid-cols-[.7fr_1.3fr] lg:gap-20">
-            <div>
-              <SectionKicker number="02" label={t.pdSpecsKicker} />
-              <h2 className="mt-7 max-w-[320px] text-4xl font-medium leading-[.98] tracking-[-.05em]">{t.pdSpecsHeading}</h2>
-              <p className="mt-5 max-w-[300px] text-sm leading-6 text-[#59655F]">{t.pdSpecsSub}</p>
+        <section className="pd-giant-wrap overflow-hidden border-y border-white/10 py-16 sm:py-24">
+          <div className="tf-container flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
+            <h2 className="pd-giant text-[22vw] font-medium uppercase leading-none tracking-[-.06em] text-[#1B8F6A] lg:text-[14vw]">
+              {giantWord[robot.id]}
+            </h2>
+            <p className="pd-reveal max-w-md text-2xl font-light leading-relaxed text-white/85">{m.body}</p>
+          </div>
+        </section>
+
+        <section id="specifications" className="py-20 sm:py-28">
+          <div className="tf-container grid gap-12 lg:grid-cols-[0.7fr_1.3fr]">
+            <div className="pd-reveal">
+              <h2 className="text-4xl font-medium tracking-tight sm:text-5xl">{t.pdSpecsHeading}</h2>
+              <p className="mt-4 max-w-sm text-white/55">{t.pdSpecsSub}</p>
             </div>
-            <dl className="border-t border-[#111311]/15">
+            <dl className="pd-reveal border-t-4 border-white">
               {m.specs.map(([label, value]) => (
-                <div key={label} className="tf-row-link grid grid-cols-[1fr_auto] gap-6 border-b border-[#111311]/15 py-5 transition-transform duration-300 ease-out hover:translate-x-1.5">
-                  <dt className="tf-mono text-[10px] uppercase tracking-[.14em] text-[#64736C]">{label}</dt>
-                  <dd className="text-right text-base font-medium text-[#111311]">{value}</dd>
+                <div key={label} className="grid gap-2 border-b border-white/15 py-6 sm:grid-cols-[1fr_auto] sm:items-baseline">
+                  <dt className="tf-mono text-white/45">{label}</dt>
+                  <dd className="text-lg font-medium sm:text-right">{value}</dd>
                 </div>
               ))}
             </dl>
           </div>
         </section>
 
-        {/* Gallery — hover-only bento grid */}
-        <section className="border-y border-[#111311]/12 bg-[#FAFAF7] py-16 sm:py-20">
+        <section className="pb-20 sm:pb-28">
           <div className="tf-container">
-            <SectionKicker number="03" label={t.pdGalleryKicker} />
-            <h2 className="mt-7 max-w-[420px] text-4xl font-medium leading-[.98] tracking-[-.05em]">{t.galleryHeading}</h2>
-            <div className="mt-10">
-              <BentoGallery cards={bentoCards} />
+            <div className="pd-reveal mb-10 flex items-end justify-between gap-6">
+              <h2 className="text-3xl font-medium tracking-tight">{t.attachmentsKicker}</h2>
+              <span className="tf-mono text-white/40">{t.attachmentsFitNote}</span>
+            </div>
+            <div className="grid gap-6 md:grid-cols-2">
+              {attachments.map((item) => {
+                const a = t.attachments[item.id];
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => openOrderForm("attach")}
+                    className="pd-reveal flex min-h-64 flex-col justify-between border border-white/10 bg-[#17201B] p-8 text-left transition-transform duration-300 hover:-translate-y-1 hover:border-[#1B8F6A]"
+                  >
+                    <div>
+                      <p className="tf-mono text-[#1B8F6A]">{item.number}</p>
+                      <h3 className="mt-4 text-3xl font-medium">{a.name}</h3>
+                      <p className="mt-3 max-w-sm text-white/55">{a.copy}</p>
+                    </div>
+                    <div className="mt-8 flex items-end justify-between">
+                      <span className="text-sm font-medium">{item.priceLabel}</span>
+                      <span className="tf-mono text-white/40">{a.stat}</span>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </section>
 
-        {/* Order strip */}
-        <section className="tf-dark py-16 sm:py-20">
-          <div className="tf-container flex flex-col items-start justify-between gap-6 border border-white/15 bg-[#17201B] p-8 sm:flex-row sm:items-center sm:p-10">
+        <section className="grid lg:grid-cols-3">
+          {t.audiences.map((audience, index) => (
+            <button
+              key={audience.label}
+              type="button"
+              onClick={() => openOrderForm(buyerChoice[index] || robot.id)}
+              className={`pd-reveal flex min-h-[420px] flex-col justify-between p-8 text-left sm:p-12 ${
+                index === 1 ? "bg-[#1B8F6A]" : index === 2 ? "bg-[#0B0F0D]" : "bg-[#17201B]"
+              }`}
+            >
+              <div>
+                <span className="tf-mono text-white/60">{String(index + 1).padStart(2, "0")}</span>
+                <h3 className="mt-6 text-4xl font-medium leading-tight">{audience.label}</h3>
+                <p className={`mt-4 text-lg leading-relaxed ${index === 1 ? "text-white/85" : "text-white/60"}`}>{audience.copy}</p>
+              </div>
+              <span className="tf-mono mt-10 inline-flex items-center gap-2">
+                {audience.cta} <MoveUpRight size={14} />
+              </span>
+            </button>
+          ))}
+        </section>
+
+        <section className="bg-[#111311] py-20 sm:py-28">
+          <div className="tf-container grid gap-12 lg:grid-cols-[320px_1fr]">
+            <div className="pd-reveal">
+              <h2 className="text-5xl font-medium tracking-tight">{t.faqHeadingB}</h2>
+              <p className="mt-4 text-white/45">{t.pdSpecsSub}</p>
+            </div>
             <div>
-              <h2 className="max-w-[440px] text-3xl font-medium tracking-[-.04em] text-white sm:text-4xl">
-                {t.pdOrderHeading.replace("{config}", m.configuration)}
-              </h2>
-              <p className="mt-3 max-w-[440px] text-sm leading-6 text-white/60">
-                {t.pdOrderSub.replace("{availability}", m.availability)}
-              </p>
+              {t.faqs.slice(0, 4).map((item) => (
+                <article key={item.q} className="pd-reveal border-t-4 border-white py-8">
+                  <h3 className="text-2xl font-medium">{item.q}</h3>
+                  <p className="mt-3 text-lg leading-relaxed text-white/60">{item.a}</p>
+                </article>
+              ))}
             </div>
-            <FillButton type="button" onClick={() => openOrderForm(robot.id)} className="shrink-0">
-              {t.cardOrderNow} <MoveUpRight size={14} />
-            </FillButton>
           </div>
         </section>
 
-        {/* Related machines */}
+        <section className="bg-[#1B8F6A] py-16 text-white sm:py-20">
+          <div className="tf-container flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
+            <div>
+              <h2 className="text-4xl font-medium tracking-tight sm:text-5xl">{t.pdOrderHeading.replace("{config}", m.configuration)}</h2>
+              <p className="mt-3 max-w-xl text-lg text-white/80">{t.pdOrderSub.replace("{availability}", m.availability)}</p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <a href="tel:+919154153925" className="text-xl font-medium">
+                +91 91541 53925
+              </a>
+              <a href="https://wa.me/919154153925" target="_blank" rel="noreferrer" className="tf-btn border border-white/40 bg-white/10 text-white">
+                {t.whatsappCta}
+              </a>
+              <button type="button" onClick={() => openOrderForm(robot.id)} className="tf-btn bg-white text-[#1B8F6A] hover:bg-[#B9F4D4]">
+                {t.cardOrderNow}
+              </button>
+            </div>
+          </div>
+        </section>
+
         <section className="py-16 sm:py-20">
           <div className="tf-container">
-            <div className="flex items-end justify-between gap-6">
-              <h2 className="max-w-[360px] text-3xl font-medium tracking-[-.04em] sm:text-4xl">{t.pdCompareHeading}</h2>
-              <Link href="/farmbro" className="tf-btn tf-btn-outline shrink-0">{t.pdViewAll}</Link>
-            </div>
-            <div className="mt-10 grid gap-6 sm:grid-cols-2">
-              {related.map((r) => {
-                const rm = t.machines[r.id];
+            <h2 className="pd-reveal text-3xl font-medium tracking-tight">{t.pdCompareHeading}</h2>
+            <div className="mt-8 grid gap-4">
+              {related.map((item) => {
+                const copy = t.machines[item.id];
                 return (
-                  <Link key={r.id} href={`/farmbro/${r.slug}`} className="tf-focus product-card group flex items-center gap-5 rounded-none p-4">
-                    <img src={r.image} alt="" loading="lazy" decoding="async" className="h-20 w-24 shrink-0 object-cover" />
+                  <Link key={item.id} href={`/farmbro/${item.slug}`} className="pd-reveal flex items-center gap-5 border border-white/10 bg-[#17201B] p-4">
+                    <img src={item.image} alt="" className="h-20 w-28 object-cover" />
                     <div className="min-w-0">
-                      <h3 className="truncate text-base font-medium text-[#111311]">{rm.name}</h3>
-                      <p className="tf-mono mt-1 text-[10px] uppercase tracking-[.14em] text-[#64736C]">{rm.configuration}</p>
+                      <h3 className="truncate text-lg font-medium">{copy.name}</h3>
+                      <p className="tf-mono mt-1 text-white/45">{copy.configuration}</p>
                     </div>
-                    <span aria-hidden="true" className="ml-auto flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#111311]/15 text-[#111311] transition-all duration-300 group-hover:rotate-45 group-hover:border-[#1B8F6A] group-hover:bg-[#1B8F6A] group-hover:text-white">
-                      <MoveUpRight size={14} />
-                    </span>
+                    <MoveUpRight className="ml-auto shrink-0" size={16} />
                   </Link>
                 );
               })}
@@ -274,6 +336,11 @@ export default function ProductDetail() {
           </div>
         </section>
       </main>
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#0B0F0D]/90 p-3 backdrop-blur lg:hidden">
+        <button type="button" onClick={() => openOrderForm(robot.id)} className="tf-btn tf-btn-primary w-full">
+          {t.cardOrderNow}
+        </button>
+      </div>
       <Footer />
     </div>
   );
