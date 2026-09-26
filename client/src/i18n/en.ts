@@ -56,6 +56,9 @@ export const en = {
   orderNotesLabel: "Anything we should know?",
   orderNotesPlaceholder: "Crop, acreage, preferred delivery window",
   orderSubmit: "Submit order request",
+  orderSubmitting: "Sending…",
+  orderSignInToSubmit: "Sign in to send",
+  signIn: "Sign in",
   orderSuccessTitle: "Order request received.",
   orderSuccessBody: "We will call you on the number you shared to confirm the configuration, attachments, and delivery window.",
   orderDone: "Done",
@@ -282,11 +285,6 @@ export const en = {
   gallerySub: "Photographs from field trials and operator days — unretouched conditions, real rows.",
   galleryMetaOne: "Field trials, 2025–26",
   galleryMetaTwo: "06 frames · unretouched",
-  galleryFilterLabel: "Filter the frames",
-  filterAll: "All",
-  filterPlatform: "Platform",
-  filterAttachments: "Attachments",
-  filterFieldOps: "Field ops",
   /** Captions aligned with the page's gallery item order. */
   galleryCaptions: [
     "The hybrid mulcher on an estate trial row",
@@ -296,7 +294,6 @@ export const en = {
     "Canopy Scout on hard ground",
     "Implement rail study, pre-season",
   ],
-  toolsKicker: "Attachment studies",
 
   // ── Contact ────────────────────────────────────────────────────────────
   contactTitle: "Contact — FarmBro Robotics",

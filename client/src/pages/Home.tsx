@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionTemplate } from "framer-motion";
 import { ArrowDownRight, ArrowUpRight, Blocks, Check, ChevronDown, CircleDot, Cpu, Factory, Footprints, Globe, Layers, PlugZap, Radar } from "lucide-react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
@@ -38,6 +38,31 @@ function scrollToId(id: string) {
   if (window.__lenis) window.__lenis.scrollTo(target, { offset: -64 });
   else target.scrollIntoView({ behavior: "smooth", block: "start" });
 }
+
+const TextbookHighlight = ({ children }: { children: React.ReactNode }) => {
+  const ref = useRef<HTMLSpanElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 85%", "start 55%"],
+  });
+  
+  const clipRight = useTransform(scrollYProgress, [0, 1], [100, 0]);
+  const clipPath = useMotionTemplate`inset(0 ${clipRight}% 0 0)`;
+
+  return (
+    <span ref={ref} className="relative inline-block px-1">
+      {/* Base text */}
+      <span className="text-[#B9F4D4] relative z-10">{children}</span>
+
+      {/* Highlight background sweeping across */}
+      <motion.span 
+        style={{ clipPath }}
+        className="absolute inset-0 z-0 rounded-sm bg-[#B9F4D4]/15"
+        aria-hidden="true"
+      />
+    </span>
+  );
+};
 
 export default function Home() {
   const { t } = useLanguage();
@@ -133,7 +158,7 @@ export default function Home() {
         {/* 01 — The machines: e-commerce cards; every card opens its product page */}
         <section className="tf-surface relative z-10 border-b border-[#111311]/15 bg-[#F5F7F5] py-16 sm:py-20" id="machines">
           <div className="tf-container">
-            <motion.div 
+            <motion.div
               className="flex flex-col items-center text-center"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -170,7 +195,7 @@ export default function Home() {
         {/* In-Field Performance Section */}
         <section className="tf-surface relative z-10 border-b border-[#111311]/15 bg-white py-20 sm:py-28" id="performance">
           <div className="tf-container">
-            <motion.div 
+            <motion.div
               className="flex flex-col items-center text-center"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -192,7 +217,7 @@ export default function Home() {
                 { video: "/videos/farm-bro-sprayer-cargo.mp4" },
                 { video: "/videos/farm-bro-canopy-scout.mp4" },
               ].map((item, i) => (
-                <motion.div 
+                <motion.div
                   key={item.video}
                   className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-black"
                   initial={{ opacity: 0, y: 40 }}
@@ -225,13 +250,13 @@ export default function Home() {
         <section id="pillars" className="relative z-10 border-b border-white/10 bg-[#111311] py-20 text-white sm:py-32">
           <div className="tf-container">
             <div className="grid gap-16 lg:grid-cols-2">
-              
+
               {/* Sticky Left Column: Image/Visual */}
               <div className="hidden lg:block">
                 <div className="sticky top-24 overflow-hidden rounded-2xl bg-[#17201B]">
-                  <img 
-                    src={agriImages.wide} 
-                    alt="FarmBro Engineering" 
+                  <img
+                    src={agriImages.wide}
+                    alt="FarmBro Engineering"
                     className="h-[600px] w-full object-cover opacity-80"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#111311] via-transparent to-transparent" />
@@ -357,7 +382,7 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             >
               <p className="mx-auto mt-8 max-w-[1200px] text-[clamp(1.15rem,2.2vw,2.25rem)] font-medium leading-[1.4] tracking-wide text-white/90">
-                {t.missionHeadingA} <span className="text-[#B9F4D4]">{t.missionHighlight}</span>{t.missionHeadingB}
+                {t.missionHeadingA} <TextbookHighlight>{t.missionHighlight}</TextbookHighlight>{t.missionHeadingB}
               </p>
             </motion.div>
           </div>
