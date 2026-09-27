@@ -32,7 +32,7 @@ interface OrderFormDialogProps {
 export default function OrderFormDialog({ open, onOpenChange, defaultRobot }: OrderFormDialogProps) {
   const { t } = useLanguage();
   const [submitted, setSubmitted] = useState(false);
-  const [form, setForm] = useState({ name: "", contact: "", robot: "", quantity: "1", notes: "" });
+  const [form, setForm] = useState<OrderFormState>({ name: "", phone: "", email: "", address: "", robot: "", quantity: "1", notes: "" });
 
   useEffect(() => {
     if (open) {

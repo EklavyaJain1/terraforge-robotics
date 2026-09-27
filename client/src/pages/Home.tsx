@@ -285,7 +285,7 @@ export default function Home() {
             <h2 className="mt-7 text-center text-4xl font-medium leading-[.98] tracking-[-.055em] sm:text-6xl">
               <motion.span
                 ref={sweepRef}
-                className="bg-[linear-gradient(to_right,rgba(27,143,106,.16),rgba(27,143,106,.16))] bg-no-repeat px-2"
+                className="bg-[linear-gradient(to_right,rgba(27,143,106,.31),rgba(27,143,106,.31))] bg-no-repeat px-2"
                 style={{ backgroundSize: "0% 100%" }}
               >
                 {t.whyHeading}
@@ -294,10 +294,10 @@ export default function Home() {
 
             <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {/* Anchor cell — the positioning statement */}
-              <div className="relative overflow-hidden bg-[#1B8F6A] p-8 text-white shadow-[0_18px_50px_rgba(27,143,106,.24)] transition-transform duration-300 hover:-translate-y-1 sm:row-span-2">
-                <CircleDot size={20} className="text-white/85" />
+              <div onPointerMove={trackSpotlight} className="product-card p-8 sm:row-span-2">
+                <CircleDot size={20} className="text-[#1B8F6A]" />
                 <h3 className="mt-16 text-2xl font-medium leading-tight tracking-[-.03em] sm:mt-28">{t.whyItems[0].title}</h3>
-                <p className="mt-3 max-w-[260px] text-sm leading-6 text-white/85">{t.whyItems[0].copy}</p>
+                <p className="mt-3 max-w-[260px] text-sm leading-6 text-[#59655F]">{t.whyItems[0].copy}</p>
               </div>
 
               {t.whyItems.slice(1, 5).map((item, i) => {
@@ -313,8 +313,8 @@ export default function Home() {
 
               {/* Closing wide cell — centered icon above centered copy */}
               <div onPointerMove={trackSpotlight} className="product-card flex flex-col items-center gap-4 p-8 text-center sm:col-span-2 lg:col-span-3">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#1B8F6A] text-white">
-                  <Factory size={19} />
+                <span className="flex h-16 w-16 shrink-0 items-center justify-center">
+                  <img src="/images/indain flag logo.avif" alt="Make in India" className="h-full w-full object-contain" />
                 </span>
                 <div>
                   <h3 className="text-lg font-medium sm:text-xl">{t.whyItems[5].title}</h3>

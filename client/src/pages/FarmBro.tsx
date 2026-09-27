@@ -183,8 +183,16 @@ export default function FarmBro() {
 
         <section className="tf-surface py-16 sm:py-20">
           <div className="tf-container">
-            <SectionKicker number="ADD-ONS" label={t.attachmentsKicker} />
-            <h2 className="mt-7 max-w-[560px] text-4xl font-medium leading-[.98] tracking-[-.055em] sm:text-5xl">Add On</h2>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col items-center text-center"
+            >
+              <SectionKicker number="ADD-ONS" label={t.attachmentsKicker} className="mx-auto" />
+              <h2 className="mt-7 max-w-[560px] text-4xl font-medium leading-[.98] tracking-[-.055em] sm:text-5xl">Add On</h2>
+            </motion.div>
             <div className="mt-10 grid gap-px border border-[#111311]/15 bg-[#111311]/15 sm:grid-cols-2 lg:grid-cols-4">
               {attachments.map((item) => {
                 const a = t.attachments[item.id];
@@ -204,11 +212,7 @@ export default function FarmBro() {
                 );
               })}
             </div>
-            <div className="mt-10 flex flex-wrap items-center gap-4">
-              <button type="button" onClick={() => openOrderForm("attach")} className="tf-btn tf-btn-primary">
-                {t.attachmentsCta} <MoveUpRight size={14} />
-              </button>
-            </div>
+
           </div>
         </section>
 
