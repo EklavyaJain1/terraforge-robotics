@@ -1,6 +1,7 @@
-import { Check, Languages, MoveUpRight } from "lucide-react";
+import { Check, Languages, MoveUpRight, UserRound } from "lucide-react";
 import { House, Images, Info, Mail, Tractor, Wrench } from "lucide-react";
 import { Link } from "wouter";
+import { useAuth, useClerk, UserButton } from "@clerk/react";
 import NavbarLanguagePicker from "@/components/NavbarLanguagePicker";
 import { FloatingDock } from "@/components/ui/floating-dock";
 import { useOrderForm } from "@/contexts/OrderContext";
@@ -25,9 +26,37 @@ function AppMark() {
 
 export { AppMark };
 
+/** Sign-in button / signed-in avatar. Only rendered when Clerk is configured. */
+function NavbarAccount() {
+  const { t } = useLanguage();
+  const { isSignedIn, isLoaded } = useAuth();
+  const clerk = useClerk();
+
+  if (!isLoaded) return <span className="h-[34px] w-[34px]" aria-hidden="true" />;
+  if (isSignedIn) {
+    return (
+      <div className="tf-focus rounded-full">
+        <UserButton />
+      </div>
+    );
+  }
+  return (
+    <button
+      type="button"
+      onClick={() => clerk.openSignIn()}
+      aria-label={t.signIn}
+      title={t.signIn}
+      className="tf-focus flex h-[34px] w-[34px] items-center justify-center rounded-full border border-white/20 text-white/80 transition-colors hover:border-white/45 hover:text-white"
+    >
+      <UserRound size={15} />
+    </button>
+  );
+}
+
 export default function Navbar() {
   const { openOrderForm } = useOrderForm();
   const { t } = useLanguage();
+  const clerkKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string | undefined;
 
   const navItems = [
     { title: t.home, href: "/", icon: <House className="h-full w-full" /> },
@@ -55,6 +84,7 @@ export default function Navbar() {
 
           <div className="flex items-center gap-2">
             <NavbarLanguagePicker />
+            {clerkKey && <NavbarAccount />}
             <button
               type="button"
               onClick={() => openOrderForm()}

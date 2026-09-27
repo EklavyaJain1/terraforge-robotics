@@ -1,0 +1,3 @@
+# Enquiries and audit logs are runtime data — never commit them.
+*
+!.gitignore

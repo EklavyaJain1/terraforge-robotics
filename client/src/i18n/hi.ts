@@ -4,7 +4,7 @@ import { en, type AttachmentStrings, type MachineStrings, type UiStrings } from 
 export const hi: UiStrings = {
   ...en,
   // ── Header / navigation ────────────────────────────────────────────────
-  orderNow: "अभी ऑर्डर करें",
+  orderNow: "अभी बुक करें",
   home: "होम",
   farmbro: "फ़ार्मब्रो",
   services: "सेवाएँ",
@@ -53,6 +53,9 @@ export const hi: UiStrings = {
   orderNotesLabel: "कुछ और बताना चाहेंगे?",
   orderNotesPlaceholder: "फ़सल, एकड़, पसंदीदा डिलीवरी समय",
   orderSubmit: "ऑर्डर अनुरोध भेजें",
+  orderSubmitting: "भेजा जा रहा है…",
+  orderSignInToSubmit: "भेजने के लिए साइन इन करें",
+  signIn: "साइन इन करें",
   orderSuccessTitle: "ऑर्डर अनुरोध मिल गया।",
   orderSuccessBody: "कॉन्फ़िगरेशन, अटैचमेंट और डिलीवरी समय की पुष्टि के लिए हम आपके दिए नंबर पर कॉल करेंगे।",
   orderDone: "पूर्ण",
@@ -75,7 +78,7 @@ export const hi: UiStrings = {
   cardViewAria: "{name} देखें",
   cardVisit: "मशीन देखें",
   cardPriceLabel: "सांकेतिक कीमत",
-  cardOrderNow: "अभी ऑर्डर करें",
+  cardOrderNow: "अभी बुक करें",
 
   // ── Savings calculator ─────────────────────────────────────────────────
   calcKickerLabel: "बचत कैलकुलेटर",
@@ -208,10 +211,8 @@ export const hi: UiStrings = {
   galleryKicker: "गैलरी",
   galleryHeading: "मशीन, काम करती हुई।",
   gallerySub: "फील्ड ट्रायल और ऑपरेटर दिवसों की तस्वीरें — बिना छुए हालात, असली कतारें।",
-  filterAll: "सभी",
-  filterPlatform: "प्लेटफ़ॉर्म",
-  filterAttachments: "अटैचमेंट",
-  filterFieldOps: "फील्ड ऑप्स",
+  galleryMetaOne: "खेत ट्रायल, 2025–26",
+  galleryMetaTwo: "06 फ़्रेम · बिना छुए",
   galleryCaptions: [
     "एस्टेट ट्रायल की कतार पर हाइब्रिड मल्चर",
     "खुले खेत का ट्रायल, काली मिट्टी",
@@ -220,7 +221,6 @@ export const hi: UiStrings = {
     "कठोर ज़मीन पर कैनोपी स्काउट",
     "इम्प्लीमेंट रेल अध्ययन, सीज़न से पहले",
   ],
-  toolsKicker: "अटैचमेंट अध्ययन",
 
   // ── Contact ────────────────────────────────────────────────────────────
   contactTitle: "संपर्क — फ़ार्मब्रो रोबोटिक्स",

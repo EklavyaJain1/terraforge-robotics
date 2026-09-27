@@ -1,102 +1,166 @@
-import { useState } from "react";
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import SectionKicker from "@/components/SectionKicker";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { agriImages, attachments } from "@/data/catalog";
+import { agriImages } from "@/data/catalog";
 import usePageTitle from "@/hooks/usePageTitle";
 
-/** Gallery captions/tags are keyed by asset so the dictionary carries the copy. */
-const galleryItems = [
-  { src: agriImages.hero, captionKey: 0, tagKey: "platform" },
-  { src: agriImages.wide, captionKey: 1, tagKey: "fieldOps" },
-  { src: agriImages.farmx, captionKey: 2, tagKey: "platform" },
-  { src: agriImages.rancher, captionKey: 3, tagKey: "platform" },
-  { src: agriImages.canopy, captionKey: 4, tagKey: "fieldOps" },
-  { src: agriImages.division, captionKey: 5, tagKey: "attachments" },
-] as const;
+import MasonryGallery from "@/components/ui/MasonryGallery";
+
+gsap.registerPlugin(useGSAP);
+
+/** All six frames, always on the sheet — the page is the proof, not a query. */
+const masonryItems = [
+  { id: "0", img: agriImages.hero, height: 400 },
+  { id: "1", img: agriImages.wide, height: 300 },
+  { id: "2", img: agriImages.farmx, height: 500 },
+  { id: "3", img: agriImages.rancher, height: 350 },
+  { id: "4", img: agriImages.canopy, height: 450 },
+  { id: "5", img: agriImages.division, height: 280 },
+];
 
 export default function Gallery() {
   const { t } = useLanguage();
   usePageTitle(t.galleryTitle);
-  const [filter, setFilter] = useState<string>("all");
-  const tags: { id: string; label: string }[] = [
-    { id: "all", label: t.filterAll },
-    { id: "platform", label: t.filterPlatform },
-    { id: "attachments", label: t.filterAttachments },
-    { id: "fieldOps", label: t.filterFieldOps },
-  ];
-  const tagLabel = (key: string) => tags.find((tag) => tag.id === key)?.label ?? key;
-  const visible = galleryItems.filter((item) => filter === "all" || item.tagKey === filter);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * Header choreography — one GSAP pass, transform/opacity only:
+   * kicker rises, headline words rise one by one, the surveyor's rule
+   * draws outward from center, sub copy and the provenance rail follow.
+   * The contour rows drift as the single ambient layer.
+   * Reduced motion: skipped entirely — everything renders in final state.
+   */
+  useGSAP(
+    () => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      gsap.from(".gallery-underlay", {
+        autoAlpha: 0,
+        scale: 1.06,
+        duration: 1.2,
+        ease: "power2.out",
+      });
+
+      gsap.from(".gallery-kicker", {
+        autoAlpha: 0,
+        y: 12,
+        duration: 0.6,
+        ease: "power2.out",
+      });
+
+      gsap.from(".gallery-title span", {
+        y: 42,
+        autoAlpha: 0,
+        duration: 0.8,
+        stagger: 0.07,
+        ease: "power3.out",
+        delay: 0.1,
+      });
+
+      gsap.from(".gallery-rule", {
+        scaleX: 0,
+        transformOrigin: "50% 50%",
+        duration: 0.9,
+        delay: 0.5,
+        ease: "power3.out",
+      });
+
+      gsap.from(".gallery-sub", {
+        autoAlpha: 0,
+        y: 18,
+        duration: 0.7,
+        delay: 0.62,
+        ease: "power2.out",
+      });
+
+      gsap.from(".gallery-meta", {
+        autoAlpha: 0,
+        duration: 0.7,
+        delay: 0.78,
+        ease: "power2.out",
+      });
+
+      gsap.to(".gallery-contours", {
+        xPercent: -3,
+        duration: 16,
+        yoyo: true,
+        repeat: -1,
+        ease: "none",
+      });
+    },
+    { scope: rootRef, dependencies: [t.galleryHeading], revertOnUpdate: true },
+  );
+
+  const headingWords = t.galleryHeading.split(" ");
 
   return (
-    <div className="tf-page">
+    <div ref={rootRef} className="tf-page">
       <Navbar />
       <main className="pt-[72px]">
-        <section className="tf-surface py-16 sm:py-24">
-          <div className="tf-container">
-            <SectionKicker number="PROOF" label={t.galleryKicker} />
-            <h1 className="mt-7 max-w-[680px] text-5xl font-medium leading-[.95] tracking-[-.055em] sm:text-7xl">
-              {t.galleryHeading}
-            </h1>
-            <p className="mt-6 max-w-[440px] text-base leading-7 text-[#3F4B45]">
-              {t.gallerySub}
-            </p>
-            <div className="mt-10 flex flex-wrap gap-2">
-              {tags.map((tag) => (
-                <button
-                  key={tag.id}
-                  type="button"
-                  onClick={() => setFilter(tag.id)}
-                  aria-pressed={filter === tag.id}
-                  className={`tf-focus tf-mono border px-4 py-2.5 text-[10px] transition-colors ${
-                    filter === tag.id
-                      ? "border-[#1B8F6A] bg-[#1B8F6A] text-white"
-                      : "border-[#111311]/25 text-[#3F4B45] hover:border-[#1B8F6A]"
-                  }`}
-                >
-                  {tag.label}
-                </button>
+        {/* ── Header: the contact sheet, centered — dark, mono metadata, one rule ── */}
+        <section className="tf-dark tf-scanline relative overflow-hidden">
+          {/* Underlay photo, treated like the other page headers: low opacity,
+              gradient vignetted into the band so copy stays readable. */}
+          <div aria-hidden="true" className="gallery-underlay absolute inset-0">
+            <img src={agriImages.wide} alt="" className="h-full w-full object-cover opacity-15" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#111311] via-[#111311]/50 to-[#111311]" />
+          </div>
+
+          {/* Mono contour rows echoing plantation rows; masked so they read as atmosphere.
+              GSAP drifts the whole layer slowly — the sheet breathes. */}
+          <div
+            aria-hidden="true"
+            className="gallery-contours pointer-events-none absolute inset-0 opacity-50"
+            style={{
+              backgroundImage:
+                "repeating-linear-gradient(90deg, rgba(185,244,212,.05) 0, rgba(185,244,212,.05) 1px, transparent 1px, transparent 72px)",
+              maskImage: "radial-gradient(ellipse 90% 85% at 50% 20%, black 25%, transparent 75%)",
+              WebkitMaskImage: "radial-gradient(ellipse 90% 85% at 50% 20%, black 25%, transparent 75%)",
+            }}
+          />
+
+          <div className="tf-container relative z-10 flex flex-col items-center py-16 text-center sm:py-24">
+            <SectionKicker number="PROOF" label={t.galleryKicker} light className="gallery-kicker justify-center" />
+
+            <h1 className="gallery-title mt-8 max-w-[900px] text-5xl font-medium leading-[.95] tracking-[-.055em] text-white sm:text-7xl lg:text-8xl">
+              {headingWords.map((word, i) => (
+                <span key={`${word}-${i}`} className="inline-block whitespace-pre">
+                  {word + (i < headingWords.length - 1 ? " " : "")}
+                </span>
               ))}
+            </h1>
+
+            {/* The surveyor's rule draws itself outward from center. */}
+            <div aria-hidden="true" className="gallery-rule mt-9 h-px w-16 bg-[#1B8F6A]" />
+
+            <p className="gallery-sub mt-7 max-w-[460px] text-base leading-7 text-white/70">{t.gallerySub}</p>
+
+            {/* Film-sheet provenance, in operator mono — the sheet's own stamp. */}
+            <div className="gallery-meta mt-10 flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+              <span className="h-1 w-1 rounded-full bg-[#1B8F6A]" />
+              <span className="tf-mono text-[10px] text-white/55">{t.galleryMetaOne}</span>
+              <span className="h-px w-5 bg-white/25" />
+              <span className="h-1 w-1 rounded-full bg-[#1B8F6A]" />
+              <span className="tf-mono text-[10px] text-white/55">{t.galleryMetaTwo}</span>
             </div>
           </div>
         </section>
 
-        <section className="tf-dark py-14 sm:py-20">
-          <div className="tf-container grid gap-4 sm:grid-cols-2">
-            {visible.map((item) => {
-              const caption = t.galleryCaptions[item.captionKey];
-              return (
-                <figure key={item.src} className="group relative overflow-hidden bg-[#17201B]">
-                  <img src={item.src} alt={caption} loading="lazy" className="h-[280px] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03] sm:h-[340px]" />
-                  <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 bg-gradient-to-t from-[#0B0F0D]/90 to-transparent p-5">
-                    <span className="max-w-[280px] text-sm text-white">{caption}</span>
-                    <span className="tf-mono shrink-0 text-[9px] text-[#B9F4D4]">{tagLabel(item.tagKey)}</span>
-                  </figcaption>
-                </figure>
-              );
-            })}
-          </div>
-        </section>
-
-        <section className="tf-surface py-14 sm:py-20">
+        {/* ── Frames grid: the masonry continues the dark band without a seam ── */}
+        <section className="tf-dark border-t border-white/10 py-14 sm:py-20">
           <div className="tf-container">
-            <SectionKicker number="TOOLS" label={t.toolsKicker} />
-            <div className="mt-8 grid gap-px border border-[#111311]/15 bg-[#111311]/15 sm:grid-cols-2 lg:grid-cols-4">
-              {attachments.map((item) => {
-                const a = t.attachments[item.id];
-                return (
-                  <div key={item.id} className="bg-white p-6">
-                    <div className="flex items-start justify-between">
-                      <span className="tf-mono text-[10px] text-[#1B8F6A]">{item.number}</span>
-                      <span className="text-2xl font-light text-[#111311]/30">{item.icon}</span>
-                    </div>
-                    <h3 className="mt-8 text-lg font-medium">{a.name}</h3>
-                    <p className="mt-2 text-sm leading-6 text-[#59655F]">{a.copy}</p>
-                  </div>
-                );
-              })}
-            </div>
+            <MasonryGallery
+              items={masonryItems}
+              animateFrom="bottom"
+              blurToFocus={true}
+              stagger={0.08}
+              scaleOnHover={true}
+              hoverScale={0.96}
+            />
           </div>
         </section>
       </main>

@@ -5,12 +5,14 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import SectionKicker from "@/components/SectionKicker";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { submitContact } from "@/lib/api";
 import usePageTitle from "@/hooks/usePageTitle";
 
 export default function Contact() {
   const { t } = useLanguage();
   usePageTitle(t.contactTitle);
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
   const [form, setForm] = useState({ name: "", contact: "", topic: t.contactTopics[0], message: "" });
 
   const contactRows = [
@@ -19,8 +21,16 @@ export default function Contact() {
     { label: t.contactRowEmail, value: "hello@farmbro.example", href: "mailto:hello@farmbro.example" },
   ];
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setSending(true);
+    const error = await submitContact(form);
+    setSending(false);
+
+    if (error) {
+      toast.error(error);
+      return;
+    }
     setSubmitted(true);
     toast.success(t.contactToastTitle, { description: t.contactToastDesc });
   }
@@ -121,7 +131,7 @@ export default function Contact() {
                       className="tf-focus mt-2 w-full resize-none border-b border-[#111311]/25 bg-transparent px-0 py-3 text-sm outline-none placeholder:text-[#7E8983] focus:border-[#1B8F6A]"
                     />
                   </label>
-                  <button type="submit" className="tf-btn tf-btn-primary mt-2">
+                  <button type="submit" disabled={sending} className="tf-btn tf-btn-primary mt-2 disabled:opacity-60">
                     {t.contactSend} <MoveUpRight size={15} />
                   </button>
                 </form>

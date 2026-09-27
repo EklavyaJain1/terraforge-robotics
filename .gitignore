@@ -115,3 +115,6 @@ client/public/__manus__/version.json
 .freebuff/
 .manus-logs/
 .project-config.json
+
+# Superdesign temporary component HTML
+.superdesign/tmp/
