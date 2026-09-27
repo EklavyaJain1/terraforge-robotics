@@ -19,7 +19,8 @@ export const orderMachineIds = [
 
 export const orderRequestSchema = z.object({
   name: z.string().trim().min(2, "Name is too short").max(80),
-  contact: z.string().trim().min(5, "Add a phone number or email").max(120),
+  // Order form packs phone+email+address into one string — allow a full address.
+  contact: z.string().trim().min(5, "Add a phone number or email").max(400),
   machine: z.enum(orderMachineIds),
   quantity: z.coerce.number().int().min(1).max(99),
   notes: z.string().trim().max(1000).optional(),
