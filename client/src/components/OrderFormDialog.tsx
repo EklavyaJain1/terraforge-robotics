@@ -28,18 +28,28 @@ export default function OrderFormDialog(props: OrderFormDialogProps) {
   return clerkKey ? <ClerkOrderForm {...props} /> : <LocalOrderForm {...props} />;
 }
 
+export interface OrderFormState {
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  robot: string;
+  quantity: string;
+  notes: string;
+}
+
 /** Form fields shared by both variants. */
 function FormFields({
   form,
   setForm,
 }: {
-  form: { name: string; contact: string; robot: string; quantity: string; notes: string };
-  setForm: (next: { name: string; contact: string; robot: string; quantity: string; notes: string }) => void;
+  form: OrderFormState;
+  setForm: (next: OrderFormState) => void;
 }) {
   const { t } = useLanguage();
   return (
     <>
-      {/* Step 1: Name & Contact */}
+      {/* Step 1: Name, Phone, Email, Address */}
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block">
           <span className="tf-mono text-[9px] text-[#1B8F6A]/80">{t.orderNameLabel}</span>
@@ -53,13 +63,35 @@ function FormFields({
           />
         </label>
         <label className="block">
-          <span className="tf-mono text-[9px] text-[#1B8F6A]/80">{t.orderContactLabel}</span>
+          <span className="tf-mono text-[9px] text-[#1B8F6A]/80">Phone number</span>
+          <input
+            required
+            type="tel"
+            value={form.phone}
+            onChange={(e) => setForm({ ...form, phone: e.target.value })}
+            placeholder="Phone number"
+            className="order-input mt-2 h-[36px] w-full rounded-[5px] border border-[#1B8F6A]/40 bg-[#1a211d] px-3 text-[13px] font-semibold text-white outline-none transition-all duration-300 placeholder:text-white/25 focus:border-transparent focus:bg-[#242e28] focus:shadow-[0_0_0_2px_rgba(27,143,106,0.4)]"
+          />
+        </label>
+        <label className="block">
+          <span className="tf-mono text-[9px] text-[#1B8F6A]/80">Email</span>
+          <input
+            required
+            type="email"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            placeholder="Email address"
+            className="order-input mt-2 h-[36px] w-full rounded-[5px] border border-[#1B8F6A]/40 bg-[#1a211d] px-3 text-[13px] font-semibold text-white outline-none transition-all duration-300 placeholder:text-white/25 focus:border-transparent focus:bg-[#242e28] focus:shadow-[0_0_0_2px_rgba(27,143,106,0.4)]"
+          />
+        </label>
+        <label className="block">
+          <span className="tf-mono text-[9px] text-[#1B8F6A]/80">Address</span>
           <input
             required
             type="text"
-            value={form.contact}
-            onChange={(e) => setForm({ ...form, contact: e.target.value })}
-            placeholder={t.orderContactPlaceholder}
+            value={form.address}
+            onChange={(e) => setForm({ ...form, address: e.target.value })}
+            placeholder="Address"
             className="order-input mt-2 h-[36px] w-full rounded-[5px] border border-[#1B8F6A]/40 bg-[#1a211d] px-3 text-[13px] font-semibold text-white outline-none transition-all duration-300 placeholder:text-white/25 focus:border-transparent focus:bg-[#242e28] focus:shadow-[0_0_0_2px_rgba(27,143,106,0.4)]"
           />
         </label>
@@ -140,7 +172,7 @@ function ClerkOrderForm({ open, onOpenChange, defaultRobot }: OrderFormDialogPro
   const clerk = useClerk();
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
-  const [form, setForm] = useState({ name: "", contact: "", robot: "", quantity: "1", notes: "" });
+  const [form, setForm] = useState<OrderFormState>({ name: "", phone: "", email: "", address: "", robot: "", quantity: "1", notes: "" });
 
   useEffect(() => {
     if (open) {
@@ -162,7 +194,7 @@ function ClerkOrderForm({ open, onOpenChange, defaultRobot }: OrderFormDialogPro
     setSending(true);
     const error = await submitOrder({
       name: form.name,
-      contact: form.contact,
+      contact: `Phone: ${form.phone}, Email: ${form.email}, Address: ${form.address}`,
       machine: form.robot,
       quantity: form.quantity,
       notes: form.notes || undefined,
@@ -220,7 +252,7 @@ function ClerkOrderForm({ open, onOpenChange, defaultRobot }: OrderFormDialogPro
 function LocalOrderForm({ open, onOpenChange, defaultRobot }: OrderFormDialogProps) {
   const { t } = useLanguage();
   const [submitted, setSubmitted] = useState(false);
-  const [form, setForm] = useState({ name: "", contact: "", robot: "", quantity: "1", notes: "" });
+  const [form, setForm] = useState<OrderFormState>({ name: "", phone: "", email: "", address: "", robot: "", quantity: "1", notes: "" });
 
   useEffect(() => {
     if (open) {
