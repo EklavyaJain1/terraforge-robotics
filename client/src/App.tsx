@@ -63,6 +63,26 @@ function SentryFallback({ error, resetError }: { error: unknown; resetError: () 
   );
 }
 
+/** Everything inside the language theme. ClerkProvider wraps this when configured,
+    so account-aware components (order dialog, navbar account) sit inside it. */
+function SiteShell({ booted, setBooted }: { booted: boolean; setBooted: (b: boolean) => void }) {
+  return (
+    <OrderProvider>
+      <TooltipProvider>
+        {/* The app mounts underneath immediately; the boot screen covers it
+            and wipes away once the first frame can actually paint. */}
+        {!booted && <BootScreen onDone={() => setBooted(true)} />}
+        <div aria-hidden={!booted}>
+          <Toaster />
+          <ScrollToTop />
+          <Router />
+          <WhatsAppBadge />
+        </div>
+      </TooltipProvider>
+    </OrderProvider>
+  );
+}
+
 export default function App() {
   const [booted, setBooted] = useState(false);
   useSmoothScroll();
@@ -78,25 +98,13 @@ export default function App() {
     <Sentry.ErrorBoundary fallback={SentryFallback}>
       <ThemeProvider defaultTheme="light">
         <LanguageProvider>
-          <OrderProvider>
-            <TooltipProvider>
-              {/* The app mounts underneath immediately; the boot screen covers it
-                  and wipes away once the first frame can actually paint. */}
-              {!booted && <BootScreen onDone={() => setBooted(true)} />}
-              <div aria-hidden={!booted}>
-                <Toaster />
-                <ScrollToTop />
-                {clerkKey ? (
-                  <ClerkProvider publishableKey={clerkKey}>
-                    <Router />
-                  </ClerkProvider>
-                ) : (
-                  <Router />
-                )}
-                <WhatsAppBadge />
-              </div>
-            </TooltipProvider>
-          </OrderProvider>
+          {clerkKey ? (
+            <ClerkProvider publishableKey={clerkKey}>
+              <SiteShell booted={booted} setBooted={setBooted} />
+            </ClerkProvider>
+          ) : (
+            <SiteShell booted={booted} setBooted={setBooted} />
+          )}
         </LanguageProvider>
       </ThemeProvider>
     </Sentry.ErrorBoundary>

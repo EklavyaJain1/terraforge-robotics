@@ -24,7 +24,14 @@ import { requireAuth } from "./middleware/auth";
 import { orderRequestSchema, contactRequestSchema, type OrderRequest, type ContactRequest } from "../shared/api";
 import { Sentry } from "./instrument";
 
-loadEnv();
+loadEnv(); // .env — project defaults
+// `.env.local` is written by `clerk init` / `clerk env pull` — its keys win.
+loadEnv({ path: ".env.local", override: true });
+// Clerk's server SDK reads CLERK_PUBLISHABLE_KEY; Vite writes the VITE_-prefixed
+// name for the browser. Publishable keys are public — alias it for the API.
+if (!process.env.CLERK_PUBLISHABLE_KEY && process.env.VITE_CLERK_PUBLISHABLE_KEY) {
+  process.env.CLERK_PUBLISHABLE_KEY = process.env.VITE_CLERK_PUBLISHABLE_KEY;
+}
 
 const app = express();
 const isProd = process.env.NODE_ENV === "production";
@@ -198,6 +205,7 @@ if (isProd) {
 Sentry.setupExpressErrorHandler(app);
 
 const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+  console.error("[api:error]", err);
   Sentry.captureException(err);
   const status = typeof (err as { status?: number })?.status === "number" ? (err as { status: number }).status : 500;
   res.status(status).json({ error: status === 500 ? "Internal server error" : (err as Error).message });
