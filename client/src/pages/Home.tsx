@@ -10,6 +10,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import usePageTitle from "@/hooks/usePageTitle";
 import { robots, agriImages } from "@/data/catalog";
 import { trackSpotlight } from "@/lib/spotlight";
+import { useCart } from "@/contexts/CartContext";
 
 const pillars = [
   { icon: Radar },
@@ -67,7 +68,7 @@ const TextbookHighlight = ({ children }: { children: React.ReactNode }) => {
 export default function Home() {
   const { t } = useLanguage();
   usePageTitle(t.homeTitle);
-  const { openOrderForm } = useOrderForm();
+  const { openCart } = useCart();
 
   // Light parallax: the hero film drifts up slightly slower than the page scrolls.
   const heroRef = useRef<HTMLElement>(null);
@@ -400,11 +401,11 @@ export default function Home() {
               </div>
               <div className="flex flex-col items-start justify-center gap-6">
                 <div className="grid w-full gap-px border border-white/20 bg-white/20 sm:grid-cols-3">
-                  <a href="tel:+919154153925" className="tf-focus bg-[#1B8F6A] px-4 py-4 transition-colors hover:bg-[#0F6F51]">
+                  <a href="tel:+919401352202" className="tf-focus bg-[#1B8F6A] px-4 py-4 transition-colors hover:bg-[#0F6F51]">
                     <span className="tf-mono block text-[9px] text-white/60">{t.orderCallLabel}</span>
-                    <span className="mt-1 block text-sm font-medium">+91 91541 53925</span>
+                    <span className="mt-1 block text-sm font-medium tabular-nums">+91 94013 52202</span>
                   </a>
-                  <a href="https://wa.me/919154153925" target="_blank" rel="noreferrer" className="tf-focus bg-[#1B8F6A] px-4 py-4 transition-colors hover:bg-[#0F6F51]">
+                  <a href="https://wa.me/919401352202" target="_blank" rel="noreferrer" className="tf-focus bg-[#1B8F6A] px-4 py-4 transition-colors hover:bg-[#0F6F51]">
                     <span className="tf-mono block text-[9px] text-white/60">{t.orderWhatsappLabel}</span>
                     <span className="mt-1 block text-sm font-medium">{t.whatsappCta}</span>
                   </a>
@@ -418,7 +419,7 @@ export default function Home() {
                     <Check size={14} className="shrink-0" />
                     <span className="rounded bg-white/15 px-2.5 py-1 leading-snug">{t.engineerNote}</span>
                   </p>
-                  <button type="button" onClick={() => openOrderForm()} className="tf-btn tf-btn-quiet text-sm shrink-0 whitespace-nowrap">
+                  <button type="button" onClick={openCart} className="tf-btn tf-btn-quiet text-sm shrink-0 whitespace-nowrap">
                     {t.orderCta} <ArrowUpRight size={15} />
                   </button>
                 </div>

@@ -25,10 +25,9 @@ export interface Robot {
   configuration: string;
   tagline: string;
   body: string;
-  priceLabel: string;
+  /** Whole rupees — demo pricing for the cart and checkout. */
+  price: number;
   badge?: string;
-  valueNote?: string;
-  availability: string;
   power?: string;
   slope?: string;
   specs: [string, string][];
@@ -57,9 +56,8 @@ export const robots: Robot[] = [
     configuration: "4X4 UGV",
     tagline: "Heavy mulching, no driver on the machine.",
     body: "A full-size remote-controlled mulcher for open fields and orchard blocks. The hybrid power pack keeps long mulching days going, while the operator works the machine from a safe distance with a rugged remote unit.",
-    priceLabel: "Price on request",
+    price: 850000,
     badge: "Flagship",
-    availability: "Field demonstrations open on request",
     power: "Hybrid",
     specs: [
       ["Configuration", "4X4 UGV"],
@@ -86,9 +84,8 @@ export const robots: Robot[] = [
     configuration: "6X6 UGV",
     tagline: "Mulch, spray, and carry — one unmanned carrier.",
     body: "One unmanned carrier that covers three season jobs: mulching between rows, spraying on schedule, and moving harvest or inputs across the estate. The six-wheel configuration is made for plantation rows and uneven estate tracks.",
-    priceLabel: "Price on request",
+    price: 1250000,
     badge: "Best seller",
-    availability: "Estate pilots open on request",
     specs: [
       ["Configuration", "6X6 UGV"],
       ["Operation", "Remote controlled"],
@@ -113,22 +110,20 @@ export const robots: Robot[] = [
     tier: "Agriculture platform",
     configuration: "4X4 UGV",
     tagline: "For the blocks a tractor can't reach.",
-    body: "The compact electric mulcher for hard-to-reach ground — terraces, orchard basins, and narrow blocks where bigger machines stall. Quiet, fume-free passes with full remote control.",
-    priceLabel: "Price on request",
-    valueNote: "For hard to reach areas, capable of moving at 45° slope.",
-    availability: "Demonstrations open on request",
+    body: "A compact electric mulcher built for ground the rest of the fleet can't work — narrow blocks, orchard basins, and tight terraces. Quiet, fume-free passes with full remote control.",
+    price: 550000,
     power: "Electric",
-    slope: "Up to 45°",
+    slope: "Steep-slope capable",
     specs: [
       ["Configuration", "4X4 UGV"],
       ["Power", "Electric"],
       ["Operation", "Remote controlled"],
-      ["Slope capability", "Up to 45°"],
+      ["Terrain", "Tight and sloped ground"],
     ],
     highlights: [
       "Compact 4X4 platform for tight ground",
       "Electric drive — quiet and fume-free",
-      "Moves on slopes up to 45°",
+      "Works slopes tractors can't",
       "Reaches where tractors and carriers can't",
     ],
   },
@@ -144,9 +139,8 @@ export const robots: Robot[] = [
     configuration: "Scouting drone",
     tagline: "The estate from above, before you commit the crew.",
     body: "A crop-scouting drone that flies the block before the machines roll — canopy health, water stress, and pest pressure mapped in one pass, so mulching and spraying go exactly where the field needs them.",
-    priceLabel: "Price on request",
+    price: 250000,
     badge: "Scout",
-    availability: "Scouting demonstrations open on request",
     specs: [
       ["Type", "Crop scouting drone"],
       ["Operation", "Remote controlled / autopilot survey"],
@@ -165,7 +159,8 @@ export const robots: Robot[] = [
 export interface Attachment {
   id: AttachmentId;
   icon: string;
-  priceLabel: string;
+  /** Whole rupees — cart + checkout price. */
+  price: number;
   number: string;
   name: string;
   copy: string;
@@ -173,11 +168,28 @@ export interface Attachment {
 }
 
 export const attachments: Attachment[] = [
-  { id: "A01", icon: "✣", priceLabel: "₹42,000", number: "A01", name: "Rotary tiller", copy: "Aerate 3–4 inches deep while cutting weed roots between rows.", stat: "3–4 in depth" },
-  { id: "A02", icon: "⌁", priceLabel: "₹38,000", number: "A02", name: "Boom sprayer", copy: "Adjustable nozzles deliver a fine, even spray with less chemical drift. 300 L tank on the implement rail.", stat: "10–15 ft reach" },
-  { id: "A03", icon: "╱", priceLabel: "₹26,000", number: "A03", name: "Brush cutter", copy: "Clear overgrowth cleanly without disturbing the crop beside it.", stat: "Row-safe cut" },
-  { id: "A04", icon: "▱", priceLabel: "₹55,000", number: "A04", name: "Field trailer", copy: "Move tools, harvest crates, or inputs without adding another vehicle.", stat: "Up to 250 kg" },
+  { id: "A01", icon: "✣", price: 42000, number: "A01", name: "Rotary tiller", copy: "Aerate 3–4 inches deep while cutting weed roots between rows.", stat: "3–4 in depth" },
+  { id: "A02", icon: "⌁", price: 38000, number: "A02", name: "Boom sprayer", copy: "Adjustable nozzles deliver a fine, even spray with less chemical drift. 300 L tank on the implement rail.", stat: "10–15 ft reach" },
+  { id: "A03", icon: "╱", price: 26000, number: "A03", name: "Brush cutter", copy: "Clear overgrowth cleanly without disturbing the crop beside it.", stat: "Row-safe cut" },
+  { id: "A04", icon: "▱", price: 55000, number: "A04", name: "Field trailer", copy: "Move tools, harvest crates, or inputs without adding another vehicle.", stat: "Up to 250 kg" },
 ];
+
+/** Rupee formatter shared by cart, drawer, and checkout. */
+export const formatINR = (paise: number) =>
+  new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(paise / 100);
+
+/** Cart line key — one id per robot or attachment. */
+export type CartItemKind = "robot" | "attachment";
+export type CartItemId = RobotId | AttachmentId;
+
+export function catalogItem(kind: CartItemKind, id: CartItemId): { name: string; price: number; image: string } | undefined {
+  if (kind === "robot") {
+    const r = robots.find((x) => x.id === id);
+    return r ? { name: r.name, price: r.price, image: r.image } : undefined;
+  }
+  const a = attachments.find((x) => x.id === id);
+  return a ? { name: a.name, price: a.price, image: a.icon } : undefined;
+}
 
 /** Language-independent ids for the order dialog's Machine select.
     Labels resolve from the active dictionary, so prefills survive translation. */

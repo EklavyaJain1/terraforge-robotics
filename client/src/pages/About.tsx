@@ -3,14 +3,12 @@ import { Link } from "wouter";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import SectionKicker from "@/components/SectionKicker";
-import { useOrderForm } from "@/contexts/OrderContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import usePageTitle from "@/hooks/usePageTitle";
 
 export default function About() {
   const { t } = useLanguage();
   usePageTitle(t.aboutTitle);
-  const { openOrderForm } = useOrderForm();
 
   return (
     <div className="tf-page">
@@ -62,11 +60,11 @@ export default function About() {
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <button type="button" onClick={() => openOrderForm()} className="tf-btn tf-btn-primary">
+              <Link href="/farmbro" className="tf-btn tf-btn-primary">
                 {t.aboutOrder} <MoveUpRight size={14} />
-              </button>
-              <Link href="/farmbro" className="tf-btn tf-btn-outline">
-                {t.aboutBrowse}
+              </Link>
+              <Link href="/contact" className="tf-btn tf-btn-outline">
+                {t.contact}
               </Link>
             </div>
           </div>

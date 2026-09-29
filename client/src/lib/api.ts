@@ -2,8 +2,9 @@
  * Typed browser client for the FarmBro API.
  * Validates payloads with the same zod schemas the server uses (shared/api.ts),
  * so a request that would be rejected locally never leaves the browser.
+ * Full-shaped POST helper with typed payloads — payments use narrow wrappers above.
  */
-import { orderRequestSchema, contactRequestSchema, type OrderRequest, type ContactRequest, type ApiError } from "@shared/api";
+import { orderRequestSchema, contactRequestSchema, paymentRequestSchema, paymentVerifySchema, type OrderRequest, type ContactRequest, type PaymentRequest, type PaymentVerify, type PaymentOrderResponse, type ApiError } from "@shared/api";
 
 const BASE = "/api";
 
@@ -47,6 +48,36 @@ export async function submitOrder(input: SubmitOrderInput): Promise<string | nul
   }
   const result = await post<OrderRequest>("/orders", parsed.data);
   return result.ok ? null : (result.details ? `${result.error}: ${Object.values(result.details).flat()[0]}` : result.error);
+}
+
+/** Demo checkout: create a payment order. Real Razorpay keys on the server
+    switch this to a genuine test-mode order (demo handle absent). */
+export async function createDemoPayment(input: { amount: number; notes?: string }): Promise<PaymentOrderResponse> {
+  const parsed = paymentRequestSchema.safeParse(input);
+  if (!parsed.success) {
+    const first = Object.values(parsed.error.flatten().fieldErrors).flat()[0];
+    throw new Error(first ?? "Invalid payment request");
+  }
+  const res = await fetch(`${BASE}/payments/create`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(parsed.data satisfies PaymentRequest),
+  });
+  if (!res.ok) throw new Error(`Payment create failed (${res.status})`);
+  return (await res.json()) as PaymentOrderResponse;
+}
+
+/** Demo checkout: confirm the payment server-side before clearing the cart. */
+export async function verifyDemoPayment(input: { orderId: string }): Promise<{ verified: boolean }> {
+  const parsed = paymentVerifySchema.safeParse(input);
+  if (!parsed.success) return { verified: false };
+  const res = await fetch(`${BASE}/payments/verify`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(parsed.data satisfies PaymentVerify),
+  });
+  if (!res.ok) return { verified: false };
+  return (await res.json()) as { verified: boolean };
 }
 
 export interface SubmitContactInput {

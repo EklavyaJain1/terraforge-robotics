@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import SectionKicker from "@/components/SectionKicker";
-import { useOrderForm } from "@/contexts/OrderContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import usePageTitle from "@/hooks/usePageTitle";
 import { agriImages } from "@/data/catalog";
@@ -27,7 +26,6 @@ const warrantyItems = [
 export default function Services() {
   const { t } = useLanguage();
   usePageTitle(t.servicesTitle);
-  const { openOrderForm } = useOrderForm();
 
   return (
     <div className="tf-page">
@@ -237,10 +235,10 @@ export default function Services() {
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <button type="button" onClick={() => openOrderForm("unsure")} className="tf-btn tf-btn-quiet text-sm">
-                {t.servicesBookTrial} <MoveUpRight size={14} />
-              </button>
-              <Link href="/farmbro" className="rounded-lg border border-white/30 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-white/10">
+              <Link href="/contact" className="rounded-lg border border-white/30 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-white/10">
+                {t.servicesBookTrial}
+              </Link>
+              <Link href="/farmbro" className="rounded-lg bg-white px-5 py-3 text-sm font-semibold text-[#1B8F6A] transition-colors hover:bg-[#B9F4D4]">
                 {t.servicesBrowse}
               </Link>
             </div>

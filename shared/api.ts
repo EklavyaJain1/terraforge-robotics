@@ -27,6 +27,27 @@ export const orderRequestSchema = z.object({
 });
 export type OrderRequest = z.infer<typeof orderRequestSchema>;
 
+/** Demo checkout payload — create a payment order for the cart total. */
+export const paymentRequestSchema = z.object({
+  /** Amount in paise (₹1 = 100). Server clamps to the demo catalog range. */
+  amount: z.coerce.number().int().min(100).max(50000000),
+  notes: z.string().trim().max(300).optional(),
+});
+export type PaymentRequest = z.infer<typeof paymentRequestSchema>;
+
+/** Server response: either a demo checkout handle or a real Razorpay order id. */
+export interface PaymentOrderResponse {
+  orderId: string;
+  demo?: {
+    complete: () => Promise<boolean>;
+  };
+}
+
+export const paymentVerifySchema = z.object({
+  orderId: z.string().trim().min(4).max(80),
+});
+export type PaymentVerify = z.infer<typeof paymentVerifySchema>;
+
 export const contactRequestSchema = z.object({
   name: z.string().trim().min(2, "Name is too short").max(80),
   contact: z.string().trim().min(5, "Add a phone number or email").max(120),

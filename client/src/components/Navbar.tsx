@@ -1,10 +1,11 @@
-import { Check, Languages, MoveUpRight, UserRound } from "lucide-react";
+import { Check, Languages, MoveUpRight, ShoppingCart, UserRound } from "lucide-react";
 import { House, Images, Info, Mail, Tractor, Wrench } from "lucide-react";
 import { Link } from "wouter";
 import { useAuth, useClerk, UserButton } from "@clerk/react";
 import NavbarLanguagePicker from "@/components/NavbarLanguagePicker";
 import { FloatingDock } from "@/components/ui/floating-dock";
 import { useOrderForm } from "@/contexts/OrderContext";
+import { useCart } from "@/contexts/CartContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 function AppMark() {
@@ -54,8 +55,8 @@ function NavbarAccount() {
 }
 
 export default function Navbar() {
-  const { openOrderForm } = useOrderForm();
   const { t } = useLanguage();
+  const { count, openCart } = useCart();
   const clerkKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string | undefined;
 
   const navItems = [
@@ -87,11 +88,23 @@ export default function Navbar() {
             {clerkKey && <NavbarAccount />}
             <button
               type="button"
-              onClick={() => openOrderForm()}
+              onClick={openCart}
+              aria-label={`${t.cartAria} (${count})`}
+              className="tf-focus relative flex size-[34px] items-center justify-center rounded-full border border-white/20 text-white/85 transition-colors hover:border-[#B9F4D4] hover:text-white"
+            >
+              <ShoppingCart size={15} />
+              {count > 0 && (
+                <span className="absolute -right-1 -top-1 flex min-w-[16px] items-center justify-center rounded-full bg-[#1B8F6A] px-1 text-[9px] font-bold leading-4 text-white tabular-nums">
+                  {count > 9 ? "9+" : count}
+                </span>
+              )}
+            </button>
+            <Link
+              href="/farmbro"
               className="tf-focus tf-btn tf-btn-primary min-h-[34px] px-3.5 text-[11px]"
             >
-              {t.orderNow} <MoveUpRight size={13} />
-            </button>
+              {t.cardOrderNow} <MoveUpRight size={13} />
+            </Link>
           </div>
         </div>
       </header>

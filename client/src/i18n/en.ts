@@ -7,7 +7,6 @@ import type { AttachmentId, RobotId } from "@/data/catalog";
  */
 export const en = {
   // ── Header / navigation ────────────────────────────────────────────────
-  orderNow: "Book Now",
   home: "Home",
   farmbro: "FarmBro",
   services: "Services",
@@ -18,6 +17,8 @@ export const en = {
   appMarkAria: "FarmBro home",
   changeLanguage: "Change language",
   chooseLanguage: "Choose language",
+  cartAria: "Open cart",
+  cartTitle: "Your cart",
 
   // ── Boot screen ────────────────────────────────────────────────────────
   bootAria: "FarmBro is loading",
@@ -77,12 +78,45 @@ export const en = {
     "Not sure yet",
   ],
 
+  // ── Cart ───────────────────────────────────────────────────────────────
+  cartEmpty: "Your cart is empty.",
+  cartEmptySub: "Browse the lineup and add a machine or an attachment.",
+  cartBrowse: "Browse machines",
+  cartSubtotal: "Subtotal",
+  cartShipping: "Shipping",
+  cartShippingNote: "Calculated at checkout",
+  cartItemsOne: "1 item",
+  cartItemsMany: "{n} items",
+  cartProceed: "Proceed to checkout",
+  cartRemoveAria: "Remove {name} from cart",
+  cartAdded: "Added to cart",
+  cartQtyDecAria: "Decrease quantity",
+  cartQtyIncAria: "Increase quantity",
+  checkoutTitle: "Checkout",
+  checkoutSignedInAs: "Signed in as",
+  checkoutDeliveryLabel: "Delivery details",
+  checkoutDeliveryPlaceholder: "Address and preferred delivery window",
+  checkoutPhoneLabel: "Phone number",
+  checkoutPhonePlaceholder: "10-digit mobile number",
+  checkoutPay: "Pay {amount}",
+  checkoutPaying: "Processing…",
+  checkoutLoginPrompt: "Sign in to continue to payment.",
+  checkoutLoginBtn: "Sign in to continue",
+  checkoutSuccessTitle: "Payment received.",
+  checkoutSuccessBody: "Your order is confirmed. A FarmBro specialist will call to schedule delivery and operator training.",
+  checkoutCatalogueKicker: "Keep exploring",
+  checkoutCatalogueHeading: "Other machines from the lineup.",
+  checkoutCatalogueAdd: "Add to cart",
+  checkoutDemoNote: "Demo checkout — no real payment is processed.",
+  checkoutError: "Payment could not be completed. Please try again.",
+  checkoutOrdersLine: "Order saved. Payment reference: {id}",
+
   // ── Shared product vocabulary ──────────────────────────────────────────
   configLabel: "Configuration",
   cardViewAria: "View {name}",
   cardVisit: "Visit machine",
-  cardPriceLabel: "Indicative price",
-  cardOrderNow: "Book now",
+  cardOrderNow: "Book Now",
+  cardAddToCart: "Add to cart",
 
   // ── Savings calculator ─────────────────────────────────────────────────
   calcKickerLabel: "Savings calculator",
@@ -160,15 +194,7 @@ export const en = {
   compareSlope: "Slope",
   attachmentsKicker: "Attachments",
   attachmentsHeading: "Tools that ship with your machine.",
-  attachmentsCta: "Order attachments",
   attachmentsFitNote: "Every attachment fits the FarmBro implement rail — no adapters needed.",
-  whoKicker: "Who we build for",
-  whoHeading: "One store. Three kinds of buyers.",
-  audiences: [
-    { label: "Progressive farmers", copy: "Field demonstrations on your land, seasonal booking, and operator training included with every machine.", cta: "Order as a farmer" },
-    { label: "Agri enterprises & estates", copy: "Multi-machine fleets with dashboards, operator certification for your crews, and pilot programmes before capital commitment.", cta: "Request fleet pricing" },
-    { label: "Government & defence", copy: "Make-in-India compliance documentation, institutional procurement support, and deployment engineering for large public programmes.", cta: "Start institutional enquiry" },
-  ],
   notSureHeading: "Not sure which machine fits?",
   notSureBody: "Tell us your crop, acreage, and the job that hurts most. We will recommend the machine — even if it is the smaller one.",
   notSureCta: "Get a recommendation",
@@ -230,9 +256,9 @@ export const en = {
   faqHeadingA: "Frequently Asked",
   faqHeadingB: "Questions",
   faqs: [
-    { q: "What makes FarmBro different from a regular tractor?", a: "FarmBro machines are purpose-built, remote-controlled robots. They eliminate the need for a driver on the machine, work on slopes up to 45°, and are far lighter than tractors — meaning zero soil compaction." },
+    { q: "What makes FarmBro different from a regular tractor?", a: "FarmBro machines are purpose-built, remote-controlled robots. They eliminate the need for a driver on the machine and are far lighter than tractors — meaning zero soil compaction." },
     { q: "Do I need any special training to operate the robots?", a: "No. Our remote units are designed for simplicity. Most operators are comfortable within 30 minutes of hands-on training. We provide on-site training with every delivery." },
-    { q: "Can FarmBro robots work on steep terrain?", a: "Absolutely. Our 4×4 platform with independent electric drive handles slopes up to 45°. This makes them ideal for vineyards, tea estates, and hillside orchards where tractors cannot safely operate." },
+    { q: "Can FarmBro robots work on steep terrain?", a: "Yes. Our 4×4 platform with independent electric drive is built for sloped and uneven ground. This makes it ideal for vineyards, tea estates, and hillside orchards where tractors cannot safely operate." },
     { q: "What is the range and battery life?", a: "Our hybrid models offer extended runtime for all-day operations. The electric models provide 4–6 hours of continuous operation depending on terrain and workload, with fast swap battery options available." },
     { q: "Is the Canopy Scout drone autonomous?", a: "The Canopy Scout flies pre-programmed survey missions autonomously, capturing multispectral imagery. It returns to base, uploads data, and generates actionable crop health maps — all without manual piloting." },
     { q: "Do you support enterprise and defense contracts?", a: "Yes. FarmBro works with enterprises, agricultural cooperatives, and defense organizations. We offer fleet management, custom integrations, and dedicated support for large-scale deployments." },
@@ -335,13 +361,12 @@ export const en = {
   pdImageAlt: "{name} — view {n}",
   pdWhyKicker: "Why operators pick it",
   pdSpecsKicker: "Specifications",
-  pdSpecsHeading: "The spec sheet.",
+  pdSpecsHeading: "Specifications",
   pdSpecsSub: "Published figures only. The full engineering sheet ships with every enquiry.",
   pdGalleryKicker: "Gallery",
   pdOrderHeading: "Put the {config} to work on your rows.",
-  pdOrderSub: "We'll bring this machine to a representative patch of your farm. {availability}.",
+  pdOrderSub: "We'll bring this machine to a representative patch of your farm for a working demonstration.",
   pdCompareHeading: "Compare with the rest of the lineup.",
-  pdViewAll: "View all",
 
   // ── Machines (from the catalog) ────────────────────────────────────────
   machines: {
@@ -351,9 +376,7 @@ export const en = {
       configuration: "4X4 UGV",
       tagline: "Heavy mulching, no driver on the machine.",
       body: "A full-size remote-controlled mulcher for open fields and orchard blocks. The hybrid power pack keeps long mulching days going, while the operator works the machine from a safe distance with a rugged remote unit.",
-      priceLabel: "Price on request",
       badge: "Flagship",
-      availability: "Field demonstrations open on request",
       power: "Hybrid",
       specs: [
         ["Configuration", "4X4 UGV"],
@@ -374,9 +397,7 @@ export const en = {
       configuration: "6X6 UGV",
       tagline: "Mulch, spray, and carry — one unmanned carrier.",
       body: "One unmanned carrier that covers three season jobs: mulching between rows, spraying on schedule, and moving harvest or inputs across the estate. The six-wheel configuration is made for plantation rows and uneven estate tracks.",
-      priceLabel: "Price on request",
       badge: "Best seller",
-      availability: "Estate pilots open on request",
       specs: [
         ["Configuration", "6X6 UGV"],
         ["Operation", "Remote controlled"],
@@ -395,22 +416,19 @@ export const en = {
       tier: "Agriculture platform",
       configuration: "4X4 UGV",
       tagline: "For the blocks a tractor can't reach.",
-      body: "The compact electric mulcher for hard-to-reach ground — terraces, orchard basins, and narrow blocks where bigger machines stall. Quiet, fume-free passes with full remote control.",
-      priceLabel: "Price on request",
-      valueNote: "For hard to reach areas, capable of moving at 45° slope.",
-      availability: "Demonstrations open on request",
+      body: "A compact electric mulcher built for ground the rest of the fleet can't work — narrow blocks, orchard basins, and tight terraces. Quiet, fume-free passes with full remote control.",
       power: "Electric",
-      slope: "Up to 45°",
+      slope: "Steep-slope capable",
       specs: [
         ["Configuration", "4X4 UGV"],
         ["Power", "Electric"],
         ["Operation", "Remote controlled"],
-        ["Slope capability", "Up to 45°"],
+        ["Terrain", "Tight and sloped ground"],
       ],
       highlights: [
         "Compact 4X4 platform for tight ground",
         "Electric drive — quiet and fume-free",
-        "Moves on slopes up to 45°",
+        "Works slopes tractors can't",
         "Reaches where tractors and carriers can't",
       ],
     },
@@ -420,9 +438,7 @@ export const en = {
       configuration: "Scouting drone",
       tagline: "The estate from above, before you commit the crew.",
       body: "A crop-scouting drone that flies the block before the machines roll — canopy health, water stress, and pest pressure mapped in one pass, so mulching and spraying go exactly where the field needs them.",
-      priceLabel: "Price on request",
       badge: "Scout",
-      availability: "Scouting demonstrations open on request",
       specs: [
         ["Type", "Crop scouting drone"],
         ["Operation", "Remote controlled / autopilot survey"],
@@ -454,10 +470,7 @@ export interface MachineStrings {
   configuration: string;
   tagline: string;
   body: string;
-  priceLabel: string;
   badge?: string;
-  valueNote?: string;
-  availability: string;
   power?: string;
   slope?: string;
   specs: [string, string][];

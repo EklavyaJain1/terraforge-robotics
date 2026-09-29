@@ -16,8 +16,8 @@ export default function Contact() {
   const [form, setForm] = useState({ name: "", contact: "", topic: t.contactTopics[0], message: "" });
 
   const contactRows = [
-    { label: t.contactRowCall, value: "+91 91541 53925", href: "tel:+919154153925" },
-    { label: t.contactRowWhatsapp, value: t.contactWhatsappValue, href: "https://wa.me/919154153925" },
+    { label: t.contactRowCall, value: "+91 94013 52202", href: "tel:+919401352202" },
+    { label: t.contactRowWhatsapp, value: t.contactWhatsappValue, href: "https://wa.me/919401352202" },
     { label: t.contactRowEmail, value: "hello@farmbro.example", href: "mailto:hello@farmbro.example" },
   ];
 
@@ -57,17 +57,24 @@ export default function Contact() {
           <div className="tf-container grid gap-12 lg:grid-cols-[.7fr_1.3fr] lg:gap-24">
             <div>
               <SectionKicker number="REACH" label={t.directKicker} />
+              {/* Number first — the fastest path to a human — then the written lines */}
+              <a href="tel:+919401352202" className="tf-focus mt-8 block">
+                <div className="tf-mono text-[9px] text-[#64736C]">{t.contactRowCall}</div>
+                <div className="mt-1 text-3xl font-medium tracking-[-.02em] text-[#111311] transition-colors hover:text-[#1B8F6A] tabular-nums sm:text-4xl">
+                  +91 94013 52202
+                </div>
+              </a>
+              <p className="mt-5 max-w-[280px] text-sm leading-6 text-[#59655F]">
+                {t.contactHours}
+              </p>
               <div className="mt-8 divide-y divide-[#111311]/15 border-y border-[#111311]/15">
-                {contactRows.map((row) => (
+                {contactRows.slice(1).map((row) => (
                   <a key={row.label} href={row.href} target={row.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer" className="block py-5">
                     <div className="tf-mono text-[9px] text-[#64736C]">{row.label}</div>
                     <div className="mt-1 text-base font-medium text-[#111311] hover:text-[#1B8F6A]">{row.value}</div>
                   </a>
                 ))}
               </div>
-              <p className="mt-6 max-w-[280px] text-sm leading-6 text-[#59655F]">
-                {t.contactHours}
-              </p>
             </div>
             <div className="border border-[#111311]/15 bg-white p-6 sm:p-8">
               {submitted ? (

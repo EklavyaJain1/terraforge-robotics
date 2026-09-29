@@ -6,12 +6,14 @@ import Navbar from "@/components/Navbar";
 import SavingsCalculator from "@/components/SavingsCalculator";
 import SectionKicker from "@/components/SectionKicker";
 import TiltCard from "@/components/ui/tilt-card";
-import { useOrderForm } from "@/contexts/OrderContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import usePageTitle from "@/hooks/usePageTitle";
 import { attachments, robots, agriImages, type Robot } from "@/data/catalog";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import { ShoppingCart } from "lucide-react";
 import { FlowButton } from "@/components/ui/flow-button";
+import { useCart } from "@/contexts/CartContext";
+import { formatINR } from "@/data/catalog";
 
 function CompareRow({ label, keywords, machineField }: { label: string; keywords: string[]; machineField?: "power" | "slope" }) {
   const { t } = useLanguage();
@@ -26,7 +28,7 @@ function CompareRow({ label, keywords, machineField }: { label: string; keywords
         // other rows fall back to spec-label matching within the active language.
         const value =
           label === "price"
-            ? m.priceLabel
+            ? formatINR(robot.price * 100)
             : label === "configuration"
               ? m.configuration
               : machineField && m[machineField]
@@ -72,7 +74,6 @@ function CompareTable() {
 }
 
 function RobotCard({ robot }: { robot: Robot }) {
-  const { openOrderForm } = useOrderForm();
   const { t } = useLanguage();
   const m = t.machines[robot.id];
   return (
@@ -103,8 +104,8 @@ function RobotCard({ robot }: { robot: Robot }) {
               {m.tagline}
             </p>
             <div className="mt-6 flex items-center justify-between">
-              <span className="bg-gradient-to-r from-[#B9F4D4] to-[#1B8F6A] bg-clip-text text-sm font-medium text-transparent">
-                {m.priceLabel}
+              <span className="bg-gradient-to-r from-[#B9F4D4] to-[#1B8F6A] bg-clip-text text-sm font-medium text-transparent tabular-nums">
+                {formatINR(robot.price * 100)}
               </span>
               <div className="inline-flex items-center gap-2 text-xs font-medium text-white transition-colors group-hover:text-[#B9F4D4]">
                 {t.cardVisit} <MoveUpRight size={14} className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -120,7 +121,7 @@ function RobotCard({ robot }: { robot: Robot }) {
 export default function FarmBro() {
   const { t } = useLanguage();
   usePageTitle(t.storeTitle);
-  const { openOrderForm } = useOrderForm();
+  const { addItem } = useCart();
   const [compare, setCompare] = useState(false);
 
   return (
@@ -197,17 +198,24 @@ export default function FarmBro() {
               {attachments.map((item) => {
                 const a = t.attachments[item.id];
                 return (
-                  <div key={item.id} className="bg-white p-6">
+                  <div key={item.id} className="flex flex-col bg-white p-6">
                     <div className="flex items-start justify-between">
                       <span className="tf-mono text-[10px] text-[#1B8F6A]">{item.number}</span>
                       <span className="text-2xl font-light text-[#111311]/30">{item.icon}</span>
                     </div>
                     <h3 className="mt-8 text-lg font-medium">{a.name}</h3>
-                    <p className="mt-2 text-sm leading-6 text-[#59655F]">{a.copy}</p>
+                    <p className="mt-2 flex-1 text-sm leading-6 text-[#59655F]">{a.copy}</p>
                     <div className="mt-5 flex items-center justify-between border-t border-[#111311]/15 pt-3">
                       <span className="tf-mono text-[9px] text-[#64736C]">{a.stat}</span>
-                      <span className="text-sm font-semibold text-[#111311]">{item.priceLabel}</span>
+                      <span className="text-sm font-semibold text-[#111311] tabular-nums">{formatINR(item.price * 100)}</span>
                     </div>
+                    <button
+                      type="button"
+                      onClick={() => addItem("attachment", item.id)}
+                      className="tf-focus tf-btn tf-btn-outline mt-3 min-h-[38px] w-full text-xs"
+                    >
+                      <ShoppingCart size={14} /> {t.cardAddToCart}
+                    </button>
                   </div>
                 );
               })}
@@ -224,9 +232,9 @@ export default function FarmBro() {
               <h2 className="text-3xl font-medium tracking-[-.04em] text-white sm:text-4xl">{t.notSureHeading}</h2>
               <p className="mt-3 max-w-[440px] text-sm leading-6 text-white/60">{t.notSureBody}</p>
             </div>
-            <button type="button" onClick={() => openOrderForm("unsure")} className="tf-btn tf-btn-primary shrink-0">
+            <a href="tel:+919401352202" className="tf-btn tf-btn-primary shrink-0">
               {t.notSureCta} <MoveUpRight size={14} />
-            </button>
+            </a>
           </div>
         </section>
       </main>

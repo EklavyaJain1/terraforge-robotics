@@ -21,7 +21,7 @@ import { readFile, appendFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { strictLimiter, generalLimiter } from "./middleware/rateLimit";
 import { requireAuth } from "./middleware/auth";
-import { orderRequestSchema, contactRequestSchema, type OrderRequest, type ContactRequest } from "../shared/api";
+import { orderRequestSchema, contactRequestSchema, paymentRequestSchema, paymentVerifySchema, type OrderRequest, type ContactRequest } from "../shared/api";
 import { Sentry } from "./instrument";
 
 loadEnv(); // .env — project defaults
@@ -166,6 +166,67 @@ app.post("/api/orders", strictLimiter, requireAuth, async (req: Request, res: Re
   const order: StoredOrder = { ...parsed.data, userId: userId ?? null, receivedAt: new Date().toISOString() };
   await appendJsonl("orders.jsonl", order);
   res.status(201).json({ ok: true, id: order.receivedAt });
+});
+
+/* ── Demo payments: Razorpay checkout. With RAZORPAY_KEY_ID/SECRET configured
+      this creates a real test-mode order; without keys it returns a simulated
+      demo gateway so the flow is fully walkable in development. ────────────── */
+const demoPaymentClaims = new Map<string, number>(); // orderId → amount (paise)
+
+app.post("/api/payments/create", strictLimiter, requireAuth, async (req: Request, res: Response) => {
+  const parsed = paymentRequestSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: "Invalid payment request", details: parsed.error.flatten().fieldErrors });
+  }
+  const { userId } = getAuth(req);
+  const { amount } = parsed.data;
+
+  const keyId = process.env.RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+  if (keyId && keySecret) {
+    // Real test-mode order via Razorpay Orders API (basic auth).
+    try {
+      const auth = Buffer.from(`${keyId}:${keySecret}`).toString("base64");
+      const rpRes = await fetch("https://api.razorpay.com/v1/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Basic ${auth}` },
+        body: JSON.stringify({ amount, currency: "INR", receipt: `fb_${Date.now()}`, notes: { user: userId ?? "unknown" } }),
+      });
+      if (!rpRes.ok) throw new Error(`Razorpay ${rpRes.status}`);
+      const rpOrder = (await rpRes.json()) as { id: string };
+      return res.status(201).json({ orderId: rpOrder.id, keyId });
+  } catch (err) {
+      Sentry.captureException(err);
+      return res.status(502).json({ error: "Payment gateway unavailable" });
+    }
+  }
+
+  // Demo mode: simulate a gateway order the client "completes" locally.
+  const orderId = `demo_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+  demoPaymentClaims.set(orderId, amount);
+  res.status(201).json({
+    orderId,
+    demo: {
+      complete: async () => true,
+    },
+  });
+});
+
+app.post("/api/payments/verify", strictLimiter, requireAuth, async (req: Request, res: Response) => {
+  const parsed = paymentVerifySchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: "Invalid payment verify" });
+  }
+  const { userId } = getAuth(req);
+  const { orderId } = parsed.data;
+
+  const claimed = demoPaymentClaims.get(orderId);
+  if (claimed === undefined) {
+    return res.status(404).json({ verified: false });
+  }
+  demoPaymentClaims.delete(orderId);
+  await appendJsonl("payments.jsonl", { orderId, amount: claimed, userId: userId ?? null, mode: "demo", at: new Date().toISOString() });
+  res.json({ verified: true });
 });
 
 // Contact enquiry — public: the marketing site's main lead form.

@@ -36,7 +36,7 @@ export default function Footer() {
             <div className="tf-mono text-[10px] text-white/35">{t.footerConnect}</div>
             <a href="mailto:hello@farmbro.example" className={linkCls}>{t.footerEmailTeam}{arrow}</a>
             <a href="/contact" className={linkCls}>{t.footerBookVisit}{arrow}</a>
-            <a href="https://wa.me/919154153925" target="_blank" rel="noreferrer" className={linkCls}>{t.footerWhatsapp}{arrow}</a>
+            <a href="https://wa.me/919401352202" target="_blank" rel="noreferrer" className={linkCls}>{t.footerWhatsapp}{arrow}</a>
           </div>
         </div>
         <div className="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-6 text-[10px] text-white/35">

@@ -6,6 +6,7 @@ import BootScreen from "./components/BootScreen";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { OrderProvider } from "./contexts/OrderContext";
+import { CartProvider } from "./contexts/CartContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { useSmoothScroll } from "./lib/smoothScroll";
 import { Sentry } from "./lib/sentry";
@@ -19,6 +20,7 @@ import NotFound from "./pages/NotFound";
 import ProductDetail from "./pages/ProductDetail";
 import Services from "./pages/Services";
 import WhatsAppBadge from "./components/WhatsAppBadge";
+import CartDrawer from "./components/CartDrawer";
 
 /* Every route change starts at the top — product pages open from card grids. */
 function ScrollToTop() {
@@ -68,17 +70,20 @@ function SentryFallback({ error, resetError }: { error: unknown; resetError: () 
 function SiteShell({ booted, setBooted }: { booted: boolean; setBooted: (b: boolean) => void }) {
   return (
     <OrderProvider>
-      <TooltipProvider>
-        {/* The app mounts underneath immediately; the boot screen covers it
-            and wipes away once the first frame can actually paint. */}
-        {!booted && <BootScreen onDone={() => setBooted(true)} />}
-        <div aria-hidden={!booted}>
-          <Toaster />
-          <ScrollToTop />
-          <Router />
-          <WhatsAppBadge />
-        </div>
-      </TooltipProvider>
+      <CartProvider>
+        <TooltipProvider>
+          {/* The app mounts underneath immediately; the boot screen covers it
+              and wipes away once the first frame can actually paint. */}
+          {!booted && <BootScreen onDone={() => setBooted(true)} />}
+          <div aria-hidden={!booted}>
+            <Toaster />
+            <ScrollToTop />
+            <Router />
+            <WhatsAppBadge />
+            <CartDrawer />
+          </div>
+        </TooltipProvider>
+      </CartProvider>
     </OrderProvider>
   );
 }

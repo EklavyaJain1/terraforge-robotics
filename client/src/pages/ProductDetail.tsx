@@ -1,5 +1,6 @@
 import { useRef } from "react";
-import { ArrowLeft, MoveUpRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowLeft, MoveUpRight, ShoppingCart } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -8,20 +9,19 @@ import { useGSAP } from "@gsap/react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { useOrderForm } from "@/contexts/OrderContext";
+import { useCart } from "@/contexts/CartContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import usePageTitle from "@/hooks/usePageTitle";
-import { attachments, robots, type RobotId } from "@/data/catalog";
+import { attachments, formatINR, robots, type RobotId } from "@/data/catalog";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
 const giantWord: Record<RobotId, string> = {
   "mulcher-hybrid": "Hybrid",
   "mulcher-sprayer-cargo": "6×6",
-  "mini-mulcher-electric": "45°",
+  "mini-mulcher-electric": "Mini",
   "canopy-scout": "Scout",
 };
-
-const buyerChoice = ["", "fleet", "gov-civil"] as const;
 
 function isVideo(src: string) {
   return src.endsWith(".mp4");
@@ -37,7 +37,7 @@ function FrameMedia({ src, alt, className }: { src: string; alt: string; classNa
 export default function ProductDetail() {
   const rootRef = useRef<HTMLDivElement>(null);
   const [location] = useLocation();
-  const { openOrderForm } = useOrderForm();
+  const { addItem } = useCart();
   const { t } = useLanguage();
   const robot = robots.find((r) => r.slug === location.split("/").pop());
   const m = robot ? t.machines[robot.id] : undefined;
@@ -122,7 +122,7 @@ export default function ProductDetail() {
     src,
     index,
     title: m.highlights[index] ?? m.specs[index]?.[0] ?? t.pdShowImage.replace("{n}", String(index + 1)),
-    copy: m.highlights[index] ? m.tagline : (m.specs[index]?.[1] ?? m.availability),
+    copy: m.highlights[index] ? m.tagline : (m.specs[index]?.[1] ?? ""),
   }));
 
   return (
@@ -156,44 +156,61 @@ export default function ProductDetail() {
                   </div>
                 ))}
               </dl>
-              <p className="text-sm text-white/70">
-                {m.priceLabel}
-                <span className="mt-1 block text-white/45">{m.availability}</span>
-              </p>
+              <p className="text-xl font-medium tabular-nums">{formatINR(robot.price * 100)}</p>
               <div className="flex flex-col gap-3">
-                <button type="button" onClick={() => openOrderForm(robot.id)} className="tf-btn tf-btn-primary w-full">
+                <Link href="/farmbro" className="tf-btn tf-btn-primary w-full">
                   {t.cardOrderNow}
-                </button>
+                </Link>
                 <button
                   type="button"
-                  onClick={() => openOrderForm(robot.id)}
+                  onClick={() => addItem("robot", robot.id)}
                   className="tf-btn w-full border border-white/25 bg-transparent text-white hover:bg-white/10"
                 >
-                  {t.servicesBookTrial}
+                  <ShoppingCart size={15} /> {t.cardAddToCart}
                 </button>
               </div>
             </div>
           </aside>
         </section>
 
+        {/* Why operators pick it — scroll-reveal points, each pinned to its image */}
         <section className="bg-[#111311] py-20 sm:py-28">
-          <div className="tf-container pd-reveal mb-10">
+          <div className="tf-container pd-reveal mb-14">
             <h2 className="text-3xl font-medium tracking-tight">{t.pdWhyKicker}</h2>
           </div>
-          <div className="pd-reveal flex gap-6 overflow-x-auto px-6 pb-2 sm:px-10 lg:px-14 [scrollbar-width:none]">
-            {frames.map((frame) => (
-              <figure key={`${frame.src}-${frame.index}`} className="relative h-[320px] w-[78vw] max-w-[560px] shrink-0 sm:h-[400px]">
-                <FrameMedia
-                  src={frame.src}
-                  alt={t.pdImageAlt.replace("{name}", m.name).replace("{n}", String(frame.index + 1))}
-                  className="h-full w-full object-cover"
-                />
-                <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0B0F0D] to-transparent p-6">
-                  <span className="tf-mono text-2xl text-[#1B8F6A]">{String(frame.index + 1).padStart(2, "0")}</span>
-                  <p className="mt-3 max-w-xs text-lg font-medium leading-snug">{frame.title}</p>
-                  <p className="mt-2 max-w-xs text-sm text-white/65">{frame.copy}</p>
-                </figcaption>
-              </figure>
+          <div className="tf-container flex flex-col gap-16 sm:gap-24">
+            {frames.map((frame, pointIndex) => (
+              <div
+                key={`${frame.src}-${frame.index}`}
+                className={`grid items-center gap-8 lg:grid-cols-2 lg:gap-14 ${pointIndex % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""}`}
+              >
+                <motion.figure
+                  initial={{ opacity: 0, scale: 0.94 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                  className="relative h-[280px] w-full overflow-hidden sm:h-[360px]"
+                >
+                  <FrameMedia
+                    src={frame.src}
+                    alt={t.pdImageAlt.replace("{name}", m.name).replace("{n}", String(frame.index + 1))}
+                    className="h-full w-full object-cover"
+                  />
+                  <span className="tf-mono absolute left-5 top-5 rounded-full bg-[#0B0F0D]/80 px-3 py-1 text-[10px] text-[#B9F4D4]">
+                    {String(frame.index + 1).padStart(2, "0")}
+                  </span>
+                </motion.figure>
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{ duration: 0.6, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <span className="tf-mono text-3xl text-[#1B8F6A]">{String(frame.index + 1).padStart(2, "0")}</span>
+                  <h3 className="mt-4 max-w-md text-2xl font-medium leading-snug sm:text-3xl">{frame.title}</h3>
+                  <p className="mt-3 max-w-md text-base leading-7 text-white/65">{frame.copy}</p>
+                </motion.div>
+              </div>
             ))}
           </div>
         </section>
@@ -213,78 +230,73 @@ export default function ProductDetail() {
               <h2 className="text-4xl font-medium tracking-tight sm:text-5xl">{t.pdSpecsHeading}</h2>
               <p className="mt-4 max-w-sm text-white/55">{t.pdSpecsSub}</p>
             </div>
-            <dl className="pd-reveal border-t-4 border-white">
-              {m.specs.map(([label, value]) => (
-                <div key={label} className="grid gap-2 border-b border-white/15 py-6 sm:grid-cols-[1fr_auto] sm:items-baseline">
+            <dl className="border-t-4 border-white">
+              {m.specs.map(([label, value], i) => (
+                <motion.div
+                  key={label}
+                  initial={{ opacity: 0, y: 36 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.45, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                  className="grid gap-2 border-b border-white/15 py-6 sm:grid-cols-[1fr_auto] sm:items-baseline"
+                >
                   <dt className="tf-mono text-white/45">{label}</dt>
-                  <dd className="text-lg font-medium sm:text-right">{value}</dd>
-                </div>
+                  <dd className="text-lg font-medium tabular-nums sm:text-right">{value}</dd>
+                </motion.div>
               ))}
             </dl>
           </div>
         </section>
 
+        {/* Attachments — centered headline, add-to-cart per item */}
         <section className="pb-20 sm:pb-28">
           <div className="tf-container">
-            <div className="pd-reveal mb-10 flex items-end justify-between gap-6">
+            <div className="pd-reveal mb-10 flex flex-col items-center text-center">
               <h2 className="text-3xl font-medium tracking-tight">{t.attachmentsKicker}</h2>
-              <span className="tf-mono text-white/40">{t.attachmentsFitNote}</span>
+              <span className="tf-mono mt-3 text-white/40">{t.attachmentsFitNote}</span>
             </div>
             <div className="grid gap-6 md:grid-cols-2">
               {attachments.map((item) => {
                 const a = t.attachments[item.id];
                 return (
-                  <button
+                  <div
                     key={item.id}
-                    type="button"
-                    onClick={() => openOrderForm("attach")}
-                    className="pd-reveal flex min-h-64 flex-col justify-between border border-white/10 bg-[#17201B] p-8 text-left transition-transform duration-300 hover:-translate-y-1 hover:border-[#1B8F6A]"
+                    className="pd-reveal flex min-h-64 flex-col justify-between border border-white/10 bg-[#17201B] p-8 transition-colors duration-300 hover:border-[#1B8F6A]/60"
                   >
                     <div>
                       <p className="tf-mono text-[#1B8F6A]">{item.number}</p>
                       <h3 className="mt-4 text-3xl font-medium">{a.name}</h3>
                       <p className="mt-3 max-w-sm text-white/55">{a.copy}</p>
                     </div>
-                    <div className="mt-8 flex items-end justify-between">
-                      <span className="text-sm font-medium">{item.priceLabel}</span>
-                      <span className="tf-mono text-white/40">{a.stat}</span>
+                    <div className="mt-8 flex items-center justify-between gap-4">
+                      <div>
+                        <span className="block text-sm font-semibold tabular-nums">{formatINR(item.price * 100)}</span>
+                        <span className="tf-mono text-[10px] text-white/40">{a.stat}</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => addItem("attachment", item.id)}
+                        className="tf-btn tf-btn-primary shrink-0 min-h-[40px] px-4 text-xs"
+                      >
+                        <ShoppingCart size={14} /> {t.cardAddToCart}
+                      </button>
                     </div>
-                  </button>
+                  </div>
                 );
               })}
             </div>
           </div>
         </section>
 
-        <section className="grid lg:grid-cols-3">
-          {t.audiences.map((audience, index) => (
-            <button
-              key={audience.label}
-              type="button"
-              onClick={() => openOrderForm(buyerChoice[index] || robot.id)}
-              className={`pd-reveal flex min-h-[420px] flex-col justify-between p-8 text-left sm:p-12 ${
-                index === 1 ? "bg-[#1B8F6A]" : index === 2 ? "bg-[#0B0F0D]" : "bg-[#17201B]"
-              }`}
-            >
-              <div>
-                <span className="tf-mono text-white/60">{String(index + 1).padStart(2, "0")}</span>
-                <h3 className="mt-6 text-4xl font-medium leading-tight">{audience.label}</h3>
-                <p className={`mt-4 text-lg leading-relaxed ${index === 1 ? "text-white/85" : "text-white/60"}`}>{audience.copy}</p>
-              </div>
-              <span className="tf-mono mt-10 inline-flex items-center gap-2">
-                {audience.cta} <MoveUpRight size={14} />
-              </span>
-            </button>
-          ))}
-        </section>
-
+        {/* FAQ — centered headline */}
         <section className="bg-[#111311] py-20 sm:py-28">
-          <div className="tf-container grid gap-12 lg:grid-cols-[320px_1fr]">
-            <div className="pd-reveal">
-              <h2 className="text-5xl font-medium tracking-tight">{t.faqHeadingB}</h2>
-              <p className="mt-4 text-white/45">{t.pdSpecsSub}</p>
+          <div className="tf-container">
+            <div className="pd-reveal mb-12 flex flex-col items-center text-center">
+              <h2 className="text-4xl font-medium tracking-tight sm:text-5xl">
+                {t.faqHeadingA} {t.faqHeadingB}
+              </h2>
             </div>
-            <div>
+            <div className="mx-auto max-w-[760px]">
               {t.faqs.slice(0, 4).map((item) => (
                 <article key={item.q} className="pd-reveal border-t-4 border-white py-8">
                   <h3 className="text-2xl font-medium">{item.q}</h3>
@@ -299,18 +311,18 @@ export default function ProductDetail() {
           <div className="tf-container flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
             <div>
               <h2 className="text-4xl font-medium tracking-tight sm:text-5xl">{t.pdOrderHeading.replace("{config}", m.configuration)}</h2>
-              <p className="mt-3 max-w-xl text-lg text-white/80">{t.pdOrderSub.replace("{availability}", m.availability)}</p>
+              <p className="mt-3 max-w-xl text-lg text-white/80">{t.pdOrderSub}</p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <a href="tel:+919154153925" className="text-xl font-medium">
-                +91 91541 53925
+              <a href="tel:+919401352202" className="text-xl font-medium">
+                +91 94013 52202
               </a>
-              <a href="https://wa.me/919154153925" target="_blank" rel="noreferrer" className="tf-btn border border-white/40 bg-white/10 text-white">
+              <a href="https://wa.me/919401352202" target="_blank" rel="noreferrer" className="tf-btn border border-white/40 bg-white/10 text-white">
                 {t.whatsappCta}
               </a>
-              <button type="button" onClick={() => openOrderForm(robot.id)} className="tf-btn bg-white text-[#1B8F6A] hover:bg-[#B9F4D4]">
+              <Link href="/farmbro" className="tf-btn bg-white text-[#1B8F6A] hover:bg-[#B9F4D4]">
                 {t.cardOrderNow}
-              </button>
+              </Link>
             </div>
           </div>
         </section>
@@ -337,9 +349,14 @@ export default function ProductDetail() {
         </section>
       </main>
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#0B0F0D]/90 p-3 backdrop-blur lg:hidden">
-        <button type="button" onClick={() => openOrderForm(robot.id)} className="tf-btn tf-btn-primary w-full">
-          {t.cardOrderNow}
-        </button>
+        <div className="flex gap-3">
+          <button type="button" onClick={() => addItem("robot", robot.id)} className="tf-btn w-full border border-white/25 bg-transparent text-white hover:bg-white/10">
+            <ShoppingCart size={15} /> {t.cardAddToCart}
+          </button>
+          <Link href="/farmbro" className="tf-btn tf-btn-primary w-full">
+            {t.cardOrderNow}
+          </Link>
+        </div>
       </div>
       <Footer />
     </div>
