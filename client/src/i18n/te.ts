@@ -265,9 +265,13 @@ export const te: UiStrings = {
   pdOrderHeading: "మీ వరుసలలో {config} పనిచేయండి.",
   pdOrderSub: "మేము ఈ యంత్రం మీ పొలంలో పని చేయించడానికి తీసుకువస్తాము.",
   pdCompareHeading: "మిగతా లైనప్‌తో పోల్చండి.",
+  pdPlaceKicker: "Place order",
+  pdPlaceHeading: "Place your order.",
+  pdPlaceSub: "Add the machine to your cart, or buy it now and confirm delivery at checkout.",
   machines: {
     "mulcher-hybrid": {
       name: "ఫార్మ్ బ్రో రిమోట్ కంట్రోల్డ్ మల్చర్ (హైబ్రిడ్)",
+      shortName: "ఫార్మ్ బ్రో మల్చర్ (హైబ్రిడ్)",
       tier: "వ్యవసాయ ప్లాట్‌ఫారమ్",
       configuration: "4X4 UGV",
       tagline: "భారీ మల్చింగ్, యంత్రంలో డ్రైవర్ లేదు.",
@@ -279,6 +283,7 @@ export const te: UiStrings = {
     },
     "mulcher-sprayer-cargo": {
       name: "ఫార్మ్ బ్రో రిమోట్ కంట్రోల్డ్ మల్చర్, స్ప్రేయర్ & కార్గో క్యారియర్",
+      shortName: "ఫార్మ్ బ్రో మల్చర్, స్ప్రేయర్ & కార్గో క్యారియర్",
       tier: "వ్యవసాయ ప్లాట్‌ఫారమ్",
       configuration: "6X6 UGV",
       tagline: "మల్చ్, స్ప్రే, మోసుకెళ్ళు — ఒక మానవ రహిత క్యారియర్.",
@@ -289,6 +294,7 @@ export const te: UiStrings = {
     },
     "mini-mulcher-electric": {
       name: "ఫార్మ్ బ్రో రిమోట్ కంట్రోల్డ్ మినీ మల్చర్ (ఎలక్ట్రిక్)",
+      shortName: "ఫార్మ్ బ్రో మినీ మల్చర్ (ఎలక్ట్రిక్)",
       tier: "వ్యవసాయ ప్లాట్‌ఫారమ్",
       configuration: "4X4 UGV",
       tagline: "ట్రాక్టర్ చేరలేని బ్లాకుల కోసం.",

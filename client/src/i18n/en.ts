@@ -367,11 +367,15 @@ export const en = {
   pdOrderHeading: "Put the {config} to work on your rows.",
   pdOrderSub: "We'll bring this machine to a representative patch of your farm for a working demonstration.",
   pdCompareHeading: "Compare with the rest of the lineup.",
+  pdPlaceKicker: "Place order",
+  pdPlaceHeading: "Place your order.",
+  pdPlaceSub: "Add the machine to your cart, or buy it now and confirm delivery at checkout.",
 
   // ── Machines (from the catalog) ────────────────────────────────────────
   machines: {
     "mulcher-hybrid": {
       name: "Farm Bro Remote Controlled Mulcher (Hybrid)",
+      shortName: "Farm Bro Mulcher (Hybrid)",
       tier: "Agriculture platform",
       configuration: "4X4 UGV",
       tagline: "Heavy mulching, no driver on the machine.",
@@ -393,6 +397,8 @@ export const en = {
     },
     "mulcher-sprayer-cargo": {
       name: "Farm Bro Remote Controlled Mulcher, Sprayer & Cargo Carrier",
+      shortName: "Farm Bro Mulcher, Sprayer & Cargo Carrier",
+      cardName: "Farm Bro Mulcher Sprayer & Cargo",
       tier: "Agriculture platform",
       configuration: "6X6 UGV",
       tagline: "Mulch, spray, and carry — one unmanned carrier.",
@@ -413,6 +419,7 @@ export const en = {
     },
     "mini-mulcher-electric": {
       name: "Farm Bro Remote Controlled Mini Mulcher (Electric)",
+      shortName: "Farm Bro Mini Mulcher (Electric)",
       tier: "Agriculture platform",
       configuration: "4X4 UGV",
       tagline: "For the blocks a tractor can't reach.",
@@ -466,6 +473,10 @@ export const en = {
 /** One machine's translatable surface. `power`/`slope` back the compare table. */
 export interface MachineStrings {
   name: string;
+  /** Card-safe name without the operation qualifier; falls back to `name` when absent. */
+  shortName?: string;
+  /** Homepage store-card name, used when a card needs a shorter cut than `shortName`. */
+  cardName?: string;
   tier: string;
   configuration: string;
   tagline: string;

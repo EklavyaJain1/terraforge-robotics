@@ -76,6 +76,8 @@ function CompareTable() {
 function RobotCard({ robot }: { robot: Robot }) {
   const { t } = useLanguage();
   const m = t.machines[robot.id];
+  // Cards carry the short name; the product page keeps the full model name.
+  const name = m.shortName ?? m.name;
   return (
     <TiltCard className="h-full">
       <article className="group relative flex h-full flex-col rounded-2xl bg-black text-white shadow-[0_22px_54px_rgba(0,0,0,.5)] border border-white/10 transition-colors duration-500 hover:border-[#1B8F6A]/50">
@@ -84,33 +86,28 @@ function RobotCard({ robot }: { robot: Robot }) {
             {m.badge}
           </span>
         )}
-        <Link href={`/farmbro/${robot.slug}`} aria-label={t.cardViewAria.replace("{name}", m.name)} className="tf-focus flex flex-1 flex-col">
+        <Link href={`/farmbro/${robot.slug}`} aria-label={t.cardViewAria.replace("{name}", name)} className="tf-focus flex flex-1 flex-col">
           <div className="relative -mt-px overflow-hidden rounded-t-2xl">
             {robot.hoverVideo ? (
               <>
-                <img src={robot.image} alt={m.name} className="h-[270px] w-full object-cover object-top transition-opacity duration-500 group-hover:opacity-0" loading="lazy" decoding="async" />
-                <video src={robot.hoverVideo} autoPlay loop muted playsInline className="absolute inset-0 h-[270px] w-full object-cover object-top opacity-0 transition-all duration-500 group-hover:scale-105 group-hover:opacity-100" />
+                <img src={robot.image} alt={name} className="h-[190px] w-full object-cover object-top transition-opacity duration-500 group-hover:opacity-0" loading="lazy" decoding="async" />
+                <video src={robot.hoverVideo} autoPlay loop muted playsInline className="absolute inset-0 h-[190px] w-full object-cover object-top opacity-0 transition-all duration-500 group-hover:scale-105 group-hover:opacity-100" />
               </>
             ) : (
-              <img src={robot.image} alt={m.name} className="h-[270px] w-full object-cover object-top transition-transform duration-500 group-hover:scale-105" loading="lazy" decoding="async" />
+              <img src={robot.image} alt={name} className="h-[190px] w-full object-cover object-top transition-transform duration-500 group-hover:scale-105" loading="lazy" decoding="async" />
             )}
-            <div className="pointer-events-none absolute bottom-0 z-10 h-32 w-full bg-gradient-to-t from-black to-transparent"></div>
+            <div className="pointer-events-none absolute bottom-0 z-10 h-20 w-full bg-gradient-to-t from-black to-transparent"></div>
           </div>
-          <div className="flex flex-1 flex-col px-6 pb-6 pt-4">
-            <h3 className="border-b border-gray-800 pb-5 text-2xl font-medium leading-snug tracking-tight text-white transition-colors group-hover:text-[#B9F4D4]">
-              {m.name}
+          <div className="flex flex-1 flex-col px-5 pb-5 pt-4">
+            {/* Fixed two-line title slot and one-line tagline keep text placement identical on every card.
+                min-height includes the border padding so 1-line and 2-line titles occupy the same slot. */}
+            <h3 className="line-clamp-2 min-h-[calc(2.6em+1rem)] border-b border-white/10 pb-4 text-xl font-medium leading-[1.3] tracking-tight text-white transition-colors group-hover:text-[#B9F4D4]">
+              {name}
             </h3>
-            <p className="mt-5 flex-1 text-sm leading-relaxed text-gray-400">
-              {m.tagline}
+            {/* Full description, top-aligned under the title slot — identical placement on every card. */}
+            <p className="mt-4 text-pretty text-sm leading-relaxed text-gray-400">
+              {m.body}
             </p>
-            <div className="mt-6 flex items-center justify-between">
-              <span className="bg-gradient-to-r from-[#B9F4D4] to-[#1B8F6A] bg-clip-text text-sm font-medium text-transparent tabular-nums">
-                {formatINR(robot.price * 100)}
-              </span>
-              <div className="inline-flex items-center gap-2 text-xs font-medium text-white transition-colors group-hover:text-[#B9F4D4]">
-                {t.cardVisit} <MoveUpRight size={14} className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-              </div>
-            </div>
           </div>
         </Link>
       </article>

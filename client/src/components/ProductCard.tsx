@@ -7,18 +7,20 @@ import { trackSpotlight } from "@/lib/spotlight";
 export default function ProductCard({ robot }: { robot: Robot }) {
   const { t } = useLanguage();
   const m = t.machines[robot.id];
+  // Home store-cards can carry an even shorter cut (cardName); the product page keeps the full name.
+  const name = m.cardName ?? m.shortName ?? m.name;
 
   return (
     <Link
       href={`/farmbro/${robot.slug}`}
       onPointerMove={trackSpotlight}
-      className="product-card rounded-2xl overflow-hidden border border-[#111311]/15 tf-focus group flex flex-col bg-white shadow-[0_16px_40px_rgba(0,0,0,0.12)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_24px_50px_rgba(27,143,106,0.18)] hover:border-[#1B8F6A]/60"
-      aria-label={t.cardViewAria.replace("{name}", m.name)}
+      className="product-card rounded-2xl overflow-hidden border border-[#111311]/15 tf-focus group flex h-full flex-col bg-white shadow-[0_16px_40px_rgba(0,0,0,0.12)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_24px_50px_rgba(27,143,106,0.18)] hover:border-[#1B8F6A]/60"
+      aria-label={t.cardViewAria.replace("{name}", name)}
     >
       <div className="relative overflow-hidden bg-[#17201B] rounded-t-2xl">
           <img
             src={robot.image}
-            alt={m.name}
+            alt={name}
             loading="lazy"
             decoding="async"
             className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
@@ -42,8 +44,9 @@ export default function ProductCard({ robot }: { robot: Robot }) {
         >
           <ArrowUpRight size={16} />
         </span>
-        <h3 className="max-w-[320px] pr-12 text-[22px] font-medium leading-[1.18] tracking-[-.03em] text-[#111311]">{m.name}</h3>
-        <div className="tf-mono mt-4 text-[10px] uppercase tracking-[.14em] text-[#64736C]">
+        {/* Fixed two-line title slot keeps every card's text block identical. */}
+        <h3 className="line-clamp-2 min-h-[2.36em] max-w-[320px] pr-12 text-[22px] font-medium leading-[1.18] tracking-[-.03em] text-[#111311]">{name}</h3>
+        <div className="tf-mono mt-auto pt-4 text-[10px] uppercase tracking-[.14em] text-[#64736C]">
           {t.configLabel} <span className="ml-2 text-[#1B8F6A]">{m.configuration}</span>
         </div>
 

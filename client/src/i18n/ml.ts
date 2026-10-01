@@ -265,9 +265,13 @@ export const ml: UiStrings = {
   pdOrderHeading: "നിങ്ങളുടെ വരികളിൽ {config} പ്രവർത്തിപ്പിക്കുക.",
   pdOrderSub: "ഞങ്ങൾ ഈ യന്ത്രം നിങ്ങളുടെ വയലിൽ ജോലി ചെയ്യിക്കാൻ കൊണ്ടുവരും.",
   pdCompareHeading: "ബാക്കി ലൈനപ്പുമായി താരതമ്യം ചെയ്യുക.",
+  pdPlaceKicker: "Place order",
+  pdPlaceHeading: "Place your order.",
+  pdPlaceSub: "Add the machine to your cart, or buy it now and confirm delivery at checkout.",
   machines: {
     "mulcher-hybrid": {
       name: "ഫാം ബ്രോ റിമോട്ട് കൺട്രോൾഡ് മൾച്ചർ (ഹൈബ്രിഡ്)",
+      shortName: "ഫാം ബ്രോ മൾച്ചർ (ഹൈബ്രിഡ്)",
       tier: "കൃഷി പ്ലാറ്റ്ഫോം",
       configuration: "4X4 UGV",
       tagline: "ഭാരമേറിയ മൾച്ചിംഗ്, യന്ത്രത്തിൽ ഡ്രൈവർ ഇല്ല.",
@@ -279,6 +283,7 @@ export const ml: UiStrings = {
     },
     "mulcher-sprayer-cargo": {
       name: "ഫാം ബ്രോ റിമോട്ട് കൺട്രോൾഡ് മൾച്ചർ, സ്പ്രേയർ & കാർഗോ കാരിയർ",
+      shortName: "ഫാം ബ്രോ മൾച്ചർ, സ്പ്രേയർ & കാർഗോ കാരിയർ",
       tier: "കൃഷി പ്ലാറ്റ്ഫോം",
       configuration: "6X6 UGV",
       tagline: "മൾച്ച്, സ്പ്രേ, കൊണ്ടുപോകുക — ഒരു മനുഷ്യരഹിത കാരിയർ.",
@@ -289,6 +294,7 @@ export const ml: UiStrings = {
     },
     "mini-mulcher-electric": {
       name: "ഫാം ബ്രോ റിമോട്ട് കൺട്രോൾഡ് മിനി മൾച്ചർ (ഇലക്ട്രിക്)",
+      shortName: "ഫാം ബ്രോ മിനി മൾച്ചർ (ഇലക്ട്രിക്)",
       tier: "കൃഷി പ്ലാറ്റ്ഫോം",
       configuration: "4X4 UGV",
       tagline: "ട്രാക്ടറിന് എത്താൻ കഴിയാത്ത ബ്ലോക്കുകൾക്കായി.",

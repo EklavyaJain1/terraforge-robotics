@@ -293,11 +293,15 @@ export const hi: UiStrings = {
   pdOrderHeading: "अपनी कतारों पर {config} को काम पर लगाइए।",
   pdOrderSub: "हम यह मशीन आपके खेत के प्रतिनिधि हिस्से तक काम करने लाएँगे।",
   pdCompareHeading: "बाक़ी लाइनअप से तुलना करें।",
+  pdPlaceKicker: "Place order",
+  pdPlaceHeading: "Place your order.",
+  pdPlaceSub: "Add the machine to your cart, or buy it now and confirm delivery at checkout.",
 
   // ── Machines ───────────────────────────────────────────────────────────
   machines: {
     "mulcher-hybrid": {
       name: "फ़ार्म ब्रो रिमोट-कंट्रोल्ड मल्चर (हाइब्रिड)",
+      shortName: "फ़ार्म ब्रो मल्चर (हाइब्रिड)",
       tier: "कृषि प्लेटफ़ॉर्म",
       configuration: "4X4 UGV",
       tagline: "भारी मल्चिंग, मशीन पर कोई ड्राइवर नहीं।",
@@ -314,6 +318,7 @@ export const hi: UiStrings = {
     },
     "mulcher-sprayer-cargo": {
       name: "फ़ार्म ब्रो रिमोट-कंट्रोल्ड मल्चर, स्प्रेयर और कार्गो कैरियर",
+      shortName: "फ़ार्म ब्रो मल्चर, स्प्रेयर और कार्गो कैरियर",
       tier: "कृषि प्लेटफ़ॉर्म",
       configuration: "6X6 UGV",
       tagline: "मल्च, स्प्रे और ढुलाई — एक अमानवीय कैरियर।",
@@ -329,6 +334,7 @@ export const hi: UiStrings = {
     },
     "mini-mulcher-electric": {
       name: "फ़ार्म ब्रो रिमोट-कंट्रोल्ड मिनी मल्चर (इलेक्ट्रिक)",
+      shortName: "फ़ार्म ब्रो मिनी मल्चर (इलेक्ट्रिक)",
       tier: "कृषि प्लेटफ़ॉर्म",
       configuration: "4X4 UGV",
       tagline: "उन ब्लॉकों के लिए जहाँ ट्रैक्टर नहीं पहुँचता।",

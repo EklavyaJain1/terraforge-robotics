@@ -265,9 +265,13 @@ export const kn: UiStrings = {
   pdOrderHeading: "ನಿಮ್ಮ ಸಾಲುಗಳಲ್ಲಿ {config} ಕೆಲಸ ಮಾಡಿ.",
   pdOrderSub: "ನಾವು ಈ ಯಂತ್ರವನ್ನು ನಿಮ್ಮ ಹೊಲದಲ್ಲಿ ಕೆಲಸ ಮಾಡಲು ತರುತ್ತೇವೆ.",
   pdCompareHeading: "ಉಳಿದ ಲೈನ್‌ಅಪ್‌ನೊಂದಿಗೆ ಹೋಲಿಸಿ.",
+  pdPlaceKicker: "Place order",
+  pdPlaceHeading: "Place your order.",
+  pdPlaceSub: "Add the machine to your cart, or buy it now and confirm delivery at checkout.",
   machines: {
     "mulcher-hybrid": {
       name: "ಫಾರ್ಮ್ ಬ್ರೋ ರಿಮೋಟ್ ಕಂಟ್ರೋಲ್ಡ್ ಮಲ್ಚರ್ (ಹೈಬ್ರಿಡ್)",
+      shortName: "ಫಾರ್ಮ್ ಬ್ರೋ ಮಲ್ಚರ್ (ಹೈಬ್ರಿಡ್)",
       tier: "ಕೃಷಿ ಪ್ಲಾಟ್‌ಫಾರ್ಮ್",
       configuration: "4X4 UGV",
       tagline: "ಭಾರಿ ಮಲ್ಚಿಂಗ್, ಯಂತ್ರದಲ್ಲಿ ಡ್ರೈವರ್ ಇಲ್ಲ.",
@@ -279,6 +283,7 @@ export const kn: UiStrings = {
     },
     "mulcher-sprayer-cargo": {
       name: "ಫಾರ್ಮ್ ಬ್ರೋ ರಿಮೋಟ್ ಕಂಟ್ರೋಲ್ಡ್ ಮಲ್ಚರ್, ಸ್ಪ್ರೇಯರ್ & ಕಾರ್ಗೋ ಕ್ಯಾರಿಯರ್",
+      shortName: "ಫಾರ್ಮ್ ಬ್ರೋ ಮಲ್ಚರ್, ಸ್ಪ್ರೇಯರ್ & ಕಾರ್ಗೋ ಕ್ಯಾರಿಯರ್",
       tier: "ಕೃಷಿ ಪ್ಲಾಟ್‌ಫಾರ್ಮ್",
       configuration: "6X6 UGV",
       tagline: "ಮಲ್ಚ್, ಸ್ಪ್ರೇ, ಸಾಗಿಸಿ — ಒಂದು ಮಾನವರಹಿತ ಕ್ಯಾರಿಯರ್.",
@@ -289,6 +294,7 @@ export const kn: UiStrings = {
     },
     "mini-mulcher-electric": {
       name: "ಫಾರ್ಮ್ ಬ್ರೋ ರಿಮೋಟ್ ಕಂಟ್ರೋಲ್ಡ್ ಮಿನಿ ಮಲ್ಚರ್ (ಎಲೆಕ್ಟ್ರಿಕ್)",
+      shortName: "ಫಾರ್ಮ್ ಬ್ರೋ ಮಿನಿ ಮಲ್ಚರ್ (ಎಲೆಕ್ಟ್ರಿಕ್)",
       tier: "ಕೃಷಿ ಪ್ಲಾಟ್‌ಫಾರ್ಮ್",
       configuration: "4X4 UGV",
       tagline: "ಟ್ರ್ಯಾಕ್ಟರ್ ತಲುಪಲಾಗದ ಬ್ಲಾಕ್‌ಗಳಿಗೆ.",

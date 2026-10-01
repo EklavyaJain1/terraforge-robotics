@@ -20,6 +20,8 @@ interface CartContextValue {
   lastAdded: { kind: CartItemKind; id: CartItemId; at: number } | null;
   openCart: () => void;
   closeCart: () => void;
+  /** Open the drawer directly on the checkout stage. */
+  openCheckout: () => void;
   addItem: (kind: CartItemKind, id: CartItemId) => void;
   removeLine: (kind: CartItemKind, id: CartItemId) => void;
   setQty: (kind: CartItemKind, id: CartItemId, qty: number) => void;
@@ -51,9 +53,16 @@ function readStored(): CartLine[] {
   }
 }
 
-export function CartProvider({ children }: { children: ReactNode }) {
+interface CartProviderProps {
+  children: ReactNode;
+  /** Render the drawer already on checkout — set by the page-level buy flow. */
+  initialMode?: "cart" | "checkout";
+}
+
+export function CartProvider({ children, initialMode = "cart" }: CartProviderProps) {
   const [lines, setLines] = useState<CartLine[]>(readStored);
   const [isOpen, setIsOpen] = useState(false);
+  const [startOnCheckout, setStartOnCheckout] = useState(initialMode === "checkout");
   const [lastAdded, setLastAdded] = useState<CartContextValue["lastAdded"]>(null);
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -93,8 +102,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const clear = useCallback(() => setLines([]), []);
-  const openCart = useCallback(() => setIsOpen(true), []);
+  const openCart = useCallback(() => {
+    setStartOnCheckout(false);
+    setIsOpen(true);
+  }, []);
   const closeCart = useCallback(() => setIsOpen(false), []);
+  /** Direct-buy entry: stage the checkout flag, then open the drawer.
+      The drawer consumes the flag and lands on checkout once the add lands. */
+  const openCheckout = useCallback(() => {
+    setStartOnCheckout(true);
+    window.dispatchEvent(new CustomEvent("farmbro:open-checkout", { detail: true }));
+  }, []);
 
   const { count, subtotal } = useMemo(() => {
     let c = 0;
@@ -110,7 +128,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   return (
     <CartContext.Provider
-      value={{ lines, count, subtotal, isOpen, lastAdded, openCart, closeCart, addItem, removeLine, setQty, clear }}
+      value={{ lines, count, subtotal, isOpen, lastAdded, openCart, closeCart, openCheckout, addItem, removeLine, setQty, clear }}
     >
       {children}
     </CartContext.Provider>

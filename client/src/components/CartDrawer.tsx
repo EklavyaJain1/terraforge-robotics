@@ -239,11 +239,39 @@ function CheckoutPanel({ onBack }: { onBack: () => void }) {
 
 export default function CartDrawer() {
   const { t } = useLanguage();
-  const { isOpen, closeCart, lines, subtotal, count } = useCart();
+  const { isOpen, closeCart, openCart, lines, subtotal, count } = useCart();
   const [mode, setMode] = useState<"cart" | "checkout">("cart");
+  /** Buy-now flow: a page-level request to land the drawer on checkout directly.
+      The ref is read when the drawer opens, so open-time mode is decided once. */
+  const [startOnCheckout, setStartOnCheckout] = useState(false);
+  const startOnCheckoutRef = useRef(false);
 
   useEffect(() => {
-    if (isOpen) setMode("cart");
+    const handler = () => {
+      startOnCheckoutRef.current = true;
+      setStartOnCheckout(true);
+    };
+    window.addEventListener("farmbro:open-checkout", handler);
+    return () => window.removeEventListener("farmbro:open-checkout", handler);
+  }, []);
+
+  useEffect(() => {
+    if (!startOnCheckout) return;
+    if (lines.length > 0) {
+      openCart();
+    } else {
+      startOnCheckoutRef.current = false;
+    }
+    setStartOnCheckout(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startOnCheckout]);
+
+  useEffect(() => {
+    if (isOpen) {
+      setMode(startOnCheckoutRef.current ? "checkout" : "cart");
+    } else {
+      startOnCheckoutRef.current = false;
+    }
   }, [isOpen]);
 
   const itemsLabel = count === 1 ? t.cartItemsOne : t.cartItemsMany.replace("{n}", String(count));
