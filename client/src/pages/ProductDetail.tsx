@@ -1,6 +1,7 @@
 import { useRef } from "react";
-import { motion } from "framer-motion";
-import { ArrowLeft, MoveUpRight, ShoppingCart } from "lucide-react";
+import {
+  ArrowLeft, Container, FileText, Layers, Mountain, MoveUpRight, Radar, Radio, ScanEye, ShoppingCart, Sprout, Truck, Wrench, Zap, type LucideIcon,
+} from "lucide-react";
 import { Link, useLocation } from "wouter";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -8,6 +9,7 @@ import { SplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
+import { FeatureRows, type FeatureRow } from "@/components/ui/feature-rows";
 import { useCart } from "@/contexts/CartContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import usePageTitle from "@/hooks/usePageTitle";
@@ -15,11 +17,13 @@ import { attachments, formatINR, robots, type RobotId } from "@/data/catalog";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
 
-const giantWord: Record<RobotId, string> = {
-  "mulcher-hybrid": "Hybrid",
-  "mulcher-sprayer-cargo": "6×6",
-  "mini-mulcher-electric": "Mini",
-  "canopy-scout": "Scout",
+/** One icon per spec row, in catalog order — kept per machine so translated
+    spec labels can never break the icon match. */
+const whyIcons: Record<RobotId, LucideIcon[]> = {
+  "mulcher-hybrid": [Truck, Zap, Radio, Sprout],
+  "mulcher-sprayer-cargo": [Truck, Radio, Layers, Container],
+  "mini-mulcher-electric": [Truck, Zap, Radio, Mountain],
+  "canopy-scout": [Radar, Radio, ScanEye, FileText],
 };
 
 function isVideo(src: string) {
@@ -75,15 +79,45 @@ export default function ProductDetail() {
         });
       });
 
-      gsap.to(".pd-giant", {
-        xPercent: -6,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".pd-giant-wrap",
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 0.6,
-        },
+      // Why-operators rows: the frame rises while its media settles from a
+      // slight zoom, then the text children cascade in — one timeline per row.
+      gsap.utils.toArray<HTMLElement>(".fr-row").forEach((row) => {
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: row, start: "top 78%" },
+        });
+        const media = row.querySelector(".fr-media");
+        if (media) {
+          tl.from(media, { y: 48, opacity: 0, duration: 0.9, ease: "power3.out" }, 0);
+          const inner = media.querySelector("img, video");
+          if (inner) tl.from(inner, { scale: 1.15, duration: 1.2, ease: "power3.out" }, 0);
+        }
+        tl.from(
+          row.querySelectorAll(".fr-reveal"),
+          { y: 28, opacity: 0, duration: 0.7, stagger: 0.09, ease: "power3.out" },
+          0.15,
+        );
+      });
+
+      // Hairline rules between rows draw themselves from the left.
+      gsap.utils.toArray<HTMLElement>(".fr-sep").forEach((sep) => {
+        gsap.from(sep, {
+          scaleX: 0,
+          transformOrigin: "left center",
+          duration: 1,
+          ease: "power3.inOut",
+          scrollTrigger: { trigger: sep, start: "top 94%" },
+        });
+      });
+
+      // Specification rows rise one by one as the list scrolls through.
+      gsap.utils.toArray<HTMLElement>(".spec-row").forEach((el) => {
+        gsap.from(el, {
+          y: 24,
+          opacity: 0,
+          duration: 0.55,
+          ease: "power2.out",
+          scrollTrigger: { trigger: el, start: "top 92%" },
+        });
       });
 
       return () => split.revert();
@@ -109,14 +143,22 @@ export default function ProductDetail() {
 
   const heroSrc = robot.hoverVideo ?? robot.image;
   const related = robots.filter((r) => r.id !== robot.id);
-  // One row per gallery frame: the statement from the highlights, with the
-  // matching spec as its support line. The closing frame carries the tagline.
-  const frames = robot.gallery.map((src, index) => ({
-    src,
-    index,
-    title: m.highlights[index] ?? m.tagline,
-    spec: m.highlights[index] ? m.specs[index] : undefined,
-  }));
+  // One row per highlight: the claim, the published spec figure that backs it,
+  // and a frame from the gallery. All four come straight from the catalog.
+  const whyRows: FeatureRow[] = m.highlights.map((title, index) => {
+    const [label, value] = m.specs[index] ?? [m.tier, m.configuration];
+    return {
+      id: `${robot.id}-${index}`,
+      eyebrow: label,
+      title,
+      value,
+      media: robot.gallery[index] ?? robot.image,
+      mediaAlt: t.pdImageAlt.replace("{name}", m.name).replace("{n}", String(index + 1)),
+      caption: m.shortName ?? m.name,
+      Icon: whyIcons[robot.id][index] ?? Wrench,
+      cta: { label: t.pdViewSpecs, href: "#specifications" },
+    };
+  });
 
   /** Direct buy: the machine lands in the cart and the drawer opens on checkout. */
   const buyNow = () => {
@@ -147,89 +189,25 @@ export default function ProductDetail() {
           </div>
         </section>
 
-        {/* Why operators pick it — centered statement, every image left, copy top-aligned beside it.
-            Each element slides in from its own side of the row as it enters the viewport. */}
-        <section className="bg-[#111311] py-20 sm:py-28">
-          <motion.div
-            className="tf-container mb-14 flex flex-col items-center text-center sm:mb-20"
-            initial={{ opacity: 0, y: 32 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-120px" }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <h2 className="text-balance text-4xl font-semibold leading-[1.02] tracking-[-.05em] sm:text-6xl">
-              {t.pdWhyKicker}
-            </h2>
-          </motion.div>
-          <div className="tf-container flex flex-col gap-20 sm:gap-28">
-            {frames.map((frame) => (
-              <div
-                key={`${frame.src}-${frame.index}`}
-                className="grid items-start gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14"
-              >
-                <motion.figure
-                  initial={{ opacity: 0, x: -64 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-120px" }}
-                  transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                  className="relative h-[300px] w-full overflow-hidden sm:h-[440px] lg:h-[540px]"
-                >
-                  <FrameMedia
-                    src={frame.src}
-                    alt={t.pdImageAlt.replace("{name}", m.name).replace("{n}", String(frame.index + 1))}
-                    className="h-full w-full object-cover"
-                  />
-                </motion.figure>
-                <motion.div
-                  initial={{ opacity: 0, x: 64 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-120px" }}
-                  transition={{ duration: 0.7, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-                  className="lg:pt-1"
-                >
-                  <h3 className="text-balance text-3xl font-semibold leading-[1.05] tracking-[-.04em] sm:text-4xl">
-                    {frame.title}
-                  </h3>
-                  {frame.spec && (
-                    <p className="mt-5 text-lg leading-7 text-white/65">
-                      <span className="tf-mono mr-3 text-[10px] text-[#B9F4D4]">{frame.spec[0]}</span>
-                      {frame.spec[1]}
-                    </p>
-                  )}
-                </motion.div>
-              </div>
-            ))}
-          </div>
-        </section>
+        {/* Why operators pick it — alternating claim/figure rows (21st.dev features-2
+            pattern, restyled to the FarmBro dark surface). One row per highlight. */}
+        <FeatureRows kicker={m.tier} heading={t.pdWhyKicker} rows={whyRows} className="pb-24 sm:pb-32" />
 
-        <section className="pd-giant-wrap overflow-hidden border-y border-white/10 py-16 sm:py-24">
-          <div className="tf-container flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
-            <h2 className="pd-giant text-[22vw] font-medium uppercase leading-none tracking-[-.06em] text-[#1B8F6A] lg:text-[14vw]">
-              {giantWord[robot.id]}
-            </h2>
-            <p className="pd-reveal max-w-md text-2xl font-light leading-relaxed text-white/85">{m.body}</p>
-          </div>
-        </section>
-
-        <section id="specifications" className="py-20 sm:py-28">
-          <div className="tf-container grid gap-12 lg:grid-cols-[0.7fr_1.3fr]">
-            <div className="pd-reveal">
-              <h2 className="text-4xl font-medium tracking-tight sm:text-5xl">{t.pdSpecsHeading}</h2>
-              <p className="mt-4 max-w-sm text-white/55">{t.pdSpecsSub}</p>
+        <section id="specifications" className="border-t border-white/10 py-20 sm:py-28">
+          <div className="tf-container">
+            <div className="pd-reveal mx-auto mb-12 flex max-w-2xl flex-col items-center text-center sm:mb-16">
+              <h2 className="text-balance text-4xl font-medium tracking-tight sm:text-5xl">{t.pdSpecsHeading}</h2>
+              <p className="mt-4 max-w-md text-pretty text-white/55">{t.pdSpecsSub}</p>
             </div>
-            <dl className="border-t-4 border-white">
-              {m.specs.map(([label, value], i) => (
-                <motion.div
+            <dl className="pd-reveal mx-auto max-w-[820px] border-t-4 border-white pt-10">
+              {m.specs.map(([label, value]) => (
+                <div
                   key={label}
-                  initial={{ opacity: 0, y: 36 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.45, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-                  className="grid gap-2 border-b border-white/15 py-6 sm:grid-cols-[1fr_auto] sm:items-baseline"
+                  className="spec-row grid gap-2 border-b border-white/15 py-6 sm:grid-cols-[1fr_auto] sm:items-baseline"
                 >
                   <dt className="tf-mono text-white/45">{label}</dt>
                   <dd className="text-lg font-medium tabular-nums sm:text-right">{value}</dd>
-                </motion.div>
+                </div>
               ))}
             </dl>
           </div>
